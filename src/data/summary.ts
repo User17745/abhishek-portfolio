@@ -1,17 +1,19 @@
 export const stats = [
   { label: "Years Experience", value: "10+" },
-  { label: "Solutions Delivered", value: "300+" },
-  { label: "Projects Completed", value: "50+" },
+  { label: "Brands Served", value: "90+" },
+  { label: "Projects Delivered", value: "300+" },
   { label: "SaaS Products Built", value: "6" },
-  { label: "Enterprise Implementations", value: "40+" },
-  { label: "Countries Served", value: "10+" },
+  { label: "Countries Reached", value: "15+" },
 ];
 
 export const summary = {
-  title: "Technology Solutions Architect",
-  subtitle: "Product Strategist | Digital Commerce Specialist",
-  tagline: "Building scalable eCommerce platforms and driving digital transformation for enterprise brands across GCC and India.",
-  bio: `Multi-disciplinary product and tech professional with 10+ years of experience in building, scaling, and managing digital platforms and SaaS products. Proven record of delivering high-impact experiences in eCommerce, enterprise software, and consulting.
+  headline: "Turning Complex Commerce Into Seamless Experiences",
+  title: "Abhishek Aggarwal",
+  subtitle: "eCommerce Architect | Product Builder | GCC Expansion Lead",
+  tagline: "From bootstrapped startups to Fortune 500 rollouts — I build the platforms that power modern commerce.",
+  bio: `I've spent the last decade building, scaling, and fixing digital commerce platforms. Started as a developer, became a founder, and now lead enterprise transformations across the Middle East and India.
 
-From bootstrapping startups to leading enterprise transformations, I've worn every hat - developer, product manager, solution architect, and regional lead. Currently based in Dubai, driving GreenHonchos' expansion across the GCC region.`,
+Currently based in Dubai, I head GreenHonchos' expansion across the GCC — helping brands like THE One, Victoria's Secret, and Philips launch and scale their digital presence.
+
+Whether it's architecting a SaaS platform from scratch, optimizing conversion rates by 30%, or managing multi-country rollouts — I've done it.`,
 };

@@ -19,21 +19,21 @@ import { skills, skillCategories } from "@/data/skills";
       </div>
       
       <div class="fade-in stagger-2">
-        <h3 class="text-xl font-semibold mb-6">Skills & Expertise</h3>
+        <h3 class="text-xl font-semibold mb-8">Skills & Expertise</h3>
       </div>
       
-      <div class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {skillCategories.map((category, index) => (
           <div class={`fade-in stagger-${((index % 3) + 3)}`}>
-            <div class="accent-dot ml-4">
-              <h4 class="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider">
+            <div class="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors">
+              <h4 class="text-sm font-semibold text-accent mb-4 uppercase tracking-wider">
                 {category}
               </h4>
-              <div class="flex flex-wrap gap-2 ml-[-4px]">
+              <div class="flex flex-wrap gap-2">
                 {skills
                   .filter((skill) => skill.category === category)
                   .map((skill) => (
-                    <span className="skill-badge px-3 py-1 rounded-full text-sm">
+                    <span class="skill-badge px-3 py-1.5 rounded-full text-sm">
                       {skill.name}
                     </span>
                   ))}

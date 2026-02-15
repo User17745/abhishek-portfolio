@@ -20,15 +20,15 @@ import { Briefcase, Building2 } from "lucide-react";
               <div class={`relative flex flex-col md:flex-row gap-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                 <div class="absolute left-4 md:left-1/2 w-3 h-3 rounded-full timeline-dot md:-translate-x-1/2 mt-1.5"></div>
                 
-                <div class="flex-1 md:text-right pl-12 md:pl-0 md:pr-8">
-                  <div class={`md:${index % 2 === 0 ? 'text-left' : 'text-right'}`}>
+                <div class="flex-1 pl-12 md:pl-0 md:pr-8">
+                  <div class={`flex flex-col ${index % 2 === 0 ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
                     <p class="text-sm text-accent font-medium">{exp.period}</p>
                     <h3 class="font-semibold text-lg">{exp.title}</h3>
-                    <div class="flex items-center gap-2 text-muted-foreground mb-2 md:justify-end">
+                    <div class={`flex items-center gap-2 text-muted-foreground mb-2 flex-wrap ${index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'}`}>
                       {exp.type === "entrepreneurship" ? (
-                        <Building2 className="h-4 w-4 text-accent" />
+                        <Building2 className="h-4 w-4 text-accent shrink-0" />
                       ) : (
-                        <Briefcase className="h-4 w-4 text-highlight" />
+                        <Briefcase className="h-4 w-4 text-highlight shrink-0" />
                       )}
                       <span>{exp.company}</span>
                       <span class="text-muted-foreground/50">•</span>

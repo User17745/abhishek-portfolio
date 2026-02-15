@@ -8,6 +8,7 @@ export interface Project {
   metrics?: { label: string; value: string }[];
   region: string;
   year: string;
+  featured?: boolean;
 }
 
 export const projects: Project[] = [
@@ -19,19 +20,20 @@ export const projects: Project[] = [
     platform: "KartmaX Enterprise",
     highlights: [
       "Multi-country rollout: UAE, Qatar, Kuwait, Bahrain, Jordan",
-      "Omnichannel integration with physical stores",
+      "Omnichannel integration with 15+ physical stores",
       "ERP and logistics orchestration"
     ],
     metrics: [
       { label: "Countries", value: "5" },
-      { label: "Channels", value: "Omnichannel" }
+      { label: "Stores Integrated", value: "15+" }
     ],
     region: "GCC",
-    year: "2024"
+    year: "2024",
+    featured: true
   },
   {
     id: "victorias-secret",
-    title: "Victoria's Secret - SFCC Implementation",
+    title: "Victoria's Secret - India Market Entry",
     client: "Victoria's Secret / Apparel Group",
     description: "Led the implementation of world's largest lingerie brand on Salesforce Commerce Cloud for India launch.",
     platform: "Salesforce Commerce Cloud",
@@ -45,7 +47,8 @@ export const projects: Project[] = [
       { label: "Market", value: "India Launch" }
     ],
     region: "India",
-    year: "2022"
+    year: "2022",
+    featured: true
   },
   {
     id: "bath-body-works",
@@ -54,16 +57,36 @@ export const projects: Project[] = [
     description: "Applied Ascent CRO framework to optimize customer journey and improve conversion metrics.",
     platform: "CRO Consulting",
     highlights: [
-      "Ascent framework implementation",
-      "Customer journey mapping",
-      "Tech integration health monitoring"
+      "30% increase in overall eCommerce conversion",
+      "14% increase in add-to-cart rate",
+      "Continuous performance monitoring"
     ],
     metrics: [
-      { label: "Conversion Increase", value: "+30%" },
-      { label: "Add-to-Cart", value: "+14%" }
+      { label: "Conversion ↑", value: "+30%" },
+      { label: "Add-to-Cart ↑", value: "+14%" }
     ],
     region: "India",
-    year: "2022"
+    year: "2022",
+    featured: true
+  },
+  {
+    id: "caneza",
+    title: "Caneza - Multi-Country eCommerce",
+    client: "Caneza (Rasasi Group)",
+    description: "Multi-backend/single frontend framework with multi-language, multi-currency, and RTL support for GCC launch.",
+    platform: "Shopify Plus + Hydrogen",
+    highlights: [
+      "Shared headless frontend across UAE & KSA",
+      "RTL language support",
+      "Multi-currency checkout"
+    ],
+    metrics: [
+      { label: "Languages", value: "3" },
+      { label: "Countries", value: "5" }
+    ],
+    region: "GCC",
+    year: "2024",
+    featured: true
   },
   {
     id: "express-stores",
@@ -78,35 +101,35 @@ export const projects: Project[] = [
     ],
     metrics: [
       { label: "Stores", value: "100+" },
-      { label: "Delivery Time", value: "2 hours" }
+      { label: "Delivery", value: "2 hours" }
     ],
     region: "India",
     year: "2021"
   },
   {
-    id: "metro-shoes",
-    title: "Metro Shoes - Enterprise D2C",
-    client: "Metro Shoes",
-    description: "Enterprise D2C implementation for India's leading footwear retailer.",
-    platform: "KartmaX Enterprise",
+    id: "pan-home",
+    title: "PAN Home - Mobile App & Optimization",
+    client: "PAN Home",
+    description: "eCommerce website & mobile app with speed optimization and ERP migration consulting.",
+    platform: "Magento + Flutter",
     highlights: [
-      "Multi-brand catalog management",
-      "OMS and logistics integration",
-      "High-traffic event handling"
+      "1-month speed optimization sprint",
+      "Mobile app architecture design",
+      "ERP migration roadmap consulting"
     ],
-    region: "India",
-    year: "2021"
+    region: "GCC",
+    year: "2023"
   },
   {
     id: "kartxo-platform",
-    title: "KartXO Platform - Product Development",
-    client: "GreenHonchos (Internal)",
-    description: "Built the KartXO SaaS platform from ground up - designed for SMB D2C brands with India-specific features.",
+    title: "KartXO Platform - From Zero to Production",
+    client: "GreenHonchos (Internal Product)",
+    description: "Built the KartXO SaaS platform from ground up for SMB D2C brands.",
     platform: "Proprietary SaaS",
     highlights: [
-      "OTP-based login, advanced filters",
-      "DIY store moderation",
-      "6 successful implementations"
+      "MVP delivered in 3 months as solo developer",
+      "OTP-based login, UPI payments",
+      "6 successful client implementations"
     ],
     metrics: [
       { label: "Time to MVP", value: "3 months" },
@@ -118,7 +141,7 @@ export const projects: Project[] = [
   {
     id: "kartmax-flavors",
     title: "KartmaX Platform Flavors",
-    client: "GreenHonchos (Internal)",
+    client: "GreenHonchos (Internal Product)",
     description: "Built three specialized platform variants: Marketplace, Omnichannel, and Hyperlocal.",
     platform: "KartmaX",
     highlights: [
@@ -130,7 +153,63 @@ export const projects: Project[] = [
       { label: "Flavors", value: "3" },
       { label: "Projects", value: "40+" }
     ],
+    region: "India & GCC",
+    year: "2020-2023"
+  },
+  {
+    id: "inorbit",
+    title: "Inorbit Malls - Mall Digitization",
+    client: "Inorbit Malls",
+    description: "Hyperlocal, omnichannel, marketplace for digitizing 4 malls with vendor payment splits and logistics orchestration.",
+    platform: "KartmaX Hyperlocal & Marketplace",
+    highlights: [
+      "4 malls digitized",
+      "Vendor commission & payout automation",
+      "Warehouse logistics orchestration"
+    ],
+    region: "India",
+    year: "2021"
+  },
+  {
+    id: "borders",
+    title: "BORDERS - eCommerce & Mobile App",
+    client: "Al Maya Group",
+    description: "Full eCommerce website and mobile app for a major GCC retail brand.",
+    platform: "Shopify Plus",
+    highlights: [
+      "eCommerce website & mobile app",
+      "GCC-wide deployment",
+      "Multi-currency support"
+    ],
+    region: "GCC",
+    year: "2023"
+  },
+  {
+    id: "metro-shoes",
+    title: "Metro Brands Portfolio",
+    client: "Metro Brands Ltd.",
+    description: "Delivered multiple brands under Metro portfolio: Metro, Mochi, FitFlop, Ecco, Walkway, BioFoot.",
+    platform: "KartmaX",
+    highlights: [
+      "6+ brand implementations",
+      "Unified platform architecture",
+      "High-traffic event handling"
+    ],
     region: "India",
     year: "2020-2023"
-  }
+  },
+  {
+    id: "being-human",
+    title: "Being Human - Multi-Region Rollout",
+    client: "Being Human Clothing",
+    description: "eCommerce platform implementation for India and GCC markets.",
+    platform: "KartmaX",
+    highlights: [
+      "Multi-region deployment",
+      "Celebrity brand launch",
+      "India & GCC presence"
+    ],
+    region: "India & GCC",
+    year: "2022"
+  },
 ];

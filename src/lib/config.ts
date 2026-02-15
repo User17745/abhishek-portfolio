@@ -8,6 +8,8 @@ export const siteConfig = {
   },
   links: {
     linkedin: "https://www.linkedin.com/in/abhishek-aggarwal-8bb82b100/",
+    github: "https://github.com/User17745/",
+    reddit: "https://www.reddit.com/user/G3grip/",
     email: "aggarwal039517@gmail.com",
   },
   contact: {
