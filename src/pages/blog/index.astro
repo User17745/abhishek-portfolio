@@ -5,7 +5,6 @@ import Footer from "@/components/layout/Footer.astro";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getCollection } from 'astro:content';
-import ScrollAnimation from "@/components/shared/ScrollAnimation";
 
 const posts = (await getCollection('blog'))
   .filter(post => !post.data.draft)
@@ -28,18 +27,18 @@ function formatDate(date: Date): string {
   <main class="pt-16">
     <section class="py-20 px-4">
       <div class="container mx-auto max-w-4xl">
-        <ScrollAnimation>
+        <div class="fade-in">
           <h1 class="text-4xl font-bold mb-4 text-center">Blog</h1>
-        </ScrollAnimation>
-        <ScrollAnimation delay={1}>
+        </div>
+        <div class="fade-in stagger-1">
           <p class="text-muted-foreground text-center mb-12">
             Thoughts on eCommerce, product management, and digital transformation.
           </p>
-        </ScrollAnimation>
+        </div>
         
         <div class="space-y-6">
           {posts.map((post, index) => (
-            <ScrollAnimation animation="fade-in" delay={((index % 3) + 2) as 1|2|3|4|5|6}>
+            <div class={`fade-in stagger-${((index % 3) + 2)}`}>
               <a href={`/blog/${post.slug}`} class="block">
                 <Card className="hover-lift hover-glow gradient-border">
                   <CardHeader>
@@ -62,7 +61,7 @@ function formatDate(date: Date): string {
                   </CardContent>
                 </Card>
               </a>
-            </ScrollAnimation>
+            </div>
           ))}
         </div>
       </div>

@@ -1,22 +1,21 @@
 ---
 import { brands, featuredBrands } from "@/data/brands";
-import ScrollAnimation from "@/components/shared/ScrollAnimation";
 import BrandLogo from "@/components/shared/BrandLogo";
 ---
 
 <section id="brands" class="py-20 px-4 bg-muted/30">
   <div class="container mx-auto">
-    <ScrollAnimation>
+    <div class="fade-in">
       <h2 class="text-3xl font-bold mb-4 text-center">Brands I've Worked With</h2>
-    </ScrollAnimation>
-    <ScrollAnimation delay={1}>
+    </div>
+    <div class="fade-in stagger-1">
       <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
         From Fortune-500 enterprises to homegrown retail giants across GCC and India.
       </p>
-    </ScrollAnimation>
+    </div>
     
     <div class="max-w-5xl mx-auto">
-      <ScrollAnimation delay={2}>
+      <div class="fade-in stagger-2">
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8">
           {featuredBrands.map((brand) => (
             <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-card border border-border hover:border-accent/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
@@ -25,9 +24,9 @@ import BrandLogo from "@/components/shared/BrandLogo";
             </div>
           ))}
         </div>
-      </ScrollAnimation>
+      </div>
       
-      <ScrollAnimation delay={3}>
+      <div class="fade-in stagger-3">
         <div class="flex flex-wrap justify-center gap-3">
           {brands.filter(b => !b.featured).map((brand) => (
             <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-accent/30 transition-all duration-300 hover:-translate-y-0.5">
@@ -36,7 +35,7 @@ import BrandLogo from "@/components/shared/BrandLogo";
             </div>
           ))}
         </div>
-      </ScrollAnimation>
+      </div>
     </div>
   </div>
 </section>

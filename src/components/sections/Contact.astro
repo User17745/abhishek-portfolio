@@ -6,22 +6,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, MapPin, Phone } from "lucide-react";
-import ScrollAnimation from "@/components/shared/ScrollAnimation";
 ---
 
 <section id="contact" class="py-20 px-4 gradient-bg">
   <div class="container mx-auto">
-    <ScrollAnimation>
+    <div class="fade-in">
       <h2 class="text-3xl font-bold mb-4 text-center">Get in Touch</h2>
-    </ScrollAnimation>
-    <ScrollAnimation delay={1}>
+    </div>
+    <div class="fade-in stagger-1">
       <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
         Interested in working together? Let's connect and discuss how I can help.
       </p>
-    </ScrollAnimation>
+    </div>
     
     <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-      <ScrollAnimation animation="fade-in-left" delay={2}>
+      <div class="fade-in-left stagger-2">
         <div>
           <Card className="h-full gradient-border">
             <CardHeader>
@@ -58,9 +57,9 @@ import ScrollAnimation from "@/components/shared/ScrollAnimation";
             </CardContent>
           </Card>
         </div>
-      </ScrollAnimation>
+      </div>
       
-      <ScrollAnimation animation="fade-in-right" delay={3}>
+      <div class="fade-in-right stagger-3">
         <div>
           <Card className="h-full gradient-border">
             <CardHeader>
@@ -93,7 +92,7 @@ import ScrollAnimation from "@/components/shared/ScrollAnimation";
             </CardContent>
           </Card>
         </div>
-      </ScrollAnimation>
+      </div>
     </div>
   </div>
 </section>

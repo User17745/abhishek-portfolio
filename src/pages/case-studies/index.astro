@@ -5,7 +5,6 @@ import Footer from "@/components/layout/Footer.astro";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getCollection } from 'astro:content';
-import ScrollAnimation from "@/components/shared/ScrollAnimation";
 
 const caseStudies = await getCollection('case-studies');
 ---
@@ -18,18 +17,18 @@ const caseStudies = await getCollection('case-studies');
   <main class="pt-16">
     <section class="py-20 px-4">
       <div class="container mx-auto">
-        <ScrollAnimation>
+        <div class="fade-in">
           <h1 class="text-4xl font-bold mb-4 text-center">Case Studies</h1>
-        </ScrollAnimation>
-        <ScrollAnimation delay={1}>
+        </div>
+        <div class="fade-in stagger-1">
           <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
             Detailed insights into enterprise implementations and digital transformations.
           </p>
-        </ScrollAnimation>
+        </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {caseStudies.map((study, index) => (
-            <ScrollAnimation animation="scale-in" delay={((index % 3) + 2) as 1|2|3|4|5|6}>
+            <div class={`scale-in stagger-${((index % 3) + 2)}`}>
               <a href={`/case-studies/${study.slug}`} class="block h-full">
                 <Card className="h-full hover-lift hover-glow cursor-pointer">
                   <CardHeader>
@@ -66,7 +65,7 @@ const caseStudies = await getCollection('case-studies');
                   </CardContent>
                 </Card>
               </a>
-            </ScrollAnimation>
+            </div>
           ))}
         </div>
       </div>

@@ -3,37 +3,36 @@ import { summary, stats } from "@/data/summary";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Linkedin } from "lucide-react";
 import { siteConfig } from "@/lib/config";
-import ScrollAnimation from "@/components/shared/ScrollAnimation";
 ---
 
 <section id="hero" class="min-h-screen flex items-center justify-center pt-16 px-4 hero-bg">
   <div class="container mx-auto text-center">
     <div class="max-w-3xl mx-auto space-y-6">
-      <ScrollAnimation>
+      <div class="fade-in">
         <p class="text-accent text-sm uppercase tracking-widest font-medium">
           Welcome to my portfolio
         </p>
-      </ScrollAnimation>
+      </div>
       
-      <ScrollAnimation delay={1}>
+      <div class="fade-in stagger-1">
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight gradient-text">
           {summary.title}
         </h1>
-      </ScrollAnimation>
+      </div>
       
-      <ScrollAnimation delay={2}>
+      <div class="fade-in stagger-2">
         <p class="text-xl text-muted-foreground">
           {summary.subtitle}
         </p>
-      </ScrollAnimation>
+      </div>
       
-      <ScrollAnimation delay={3}>
+      <div class="fade-in stagger-3">
         <p class="text-muted-foreground max-w-xl mx-auto">
           {summary.tagline}
         </p>
-      </ScrollAnimation>
+      </div>
       
-      <ScrollAnimation delay={4}>
+      <div class="fade-in stagger-4">
         <div class="flex flex-wrap justify-center gap-4 pt-4">
           <Button asChild size="lg" className="cta-button">
             <a href="#contact">Get in Touch</a>
@@ -45,27 +44,27 @@ import ScrollAnimation from "@/components/shared/ScrollAnimation";
             </a>
           </Button>
         </div>
-      </ScrollAnimation>
+      </div>
       
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 pt-12">
         {stats.map((stat, index) => (
-          <ScrollAnimation delay={((index % 6) + 1) as 1|2|3|4|5|6}>
+          <div class={`fade-in stagger-${((index % 6) + 1)}`}>
             <div class="p-4 rounded-lg bg-card border border-border stat-card hover-lift">
               <div class="text-2xl font-bold text-highlight">{stat.value}</div>
               <div class="text-xs text-muted-foreground">{stat.label}</div>
             </div>
-          </ScrollAnimation>
+          </div>
         ))}
       </div>
       
-      <ScrollAnimation delay={6}>
+      <div class="fade-in stagger-6">
         <a 
           href="#about" 
           class="inline-flex items-center justify-center mt-12 text-muted-foreground hover:text-accent transition-colors"
         >
           <ArrowDown className="h-6 w-6 animate-bounce" />
         </a>
-      </ScrollAnimation>
+      </div>
     </div>
   </div>
 </section>
