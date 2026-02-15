@@ -1,0 +1,84 @@
+---
+import { siteConfig } from "@/lib/config";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, MapPin, Phone } from "lucide-react";
+---
+
+<section id="contact" class="py-20 px-4">
+  <div class="container mx-auto">
+    <h2 class="text-3xl font-bold mb-4 text-center">Get in Touch</h2>
+    <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+      Interested in working together? Let's connect and discuss how I can help.
+    </p>
+    
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Contact Information</CardTitle>
+            <CardDescription>Reach out via email or connect on LinkedIn</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <a 
+              href={`mailto:${siteConfig.contact.email}`}
+              class="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Mail className="h-5 w-5" />
+              <span>{siteConfig.contact.email}</span>
+            </a>
+            
+            <div class="flex items-center gap-3 text-muted-foreground">
+              <Phone className="h-5 w-5" />
+              <div class="text-sm">
+                <div>IND: {siteConfig.contact.phone.india}</div>
+                <div>UAE: {siteConfig.contact.phone.uae}</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-3 text-muted-foreground">
+              <MapPin className="h-5 w-5" />
+              <span>{siteConfig.contact.location}</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Send a Message</CardTitle>
+            <CardDescription>I'll get back to you within 24 hours</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form 
+              action="https://formspree.io/f/xnnnnnnn" 
+              method="POST"
+              class="space-y-4"
+            >
+              <div class="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" name="name" placeholder="Your name" required />
+              </div>
+              
+              <div class="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" placeholder="your@email.com" required />
+              </div>
+              
+              <div class="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Textarea id="message" name="message" placeholder="How can I help you?" rows={4} required />
+              </div>
+              
+              <Button type="submit" className="w-full">Send Message</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </div>
+</section>

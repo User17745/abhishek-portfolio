@@ -1,0 +1,39 @@
+---
+import { navItems, siteConfig } from "@/lib/config";
+import ThemeToggle from "./ThemeToggle";
+import MobileMenu from "./MobileMenu";
+
+const items = navItems;
+---
+
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
+  <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="/" class="font-bold text-lg">
+      AA
+    </a>
+    
+    <div class="hidden md:flex items-center gap-6">
+      {items.map((item) => (
+        <a
+          href={item.href}
+          class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <ThemeToggle client:load />
+      <a
+        href={siteConfig.links.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden sm:inline-flex h-9 px-4 items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+      >
+        Connect
+      </a>
+      <MobileMenu client:load items={items} />
+    </div>
+  </nav>
+</header>

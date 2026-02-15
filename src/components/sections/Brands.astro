@@ -1,0 +1,30 @@
+---
+import { brands, featuredBrands } from "@/data/brands";
+---
+
+<section id="brands" class="py-20 px-4 bg-muted/30">
+  <div class="container mx-auto">
+    <h2 class="text-3xl font-bold mb-4 text-center">Brands I've Worked With</h2>
+    <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+      From Fortune-500 enterprises to homegrown retail giants across GCC and India.
+    </p>
+    
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-wrap justify-center gap-4">
+        {featuredBrands.map((brand) => (
+          <div class="px-6 py-3 rounded-full bg-card border border-border hover:border-primary transition-colors">
+            <span class="font-medium">{brand.name}</span>
+          </div>
+        ))}
+      </div>
+      
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        {brands.filter(b => !b.featured).map((brand) => (
+          <div class="px-4 py-2 rounded-full bg-background border border-border text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {brand.name}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

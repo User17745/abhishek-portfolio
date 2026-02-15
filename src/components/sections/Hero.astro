@@ -1,0 +1,56 @@
+---
+import { summary, stats } from "@/data/summary";
+import { Button } from "@/components/ui/button";
+import { ArrowDown, Linkedin } from "lucide-react";
+import { siteConfig } from "@/lib/config";
+---
+
+<section id="hero" class="min-h-screen flex items-center justify-center pt-16 px-4">
+  <div class="container mx-auto text-center">
+    <div class="max-w-3xl mx-auto space-y-6">
+      <p class="text-muted-foreground text-sm uppercase tracking-widest">
+        Welcome to my portfolio
+      </p>
+      
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+        {summary.title}
+      </h1>
+      
+      <p class="text-xl text-muted-foreground">
+        {summary.subtitle}
+      </p>
+      
+      <p class="text-muted-foreground max-w-xl mx-auto">
+        {summary.tagline}
+      </p>
+      
+      <div class="flex flex-wrap justify-center gap-4 pt-4">
+        <Button asChild size="lg">
+          <a href="#contact">Get in Touch</a>
+        </Button>
+        <Button variant="outline" size="lg" asChild>
+          <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer">
+            <Linkedin className="mr-2 h-4 w-4" />
+            LinkedIn
+          </a>
+        </Button>
+      </div>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 pt-12">
+        {stats.map((stat) => (
+          <div class="p-4 rounded-lg bg-card border border-border">
+            <div class="text-2xl font-bold">{stat.value}</div>
+            <div class="text-xs text-muted-foreground">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+      
+      <a 
+        href="#about" 
+        class="inline-flex items-center justify-center mt-12 text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowDown className="h-6 w-6 animate-bounce" />
+      </a>
+    </div>
+  </div>
+</section>

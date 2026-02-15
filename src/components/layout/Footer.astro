@@ -1,0 +1,48 @@
+---
+import { siteConfig } from "@/lib/config";
+import { Linkedin, Mail, MapPin } from "lucide-react";
+---
+
+<footer class="border-t border-border bg-card">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="font-bold text-lg mb-4">Abhishek Aggarwal</h3>
+        <p class="text-muted-foreground text-sm">
+          Technology Solutions Architect | Product Strategist | Digital Commerce Specialist
+        </p>
+      </div>
+      
+      <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <div class="space-y-2 text-sm text-muted-foreground">
+          <a href={`mailto:${siteConfig.contact.email}`} class="flex items-center gap-2 hover:text-foreground transition-colors">
+            <Mail className="h-4 w-4" />
+            {siteConfig.contact.email}
+          </a>
+          <div class="flex items-center gap-2">
+            <MapPin className="h-4 w-4" />
+            {siteConfig.contact.location}
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="font-semibold mb-4">Connect</h4>
+        <a
+          href={siteConfig.links.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Linkedin className="h-4 w-4" />
+          LinkedIn
+        </a>
+      </div>
+    </div>
+    
+    <div class="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
+      <p>&copy; {new Date().getFullYear()} Abhishek Aggarwal. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
