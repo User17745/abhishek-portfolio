@@ -9,7 +9,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://abhishekaggarwal.dev',
+  site: 'https://abhishekaggarwal.com',
   integrations: [react(), sitemap({
     changefreq: 'monthly',
     priority: 0.7,
