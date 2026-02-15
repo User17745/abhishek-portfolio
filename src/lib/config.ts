@@ -3,6 +3,9 @@ export const siteConfig = {
   description: "Technology Solutions Architect | Product Strategist | Digital Commerce Specialist with 10+ years of experience in eCommerce, SaaS, and enterprise platforms.",
   url: "https://abhishekaggarwal.dev",
   ogImage: "https://abhishekaggarwal.dev/og.jpg",
+  analytics: {
+    googleMeasurementId: undefined,
+  },
   links: {
     linkedin: "https://www.linkedin.com/in/abhishek-aggarwal-8bb82b100/",
     email: "aggarwal039517@gmail.com",

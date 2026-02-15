@@ -1,30 +1,42 @@
 ---
 import { brands, featuredBrands } from "@/data/brands";
+import ScrollAnimation from "@/components/shared/ScrollAnimation";
+import BrandLogo from "@/components/shared/BrandLogo";
 ---
 
 <section id="brands" class="py-20 px-4 bg-muted/30">
   <div class="container mx-auto">
-    <h2 class="text-3xl font-bold mb-4 text-center">Brands I've Worked With</h2>
-    <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-      From Fortune-500 enterprises to homegrown retail giants across GCC and India.
-    </p>
+    <ScrollAnimation>
+      <h2 class="text-3xl font-bold mb-4 text-center">Brands I've Worked With</h2>
+    </ScrollAnimation>
+    <ScrollAnimation delay={1}>
+      <p class="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+        From Fortune-500 enterprises to homegrown retail giants across GCC and India.
+      </p>
+    </ScrollAnimation>
     
-    <div class="max-w-4xl mx-auto">
-      <div class="flex flex-wrap justify-center gap-4">
-        {featuredBrands.map((brand) => (
-          <div class="px-6 py-3 rounded-full bg-card border border-border hover:border-primary transition-colors">
-            <span class="font-medium">{brand.name}</span>
-          </div>
-        ))}
-      </div>
+    <div class="max-w-5xl mx-auto">
+      <ScrollAnimation delay={2}>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8">
+          {featuredBrands.map((brand) => (
+            <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-card border border-border hover:border-accent/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <BrandLogo name={brand.name} color={brand.color} size="lg" client:load />
+              <span class="text-sm font-medium text-center">{brand.name}</span>
+            </div>
+          ))}
+        </div>
+      </ScrollAnimation>
       
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        {brands.filter(b => !b.featured).map((brand) => (
-          <div class="px-4 py-2 rounded-full bg-background border border-border text-sm text-muted-foreground hover:text-foreground transition-colors">
-            {brand.name}
-          </div>
-        ))}
-      </div>
+      <ScrollAnimation delay={3}>
+        <div class="flex flex-wrap justify-center gap-3">
+          {brands.filter(b => !b.featured).map((brand) => (
+            <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-accent/30 transition-all duration-300 hover:-translate-y-0.5">
+              <BrandLogo name={brand.name} color={brand.color} size="sm" client:load />
+              <span class="text-sm text-muted-foreground">{brand.name}</span>
+            </div>
+          ))}
+        </div>
+      </ScrollAnimation>
     </div>
   </div>
 </section>
