@@ -24,17 +24,17 @@ import { siteConfig } from "@/lib/config";
         Get started by downloading Abhishek's official documentation (resume):
       </p>
       
-      <div class="fade-in stagger-3">
+      <div class="fade-in stagger-3 px-2 sm:px-0">
         <div class="quickstart-container rounded-lg bg-white border border-zinc-200 shadow-lg overflow-hidden max-w-2xl mx-auto">
           <!-- Top bar with window dots, filename, tabs, and copy button -->
-          <div class="flex items-center justify-between px-3 py-2 bg-zinc-50 border-b border-zinc-200">
+          <div class="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 bg-zinc-50 border-b border-zinc-200">
             <div class="flex items-center gap-2">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+              <div class="flex items-center gap-1 sm:gap-1.5">
+                <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-400"></span>
+                <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-yellow-400"></span>
+                <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-green-400"></span>
               </div>
-              <span class="ml-3 text-[10px] text-zinc-400 font-mono">install.sh</span>
+              <span class="ml-2 text-[10px] text-zinc-400 font-mono hidden sm:inline">install.sh</span>
             </div>
             
             <button 
@@ -42,54 +42,53 @@ import { siteConfig } from "@/lib/config";
               class="flex items-center gap-1 px-2 py-1 rounded text-[10px] text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
               aria-label="Copy to clipboard"
             >
-              <Copy class="h-3 w-3 copy-icon-hero" />
-              <Check class="h-3 w-3 text-green-600 check-icon-hero hidden" />
+              <Copy class="h-3 w-3" />
               <span class="copy-text-hero">Copy</span>
               <span class="copied-text-hero hidden text-green-600">Copied!</span>
             </button>
           </div>
           
           <!-- Tabs -->
-          <div class="px-3 py-2 border-b border-zinc-100 overflow-x-auto no-scrollbar bg-white">
+          <div class="px-2 sm:px-3 py-1.5 sm:py-2 border-b border-zinc-100 overflow-x-auto no-scrollbar bg-white">
             <div class="flex gap-0.5">
-              <button data-tab="all" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-700 bg-zinc-100">All</button>
-              <button data-tab="sol_eng" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors">Solutions</button>
-              <button data-tab="ecom" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors">eCommerce</button>
-              <button data-tab="pmo" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors">PMO</button>
-              <button data-tab="prod" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors">Product</button>
-              <button data-tab="tpm" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors">TPM</button>
-              <button data-tab="shop_pm" class="tab-btn-hero px-2.5 py-1 text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors">Shopify</button>
+              <button data-tab="all" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-700 bg-zinc-100 whitespace-nowrap">All</button>
+              <button data-tab="sol_eng" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors whitespace-nowrap">Solutions</button>
+              <button data-tab="ecom" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors whitespace-nowrap">eCom</button>
+              <button data-tab="pmo" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors whitespace-nowrap">PMO</button>
+              <button data-tab="prod" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors whitespace-nowrap">Product</button>
+              <button data-tab="tpm" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors whitespace-nowrap">TPM</button>
+              <button data-tab="shop_pm" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50 transition-colors whitespace-nowrap">Shopify</button>
             </div>
           </div>
           
           <!-- Code display -->
           <div class="relative bg-zinc-50/50">
-            <div class="p-3 font-mono text-[11px]">
-              <div data-content="all" class="code-content-hero flex items-center gap-1.5">
+            <div class="p-2 sm:p-3 font-mono text-[10px] sm:text-[11px] overflow-x-auto">
+              <div data-content="all" class="code-content-hero flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"all"</span></span>
               </div>
-              <div data-content="sol_eng" class="code-content-hero hidden flex items-center gap-1.5">
+              <div data-content="sol_eng" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"sol_eng"</span></span>
               </div>
-              <div data-content="ecom" class="code-content-hero hidden flex items-center gap-1.5">
+              <div data-content="ecom" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"ecom"</span></span>
               </div>
-              <div data-content="pmo" class="code-content-hero hidden flex items-center gap-1.5">
+              <div data-content="pmo" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"pmo"</span></span>
               </div>
-              <div data-content="prod" class="code-content-hero hidden flex items-center gap-1.5">
+              <div data-content="prod" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"prod"</span></span>
               </div>
-              <div data-content="tpm" class="code-content-hero hidden flex items-center gap-1.5">
+              <div data-content="tpm" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"tpm"</span></span>
               </div>
-              <div data-content="shop_pm" class="code-content-hero hidden flex items-center gap-1.5">
+              <div data-content="shop_pm" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 select-none">$</span>
                 <span class="text-zinc-700">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600">|</span> bash -s -- <span class="text-amber-600">"shop_pm"</span></span>
               </div>
@@ -246,19 +245,13 @@ import { siteConfig } from "@/lib/config";
   copyBtn?.addEventListener('click', async () => {
     await navigator.clipboard.writeText(commands[currentTab]);
     
-    const copyIcon = copyBtn.querySelector('.copy-icon-hero');
-    const checkIcon = copyBtn.querySelector('.check-icon-hero');
     const copyText = copyBtn.querySelector('.copy-text-hero');
     const copiedText = copyBtn.querySelector('.copied-text-hero');
     
-    copyIcon?.classList.add('hidden');
-    checkIcon?.classList.remove('hidden');
     copyText?.classList.add('hidden');
     copiedText?.classList.remove('hidden');
     
     setTimeout(() => {
-      copyIcon?.classList.remove('hidden');
-      checkIcon?.classList.add('hidden');
       copyText?.classList.remove('hidden');
       copiedText?.classList.add('hidden');
     }, 2000);
