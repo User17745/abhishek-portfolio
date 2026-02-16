@@ -97,12 +97,12 @@ download_resume() {
 # Print banner
 print_banner() {
   echo ""
-  echo -e "${BLUE}╔══════════════════════════════════════════════════════════════════════════╗${NC}"
-  echo -e "${BLUE}║${NC}                                                              ${BLUE}║${NC}"
-  echo -e "${BLUE}║${NC}   ${GREEN}Abhishek Aggarwal${NC} - Resume Installer          ${BLUE}║${NC}"
-  echo -e "${BLUE}║${NC}   ${YELLOW}Documentation Loader v1.0${NC}                    ${BLUE}║${NC}"
-  echo -e "${BLUE}║${NC}                                                              ${BLUE}║${NC}"
-  echo -e "${BLUE}╚══════════════════════════════════════════════════════════════════════════╝${NC}"
+  echo -e "${BLUE}╔════════════════════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${BLUE}║${NC}                                                                            ${BLUE}║${NC}"
+  echo -e "${BLUE}║${NC}   ${GREEN}Abhishek Aggarwal${NC} - Resume Installer                       ${BLUE}║${NC}"
+  echo -e "${BLUE}║${NC}   ${YELLOW}Documentation Loader v1.0${NC}                                  ${BLUE}║${NC}"
+  echo -e "${BLUE}║${NC}                                                                            ${BLUE}║${NC}"
+  echo -e "${BLUE}╚════════════════════════════════════════════════════════════════════════════╝${NC}"
   echo ""
 }
 
@@ -112,16 +112,21 @@ main() {
   
   print_banner
   
-  # Create output directory
-  local home_dir="$HOME"
-  if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
-    home_dir="$USERPROFILE"
+  # Create output directory in current working directory
+  local output_dir="./abhishek-aggarwal-resumes"
+  
+  # Try to create directory in current directory, fallback to home if it fails
+  if ! mkdir -p "$output_dir" 2>/dev/null; then
+    local home_dir="$HOME"
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+      home_dir="$USERPROFILE"
+    fi
+    output_dir="${home_dir}/abhishek-aggarwal-resumes"
+    echo -e "${YELLOW}Could not write to current directory. Falling back to home directory.${NC}"
+    mkdir -p "$output_dir"
   fi
   
-  local output_dir="${home_dir}/abhishek-aggarwal-resume"
-  
   echo -e "${BLUE}Creating directory:${NC} ${output_dir}"
-  mkdir -p "$output_dir"
   echo ""
   
   # Download resumes
