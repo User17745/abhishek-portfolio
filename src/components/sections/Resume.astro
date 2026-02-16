@@ -1,12 +1,12 @@
 ---
 import { resumes } from "@/data/resumes";
-import { Button } from "@/components/ui/button";
-import { Download, Presentation, ShoppingCart, ClipboardList, Store, Box, FileText, ArrowRight } from "lucide-react";
+import { Download, Presentation, ShoppingCart, ClipboardList, ClipboardCheck, Store, Box } from "lucide-react";
 
 const iconMap: Record<string, any> = {
   Presentation: Presentation,
   ShoppingCart: ShoppingCart,
   ClipboardList: ClipboardList,
+  ClipboardCheck: ClipboardCheck,
   Store: Store,
   Box: Box,
 };
@@ -17,56 +17,54 @@ const colors = [
   { bg: "bg-emerald-500/10", text: "text-emerald-500", border: "hover:border-emerald-500/30" },
   { bg: "bg-blue-500/10", text: "text-blue-500", border: "hover:border-blue-500/30" },
   { bg: "bg-violet-500/10", text: "text-violet-500", border: "hover:border-violet-500/30" },
+  { bg: "bg-cyan-500/10", text: "text-cyan-500", border: "hover:border-cyan-500/30" },
 ];
 ---
 
 <section id="resume" class="py-20 px-4 bg-muted/30">
   <div class="container mx-auto">
-    <div class="max-w-3xl mx-auto">
-      <div class="fade-in text-center mb-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="fade-in text-center mb-10">
         <h2 class="text-3xl font-bold mb-3">Pick Your Flavor</h2>
-        <p class="text-muted-foreground text-lg">
-          Different roles, different resumes. Take your pick.
+        <p class="text-muted-foreground">
+          Much like ice cream, people sometimes come in various flavors. Here are mine:
         </p>
       </div>
       
-      <div class="space-y-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {resumes.map((resume, index) => {
           const Icon = iconMap[resume.icon] || Box;
           const color = colors[index % colors.length];
           
           return (
-            <div class={`fade-in stagger-${((index % 5) + 1)}`}>
+            <div class={`fade-in stagger-${((index % 3) + 1)}`}>
               <a
                 href={resume.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class={`group flex items-center gap-4 p-4 rounded-xl bg-card border border-border ${color.border} transition-all duration-300 hover:shadow-md`}
+                class={`group flex items-center gap-3 p-3 rounded-xl bg-card border border-border ${color.border} transition-all duration-300 hover:shadow-md`}
               >
-                <div class={`w-12 h-12 rounded-lg ${color.bg} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
-                  <Icon class={`h-6 w-6 ${color.text}`} />
+                <div class={`w-10 h-10 rounded-lg ${color.bg} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+                  <Icon class={`h-5 w-5 ${color.text}`} />
                 </div>
                 
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-foreground group-hover:text-accent transition-colors">
+                  <h3 class="font-medium text-sm text-foreground group-hover:text-accent transition-colors">
                     {resume.title}
                   </h3>
-                  <p class="text-sm text-muted-foreground truncate">
+                  <p class="text-xs text-muted-foreground truncate">
                     {resume.description}
                   </p>
                 </div>
                 
-                <div class="flex items-center gap-2 shrink-0">
-                  <span class="text-xs text-muted-foreground hidden sm:inline">PDF</span>
-                  <Download class={`h-4 w-4 ${color.text} opacity-50 group-hover:opacity-100 transition-opacity`} />
-                </div>
+                <Download class={`h-4 w-4 ${color.text} opacity-40 group-hover:opacity-100 transition-opacity shrink-0`} />
               </a>
             </div>
           );
         })}
       </div>
       
-      <div class="fade-in stagger-6 mt-8 text-center">
+      <div class="fade-in stagger-4 mt-6 text-center">
         <p class="text-xs text-muted-foreground">
           Click any flavor to download as PDF
         </p>

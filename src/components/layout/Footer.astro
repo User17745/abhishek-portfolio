@@ -29,7 +29,7 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
       
       <div>
         <h4 class="font-semibold mb-4">Find Me On</h4>
-        <div class="flex gap-3 items-center flex-wrap">
+        <div class="flex flex-wrap items-center gap-3">
           <a
             href={siteConfig.links.linkedin}
             target="_blank"
@@ -52,17 +52,23 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
           <!-- Reddit with sketch callout -->
           <div class="reddit-callout flex items-center gap-2">
             <span class="sketch-text">Hear me ramble about the silly stuff that keeps me going.</span>
-            <svg class="sketch-arrow" viewBox="0 0 60 30" fill="none">
+            <svg class="sketch-arrow" viewBox="0 0 80 40" fill="none">
+              <!-- Curvy path with "wrong turns" -->
               <path 
-                d="M5 15 Q 20 12, 35 15 Q 45 17, 52 15" 
+                d="M5 20 
+                   Q 15 10, 25 18 
+                   Q 35 26, 45 14 
+                   Q 55 4, 60 16
+                   Q 65 24, 72 20" 
                 stroke="currentColor" 
                 stroke-width="2" 
                 stroke-linecap="round"
                 stroke-dasharray="4 3"
                 class="arrow-path"
               />
+              <!-- Arrow head -->
               <path 
-                d="M48 10 L 55 15 L 48 20" 
+                d="M68 14 L 76 20 L 68 26" 
                 stroke="currentColor" 
                 stroke-width="2" 
                 stroke-linecap="round"
@@ -114,15 +120,15 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
   }
   
   .sketch-arrow {
-    width: 50px;
-    height: 24px;
+    width: 70px;
+    height: 32px;
     color: var(--color-muted-foreground);
-    transform: rotate(-3deg);
+    transform: rotate(-2deg);
     flex-shrink: 0;
   }
   
   .arrow-path {
-    animation: draw 1.5s ease-in-out infinite;
+    animation: draw 2s ease-in-out infinite;
   }
   
   @keyframes draw {
@@ -130,7 +136,7 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
       stroke-dashoffset: 0;
     }
     50% {
-      stroke-dashoffset: 8;
+      stroke-dashoffset: 12;
     }
   }
   
@@ -149,11 +155,12 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
     
     .sketch-text {
       white-space: normal;
-      max-width: 140px;
+      max-width: 130px;
     }
     
     .sketch-arrow {
-      width: 40px;
+      width: 55px;
+      height: 28px;
     }
   }
 </style>
