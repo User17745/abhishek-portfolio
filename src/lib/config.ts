@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Abhishek Aggarwal",
-  description: "Technology Solutions Architect | Product Strategist | Digital Commerce Specialist with 10+ years of experience in eCommerce, SaaS, and enterprise platforms.",
+  description: "Technology Solutions Architect | Product Strategist | Digital Commerce Specialist with 12+ years of experience in eCommerce, SaaS, and enterprise platforms.",
   url: "https://abhishekaggarwal.com",
   ogImage: "https://abhishekaggarwal.com/favicon.webp",
   analytics: {
