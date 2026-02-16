@@ -1,7 +1,7 @@
 ---
 import { summary, stats } from "@/data/summary";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Linkedin, Github } from "lucide-react";
+import { ArrowDown, Linkedin, Info } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 ---
 
@@ -49,12 +49,24 @@ import { siteConfig } from "@/lib/config";
         </div>
       </div>
       
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 pt-12">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-12">
         {stats.map((stat, index) => (
-          <div class={`fade-in stagger-${((index % 5) + 1)}`}>
-            <div class="p-4 rounded-lg bg-card border border-border stat-card hover-lift">
-              <div class="text-2xl font-bold text-highlight">{stat.value}</div>
+          <div class={`fade-in stagger-${((index % 6) + 1)}`}>
+            <div class="group relative p-4 rounded-lg bg-card border border-border stat-card hover-lift">
+              <div class="flex items-center justify-center gap-1">
+                <div class="text-2xl font-bold text-highlight">{stat.value}</div>
+                {stat.tooltip && (
+                  <Info className="h-3 w-3 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity" />
+                )}
+              </div>
               <div class="text-xs text-muted-foreground">{stat.label}</div>
+              
+              {stat.tooltip && (
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-popover text-popover-foreground text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 w-48 text-left border border-border">
+                  {stat.tooltip}
+                  <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-popover"></div>
+                </div>
+              )}
             </div>
           </div>
         ))}

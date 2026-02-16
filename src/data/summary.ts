@@ -1,9 +1,34 @@
 export const stats = [
-  { label: "Years Experience", value: "10+" },
-  { label: "Brands Served", value: "90+" },
-  { label: "Projects Delivered", value: "300+" },
-  { label: "SaaS Products Built", value: "6" },
-  { label: "Countries Reached", value: "15+" },
+  { 
+    label: "Years Experience", 
+    value: "12+", 
+    tooltip: null 
+  },
+  { 
+    label: "Brands Served", 
+    value: "90+",
+    tooltip: "Philips / Versuni, Victoria's Secret, African + Eastern, BORDERS, THE One, Metro Brands Ltd., PAN Home, DLF Brands, Sacoor Brothers, U.S. Polo Assn. and more..."
+  },
+  { 
+    label: "Solutions Delivered", 
+    value: "300+",
+    tooltip: null
+  },
+  { 
+    label: "SaaS Products", 
+    value: "4",
+    tooltip: "KartXO, KartmaX Hyperlocal, KartmaX Marketplace, KartmaX Omni-Channel"
+  },
+  { 
+    label: "eCom Stacks", 
+    value: "5",
+    tooltip: "Salesforce Commerce Cloud, Shopify Plus, Adobe Commerce Cloud, Akinon, KartmaX"
+  },
+  { 
+    label: "Countries Reached", 
+    value: "10+",
+    tooltip: "India, UAE, Saudi, Qatar, Oman, Kuwait, Bahrain, US, UK, South Korea, Australia"
+  },
 ];
 
 export const summary = {
