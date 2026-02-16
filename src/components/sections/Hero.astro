@@ -52,19 +52,22 @@ import { siteConfig } from "@/lib/config";
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-12">
         {stats.map((stat, index) => (
           <div class={`fade-in stagger-${((index % 6) + 1)}`}>
-            <div class="group relative p-4 rounded-lg bg-card border border-border stat-card hover-lift">
-              <div class="flex items-center justify-center gap-1">
-                <div class="text-2xl font-bold text-highlight">{stat.value}</div>
-                {stat.tooltip && (
-                  <Info className="h-3 w-3 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity" />
-                )}
+            <div class="stat-card-wrapper relative">
+              <div class="p-4 rounded-lg bg-card border border-border stat-card hover-lift">
+                <div class="flex items-center justify-center gap-1">
+                  <div class="text-2xl font-bold text-highlight">{stat.value}</div>
+                  {stat.tooltip && (
+                    <Info className="h-3 w-3 text-muted-foreground" />
+                  )}
+                </div>
+                <div class="text-xs text-muted-foreground h-8 flex items-center justify-center">
+                  <span class="text-center whitespace-pre-line">{stat.label}</span>
+                </div>
               </div>
-              <div class="text-xs text-muted-foreground">{stat.label}</div>
               
               {stat.tooltip && (
-                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-popover text-popover-foreground text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 w-48 text-left border border-border">
+                <div class="stat-tooltip">
                   {stat.tooltip}
-                  <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-popover"></div>
                 </div>
               )}
             </div>
@@ -84,3 +87,44 @@ import { siteConfig } from "@/lib/config";
     </div>
   </div>
 </section>
+
+<style>
+  .stat-card-wrapper:hover .stat-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .stat-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 8px 12px;
+    background: var(--color-popover);
+    color: var(--color-popover-foreground);
+    font-size: 11px;
+    line-height: 1.4;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color-border);
+    width: max-content;
+    max-width: 200px;
+    text-align: left;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+  }
+  
+  .stat-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--color-popover);
+  }
+</style>

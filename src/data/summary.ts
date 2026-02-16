@@ -1,31 +1,31 @@
 export const stats = [
   { 
-    label: "Years Experience", 
+    label: "Years\nExperience", 
     value: "12+", 
     tooltip: null 
   },
   { 
-    label: "Brands Served", 
+    label: "Brands\nServed", 
     value: "90+",
     tooltip: "Philips / Versuni, Victoria's Secret, African + Eastern, BORDERS, THE One, Metro Brands Ltd., PAN Home, DLF Brands, Sacoor Brothers, U.S. Polo Assn. and more..."
   },
   { 
-    label: "Solutions Delivered", 
+    label: "Solutions\nDelivered", 
     value: "300+",
     tooltip: null
   },
   { 
-    label: "SaaS Products", 
+    label: "SaaS\nProducts", 
     value: "4",
     tooltip: "KartXO, KartmaX Hyperlocal, KartmaX Marketplace, KartmaX Omni-Channel"
   },
   { 
-    label: "eCom Stacks", 
+    label: "eCom\nStacks", 
     value: "5",
     tooltip: "Salesforce Commerce Cloud, Shopify Plus, Adobe Commerce Cloud, Akinon, KartmaX"
   },
   { 
-    label: "Countries Reached", 
+    label: "Countries\nReached", 
     value: "10+",
     tooltip: "India, UAE, Saudi, Qatar, Oman, Kuwait, Bahrain, US, UK, South Korea, Australia"
   },

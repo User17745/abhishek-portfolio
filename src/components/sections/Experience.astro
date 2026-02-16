@@ -12,13 +12,17 @@ import { Briefcase, Building2 } from "lucide-react";
     
     <div class="max-w-4xl mx-auto">
       <div class="relative">
-        <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-highlight to-accent md:-translate-x-1/2 opacity-30"></div>
+        <!-- Animated Timeline Line -->
+        <div class="timeline-line"></div>
         
         <div class="space-y-8">
           {experiences.map((exp, index) => (
             <div class={`fade-in-${index % 2 === 0 ? 'right' : 'left'} stagger-${((index % 4) + 1)}`}>
-              <div class={`relative flex flex-col md:flex-row gap-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                <div class="absolute left-4 md:left-1/2 w-3 h-3 rounded-full timeline-dot md:-translate-x-1/2 mt-1.5"></div>
+              <div class={`timeline-item relative flex flex-col md:flex-row gap-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                <div class="timeline-dot-wrapper">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-dot-pulse"></div>
+                </div>
                 
                 <div class="flex-1 pl-12 md:pl-0 md:pr-8">
                   <div class={`flex flex-col ${index % 2 === 0 ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
@@ -38,7 +42,7 @@ import { Briefcase, Building2 } from "lucide-react";
                 </div>
                 
                 <div class="flex-1 pl-12 md:pl-8">
-                  <div class="bg-card rounded-lg border border-border p-6 hover-lift hover-glow">
+                  <div class="timeline-card bg-card rounded-lg border border-border p-6 hover-lift hover-glow">
                     <p class="text-muted-foreground text-sm mb-4">{exp.description}</p>
                     
                     <ul class="space-y-2 mb-4">
@@ -67,3 +71,125 @@ import { Briefcase, Building2 } from "lucide-react";
     </div>
   </div>
 </section>
+
+<style>
+  .timeline-line {
+    position: absolute;
+    left: 16px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, 
+      transparent 0%,
+      var(--color-accent) 10%,
+      var(--color-highlight) 50%,
+      var(--color-accent) 90%,
+      transparent 100%
+    );
+    opacity: 0.4;
+  }
+  
+  @media (min-width: 768px) {
+    .timeline-line {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  .timeline-dot-wrapper {
+    position: absolute;
+    left: 10px;
+    top: 6px;
+    z-index: 10;
+  }
+  
+  @media (min-width: 768px) {
+    .timeline-dot-wrapper {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  .timeline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-highlight));
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .timeline-item:hover .timeline-dot {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.25);
+  }
+  
+  .timeline-dot-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0;
+    animation: pulse 2s ease-out infinite;
+    z-index: 1;
+  }
+  
+  .timeline-item:hover .timeline-dot-pulse {
+    animation: pulse 1.5s ease-out infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 0.6;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(2.5);
+    }
+  }
+  
+  .timeline-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .timeline-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 0;
+    background: linear-gradient(180deg, var(--color-accent), var(--color-highlight));
+    transition: height 0.4s ease;
+    border-radius: 0 2px 2px 0;
+  }
+  
+  .timeline-item:hover .timeline-card::before {
+    height: 100%;
+  }
+  
+  .timeline-item:hover .timeline-card {
+    border-color: var(--color-accent);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-dot-pulse {
+      animation: none;
+    }
+    .timeline-card::before {
+      transition: none;
+    }
+    .timeline-dot {
+      transition: none;
+    }
+  }
+</style>
