@@ -5,36 +5,16 @@ import { skills, skillCategories } from "@/data/skills";
 
 <section id="about" class="py-20 px-4">
   <div class="container mx-auto">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-4xl mx-auto">
       <div class="fade-in">
         <h2 class="text-3xl font-bold mb-8">About Me</h2>
       </div>
       
       <div class="fade-in stagger-1">
-        <div class="flex flex-col md:flex-row gap-8 items-start mb-12">
-          <div class="shrink-0">
-            <div class="relative">
-              <div class="w-40 h-40 md:w-48 md:h-48 rounded-2xl overflow-hidden border-2 border-border shadow-lg">
-                <img 
-                  src="/profile.webp" 
-                  alt="Abhishek Aggarwal"
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div class="absolute -bottom-2 -right-2 w-12 h-12 rounded-lg bg-gradient-to-br from-accent to-highlight flex items-center justify-center text-white font-bold text-lg shadow-md">
-                AA
-              </div>
-            </div>
-          </div>
-          
-          <div class="flex-1">
-            <div class="prose prose-lg dark:prose-invert max-w-none">
-              {summary.bio.split('\n\n').map((paragraph) => (
-                <p class="text-muted-foreground mb-4">{paragraph}</p>
-              ))}
-            </div>
-          </div>
+        <div class="prose prose-lg dark:prose-invert max-w-none mb-12">
+          {summary.bio.split('\n\n').map((paragraph) => (
+            <p class="text-muted-foreground mb-4">{paragraph}</p>
+          ))}
         </div>
       </div>
       
