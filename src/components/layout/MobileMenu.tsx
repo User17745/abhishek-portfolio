@@ -32,13 +32,13 @@ export default function MobileMenu({ items }: MobileMenuProps) {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 top-16 bg-background z-50 p-6">
+        <div className="fixed inset-0 top-16 bg-background/95 backdrop-blur-md z-50 p-6">
           <nav className="flex flex-col gap-4">
             {items.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="text-lg font-medium py-2 border-b border-border"
+                className="text-lg font-medium py-3 px-4 rounded-lg hover:bg-muted transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
