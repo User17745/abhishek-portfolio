@@ -11,9 +11,6 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
         <p class="text-muted-foreground text-sm mb-4">
           Building digital commerce platforms that actually convert. Based in Dubai, working across borders.
         </p>
-        <p class="text-muted-foreground text-xs italic">
-          Want unfiltered thoughts? I ramble about tech & life over on Reddit.
-        </p>
       </div>
       
       <div>
@@ -32,7 +29,7 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
       
       <div>
         <h4 class="font-semibold mb-4">Find Me On</h4>
-        <div class="flex gap-3">
+        <div class="flex gap-3 items-center">
           <a
             href={siteConfig.links.linkedin}
             target="_blank"
@@ -51,17 +48,43 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
           >
             <Github className="h-5 w-5" />
           </a>
-          <a
-            href={siteConfig.links.reddit}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center hover:border-[#FF4500] hover:bg-[#FF4500]/10 transition-colors"
-            aria-label="Reddit"
-          >
-            <svg class="h-5 w-5 text-[#FF4500]" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.003-2.176-7.003-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .37-.249l2.972.612a1.252 1.252 0 0 1 1.042-.566zM8.5 11.983c-.968 0-1.754.786-1.754 1.754s.786 1.754 1.754 1.754 1.754-.786 1.754-1.754-.786-1.754-1.754-1.754zm7 0c-.968 0-1.754.786-1.754 1.754s.786 1.754 1.754 1.754 1.754-.786 1.754-1.754-.786-1.754-1.754-1.754zm-3.5 3.5a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1z"/>
-            </svg>
-          </a>
+          
+          <!-- Reddit with sketch arrow -->
+          <div class="reddit-wrapper relative">
+            <div class="sketch-callout">
+              <span class="sketch-text">Hear me ramble about the silly stuff that keeps me going.</span>
+              <svg class="sketch-arrow" viewBox="0 0 120 50" fill="none">
+                <path 
+                  d="M5 25 Q 30 20, 50 25 Q 70 30, 85 28 Q 95 27, 105 30" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round"
+                  stroke-dasharray="4 3"
+                  class="arrow-path"
+                />
+                <path 
+                  d="M100 25 L 108 30 L 102 36" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  fill="none"
+                  class="arrow-head"
+                />
+              </svg>
+            </div>
+            <a
+              href={siteConfig.links.reddit}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center hover:border-[#FF4500] hover:bg-[#FF4500]/10 transition-colors"
+              aria-label="Reddit"
+            >
+              <svg class="h-5 w-5 text-[#FF4500]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.003-2.176-7.003-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .37-.249l2.972.612a1.252 1.252 0 0 1 1.042-.566zM8.5 11.983c-.968 0-1.754.786-1.754 1.754s.786 1.754 1.754 1.754 1.754-.786 1.754-1.754-.786-1.754-1.754-1.754zm7 0c-.968 0-1.754.786-1.754 1.754s.786 1.754 1.754 1.754 1.754-.786 1.754-1.754-.786-1.754-1.754-1.754zm-3.5 3.5a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -71,3 +94,96 @@ import { Linkedin, Mail, MapPin, Github } from "lucide-react";
     </div>
   </div>
 </footer>
+
+<style>
+  .reddit-wrapper {
+    position: relative;
+  }
+  
+  .sketch-callout {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: -60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  
+  .reddit-wrapper:hover .sketch-callout {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .sketch-text {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive;
+    font-size: 12px;
+    color: var(--color-muted-foreground);
+    background: var(--color-card);
+    padding: 8px 12px;
+    border-radius: 12px 12px 12px 4px;
+    border: 2px dashed var(--color-border);
+    max-width: 200px;
+    white-space: normal;
+    text-align: right;
+    line-height: 1.4;
+    box-shadow: 2px 2px 0 var(--color-border);
+    transform: rotate(-2deg);
+  }
+  
+  .sketch-arrow {
+    width: 80px;
+    height: 40px;
+    color: var(--color-muted-foreground);
+    margin-top: -5px;
+    margin-right: 20px;
+    transform: rotate(10deg);
+  }
+  
+  .arrow-path {
+    animation: draw 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes draw {
+    0%, 100% {
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dashoffset: 10;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .arrow-path {
+      animation: none;
+    }
+    .sketch-callout {
+      transition: none;
+    }
+  }
+  
+  /* Mobile: show below instead of above */
+  @media (max-width: 768px) {
+    .sketch-callout {
+      bottom: auto;
+      top: calc(100% + 8px);
+      right: -80px;
+      flex-direction: column-reverse;
+    }
+    
+    .sketch-arrow {
+      transform: rotate(190deg);
+      margin-top: -8px;
+      margin-bottom: -5px;
+    }
+    
+    .sketch-text {
+      border-radius: 4px 12px 12px 12px;
+      transform: rotate(1deg);
+    }
+  }
+</style>
