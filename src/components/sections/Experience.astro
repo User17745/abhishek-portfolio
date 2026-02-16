@@ -24,7 +24,8 @@ import { Briefcase, Building2 } from "lucide-react";
                   <div class="timeline-dot-pulse"></div>
                 </div>
                 
-                <div class="flex-1 pl-12 md:pl-0 md:pr-8">
+                <!-- Info Column (period, title, company) -->
+                <div class={`flex-1 pl-12 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pr-8'}`}>
                   <div class={`flex flex-col ${index % 2 === 0 ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
                     <p class="text-sm text-accent font-medium">{exp.period}</p>
                     <h3 class="font-semibold text-lg">{exp.title}</h3>
@@ -41,7 +42,8 @@ import { Briefcase, Building2 } from "lucide-react";
                   </div>
                 </div>
                 
-                <div class="flex-1 pl-12 md:pl-8">
+                <!-- Card Column -->
+                <div class={`flex-1 pl-12 ${index % 2 === 0 ? 'md:pl-12' : 'md:pl-8'}`}>
                   <div class="timeline-card bg-card rounded-lg border border-border p-6 hover-lift hover-glow">
                     <p class="text-muted-foreground text-sm mb-4">{exp.description}</p>
                     

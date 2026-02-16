@@ -23,12 +23,18 @@ export const skills: Skill[] = [
   { name: "Shopify / Shopify Plus", category: "Platforms" },
   { name: "Magento / Adobe Commerce", category: "Platforms" },
   { name: "Salesforce Commerce Cloud", category: "Platforms" },
+  { name: "Akinon", category: "Platforms" },
   { name: "KartmaX", category: "Platforms" },
   
   { name: "CRO & Analytics", category: "Growth" },
   { name: "eCommerce Architecture", category: "Growth" },
   { name: "ERP Integration", category: "Growth" },
   { name: "Omnichannel Commerce", category: "Growth" },
+  
+  { name: "Conversion Optimization", category: "Consulting" },
+  { name: "Tech Due Diligence", category: "Consulting" },
+  { name: "Speed Optimization", category: "Consulting" },
+  { name: "Platform Migration", category: "Consulting" },
 ];
 
 export const skillCategories = [...new Set(skills.map(s => s.category))];
