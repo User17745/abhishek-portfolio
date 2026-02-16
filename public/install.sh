@@ -97,12 +97,12 @@ download_resume() {
 # Print banner
 print_banner() {
   echo ""
-  echo -e "${BLUE}╔═══════════════════════════════════════════════════════════╗${NC}"
-  echo -e "${BLUE}║${NC}                                                           ${BLUE}║${NC}"
-  echo -e "${BLUE}║${NC}   ${GREEN}Abhishek Aggarwal${NC} - Resume Installer                ${BLUE}║${NC}"
-  echo -e "${BLUE}║${NC}   ${YELLOW}Documentation Loader v1.0${NC}                              ${BLUE}║${NC}"
-  echo -e "${BLUE}║${NC}                                                           ${BLUE}║${NC}"
-  echo -e "${BLUE}╚═══════════════════════════════════════════════════════════╝${NC}"
+  echo -e "${BLUE}╔══════════════════════════════════════════════════════════════════════════╗${NC}"
+  echo -e "${BLUE}║${NC}                                                              ${BLUE}║${NC}"
+  echo -e "${BLUE}║${NC}   ${GREEN}Abhishek Aggarwal${NC} - Resume Installer          ${BLUE}║${NC}"
+  echo -e "${BLUE}║${NC}   ${YELLOW}Documentation Loader v1.0${NC}                    ${BLUE}║${NC}"
+  echo -e "${BLUE}║${NC}                                                              ${BLUE}║${NC}"
+  echo -e "${BLUE}╚══════════════════════════════════════════════════════════════════════════╝${NC}"
   echo ""
 }
 
