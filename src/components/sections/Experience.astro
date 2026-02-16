@@ -16,7 +16,7 @@ import { Briefcase, Building2 } from "lucide-react";
         <div class="timeline-line"></div>
         
         <div class="space-y-8">
-          {experiences.map((exp, index) => (
+          {[...experiences].reverse().map((exp, index) => (
             <div class={`fade-in-${index % 2 === 0 ? 'right' : 'left'} stagger-${((index % 4) + 1)}`}>
               <div class={`timeline-item relative flex flex-col md:flex-row gap-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                 <div class="timeline-dot-wrapper">
