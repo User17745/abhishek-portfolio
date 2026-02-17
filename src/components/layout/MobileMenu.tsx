@@ -32,7 +32,7 @@ export default function MobileMenu({ items }: MobileMenuProps) {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 top-16 bg-background/95 backdrop-blur-md z-50 p-6">
+        <div className="fixed inset-0 top-16 bg-background z-50 p-6">
           <nav className="flex flex-col gap-4">
             {items.map((item) => (
               <a
