@@ -16,7 +16,7 @@ import BrandLogo from "@/components/shared/BrandLogo";
     
     <div class="max-w-5xl mx-auto">
       <div class="fade-in stagger-2">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8 max-w-4xl mx-auto">
           {featuredBrands.map((brand) => (
             <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-card border border-border hover:border-accent/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
               <BrandLogo name={brand.name} color={brand.color} size="lg" client:load />

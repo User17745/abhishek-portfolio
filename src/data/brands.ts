@@ -14,6 +14,7 @@ export const brands: Brand[] = [
   { name: "PAN Home", category: "enterprise", featured: true, color: "#ea580c" },
   { name: "Caneza (Rasasi)", category: "enterprise", featured: true, color: "#c2410c" },
   { name: "Versuni", category: "enterprise", featured: true, color: "#0284c7" },
+  { name: "Al Maya Group", category: "enterprise", featured: true, color: "#0f766e" },
   
   // Retail Chains
   { name: "Metro Shoes", category: "retail", featured: true, color: "#be123c" },
@@ -28,7 +29,6 @@ export const brands: Brand[] = [
   { name: "BioFoot", category: "retail", color: "#16a34a" },
   { name: "Sabhyata", category: "retail", color: "#c2410c" },
   { name: "Inorbit Malls", category: "enterprise", color: "#2563eb" },
-  { name: "Al Maya Group", category: "enterprise", color: "#0f766e" },
   { name: "BORDERS", category: "enterprise", color: "#b45309" },
   
   // D2C & Startups
