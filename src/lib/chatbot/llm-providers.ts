@@ -258,21 +258,22 @@ export function getActiveLLMConfig(): LLMConfig | null {
   const openrouterKey = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
   const nvidiaKey = import.meta.env.PUBLIC_NVIDIA_API_KEY;
 
-  // Priority order
-  if (nvidiaKey && nvidiaKey !== "your_nvidia_api_key_here") {
-    return { provider: "nvidia", apiKey: nvidiaKey };
-  }
-
-  if (zhipuaiKey && zhipuaiKey !== "your_zhipuai_api_key_here") {
-    return { provider: "zhipuai", apiKey: zhipuaiKey };
-  }
-
+  // Priority order - fastest/most reliable first
   if (openrouterKey && openrouterKey !== "your_openrouter_api_key_here") {
     return { provider: "openrouter", apiKey: openrouterKey };
   }
 
   if (geminiKey && geminiKey !== "your_gemini_api_key_here") {
     return { provider: "gemini", apiKey: geminiKey };
+  }
+
+  if (zhipuaiKey && zhipuaiKey !== "your_zhipuai_api_key_here") {
+    return { provider: "zhipuai", apiKey: zhipuaiKey };
+  }
+
+  // Nvidia last - it's slow and often times out
+  if (nvidiaKey && nvidiaKey !== "your_nvidia_api_key_here") {
+    return { provider: "nvidia", apiKey: nvidiaKey };
   }
 
   return null;

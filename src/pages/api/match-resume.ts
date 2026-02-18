@@ -12,8 +12,11 @@ interface RequestBody {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  console.log("[API] Received request");
+  
   try {
     const body: RequestBody = await request.json();
+    console.log("[API] Parsed body, jdText length:", body.jdText?.length);
 
     if (!body.jdText) {
       return new Response(
@@ -23,9 +26,11 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const llmConfig = getActiveLLMConfig();
+    console.log("[API] LLM Config:", llmConfig?.provider || "null");
+    
     if (!llmConfig) {
       return new Response(
-        JSON.stringify({ error: "No LLM API key configured. Please set PUBLIC_GEMINI_API_KEY, PUBLIC_ZHIPUAI_API_KEY, or PUBLIC_OPENROUTER_API_KEY" }),
+        JSON.stringify({ error: "No LLM API key configured" }),
         { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
@@ -33,22 +38,30 @@ export const POST: APIRoute = async ({ request }) => {
     const searchQuery = body.userQuestion || body.jdText;
 
     // Get embedding for the job description / question
+    console.log("[API] Getting embedding...");
     const jdEmbedding = await getEmbedding(searchQuery);
+    console.log("[API] Got embedding, length:", jdEmbedding.length);
 
     // Load stored embeddings
+    console.log("[API] Loading embeddings...");
     const fs = await import("fs");
     const path = await import("path");
     const embeddingsPath = path.join(process.cwd(), "docs/resources/rag/embeddings.json");
     const embeddingsData = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
     const storedEmbeddings: EmbeddingChunk[] = embeddingsData;
+    console.log("[API] Loaded embeddings:", storedEmbeddings.length);
 
-    // Find top 5 matches
-    const topMatches = findTopMatches(jdEmbedding, storedEmbeddings, 5);
+    // Find top 3 matches (reduced from 5 for speed)
+    console.log("[API] Finding matches...");
+    const topMatches = findTopMatches(jdEmbedding, storedEmbeddings, 3);
+    console.log("[API] Found matches:", topMatches.length);
 
     // Extract context chunks for LLM
     const contextChunks = topMatches.map((m) => m.chunk.text);
+    console.log("[API] Context chunks:", contextChunks.length);
 
     // Call LLM with context to get structured analysis
+    console.log("[API] Calling LLM...");
     const analysis: LLMResponse = await callLLM(
       llmConfig,
       SYSTEM_PROMPT,
@@ -57,6 +70,7 @@ export const POST: APIRoute = async ({ request }) => {
         ? body.userQuestion
         : `Analyze how Abhishek Aggarwal fits for this job description:\n\n${body.jdText}`
     );
+    console.log("[API] Got LLM response");
 
     // Return the structured response
     return new Response(JSON.stringify(analysis), {
@@ -64,7 +78,7 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("[API] Error:", error);
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Internal server error",
