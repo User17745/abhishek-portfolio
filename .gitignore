@@ -1,5 +1,8 @@
 # build output
 dist/
+.vercel/output
+.vercel/output/**/*
+
 # generated types
 .astro/
 
@@ -12,10 +15,13 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 *.log
+logs/
 
 # environment variables
 .env
 .env.production
+.env.local
+.env.*.local
 
 # macOS-specific files
 .DS_Store
@@ -23,8 +29,11 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# vercel output
-.vercel/output
+# vscode
+.vscode/
 
 # embeddings (generated during build)
 public/embeddings.json
+
+# server functions (may contain secrets)
+#.netlify/
