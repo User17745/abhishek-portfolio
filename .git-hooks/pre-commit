@@ -1,54 +1,79 @@
 #!/bin/bash
-# Pre-commit hook to detect potential secrets in staged files
+# Pre-commit hook to detect likely hardcoded secrets in staged content.
 
-echo "🔍 Scanning for potential secrets..."
+set -euo pipefail
 
-# Patterns that might indicate secrets
-PATTERNS=(
-  "api_key"
-  "apikey"
-  "secret"
-  "password"
-  "token"
-  "Bearer"
-  "sk-"
-  "AIza"
-  "ghp_"
-  "glpat-"
-)
+echo "🔍 Scanning staged changes for potential secrets..."
 
-# Files to check
 FILES=$(git diff --cached --name-only --diff-filter=ACM)
-
 FOUND_ISSUE=0
 
+# High-confidence patterns only. This intentionally avoids generic words like
+# "token" or "api_key" to reduce false positives in normal application code.
+FULL_CONTENT_PATTERNS=(
+  'sk-[A-Za-z0-9]{20,}'
+  'AIza[0-9A-Za-z_-]{20,}'
+  'ghp_[A-Za-z0-9]{20,}'
+  'glpat-[A-Za-z0-9_-]{20,}'
+  'Bearer[[:space:]]+[A-Za-z0-9._-]{20,}'
+)
+
+# Assignment-like patterns with a long literal value.
+ADDED_LINE_PATTERNS=(
+  '(api[_-]?key|apikey|secret|password|token)[[:space:]]*[:=][[:space:]]*["'\''][^"'\'']{16,}["'\'']'
+)
+
+is_text_file() {
+  local file="$1"
+  case "$file" in
+    *.png|*.jpg|*.jpeg|*.gif|*.ico|*.webp|*.svg|*.pdf|*.woff|*.woff2|*.ttf|*.eot)
+      return 1
+      ;;
+  esac
+  return 0
+}
+
 for FILE in $FILES; do
-  # Skip certain file types
-  if [[ "$FILE" == *.png ]] || [[ "$FILE" == *.jpg ]] || [[ "$FILE" == *.gif ]] || [[ "$FILE" == *.ico ]]; then
-    continue
-  fi
-  
-  # Skip this hook file
   if [[ "$FILE" == .git-hooks/* ]]; then
     continue
   fi
-  
-  # Check each pattern
-  for PATTERN in "${PATTERNS[@]}"; do
-    if grep -iq "$PATTERN" "$FILE" 2>/dev/null; then
-      echo "⚠️  WARNING: Possible secret found in $FILE (pattern: $PATTERN)"
+
+  if ! is_text_file "$FILE"; then
+    continue
+  fi
+
+  STAGED_CONTENT="$(git show ":$FILE" 2>/dev/null || true)"
+  if [[ -z "$STAGED_CONTENT" ]]; then
+    continue
+  fi
+
+  for PATTERN in "${FULL_CONTENT_PATTERNS[@]}"; do
+    if echo "$STAGED_CONTENT" | grep -Eiq "$PATTERN"; then
+      echo "⚠️  WARNING: Possible secret found in $FILE (pattern: high-confidence token signature)"
+      FOUND_ISSUE=1
+    fi
+  done
+
+  ADDED_LINES="$(git diff --cached -U0 -- "$FILE" | grep -E '^\+[^+]' || true)"
+  if [[ -z "$ADDED_LINES" ]]; then
+    continue
+  fi
+
+  for PATTERN in "${ADDED_LINE_PATTERNS[@]}"; do
+    if echo "$ADDED_LINES" | grep -Eiq "$PATTERN"; then
+      echo "⚠️  WARNING: Possible hardcoded credential in added line(s): $FILE"
       FOUND_ISSUE=1
     fi
   done
 done
 
-if [ $FOUND_ISSUE -eq 1 ]; then
+if [ "$FOUND_ISSUE" -eq 1 ]; then
   echo ""
   echo "❌ Commit blocked - potential secrets detected!"
-  echo "Please review the files above and remove any sensitive data."
-  echo "If you're sure this is a false positive, use: git commit --no-verify"
+  echo "Review staged changes and move secrets to environment variables."
+  echo "If this is a known false positive, bypass with: git commit --no-verify"
   exit 1
 fi
 
-echo "✅ No obvious secrets detected"
+echo "✅ No likely hardcoded secrets detected"
 exit 0

@@ -24,8 +24,8 @@ export function ChatSidebar() {
 
   // Dispatch event for content squeezing
   useEffect(() => {
-    document.dispatchEvent(new CustomEvent('sidebar-state-change', { 
-      detail: { isOpen } 
+    document.dispatchEvent(new CustomEvent('sidebar-state-change', {
+      detail: { isOpen }
     }));
   }, [isOpen]);
 
@@ -34,16 +34,16 @@ export function ChatSidebar() {
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       data-sidebar-open="true"
       className="fixed right-0 top-16 w-full md:w-[450px] h-[calc(100vh-4rem)] bg-background border-l border-border z-30 flex flex-col overscroll-y-contain"
       style={{ overscrollBehavior: 'contain' }}
     >
       {/* Close button - positioned lower */}
       <div className="flex justify-end p-3 shrink-0">
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={closeChat}
           className="h-9 w-9 bg-muted/80 hover:bg-muted"
         >
@@ -60,6 +60,23 @@ export function ChatSidebar() {
 }
 
 export function ChatButton() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleSidebarState = (event: Event) => {
+      const customEvent = event as CustomEvent<{ isOpen?: boolean }>;
+      setIsSidebarOpen(Boolean(customEvent.detail?.isOpen));
+    };
+
+    document.addEventListener("sidebar-state-change", handleSidebarState as EventListener);
+    const sidebarOpen = document.querySelector('[data-sidebar-open="true"]') !== null;
+    setIsSidebarOpen(sidebarOpen);
+
+    return () => {
+      document.removeEventListener("sidebar-state-change", handleSidebarState as EventListener);
+    };
+  }, []);
+
   const handleClick = () => {
     document.dispatchEvent(new CustomEvent('toggle-chat'));
   };
@@ -69,12 +86,14 @@ export function ChatButton() {
       onClick={handleClick}
       className="group inline-flex items-center gap-3 px-6 py-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
     >
-      <img 
-        src="/cookie-avatar.gif" 
-        alt="Cookie" 
-        className="w-8 h-8 rounded-full border-2 border-white/20"
-      />
-      <span className="font-medium">Check my eligibility</span>
+      {!isSidebarOpen && (
+        <img
+          src="/cookie-avatar.gif"
+          alt="Cookie"
+          className="w-8 h-8 rounded-full border-2 border-white/20"
+        />
+      )}
+      <span className="font-medium">Interview me right now!</span>
     </button>
   );
 }

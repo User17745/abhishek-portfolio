@@ -6,14 +6,28 @@ export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  attachment?: ChatAttachmentPreview;
   metadata?: {
+    mode?: "analysis" | "conversation";
     fit_score?: number;
     strong_matches?: string[];
     partial_matches?: string[];
     gaps?: string[];
     recommended_positioning?: string;
     confidence_level?: "High" | "Medium" | "Low";
+    suggested_questions?: string[];
   };
+}
+
+export interface ChatAttachment {
+  name: string;
+  mimeType: string;
+  base64: string;
+}
+
+export interface ChatAttachmentPreview {
+  name: string;
+  mimeType: string;
 }
 
 interface ChatContextType {

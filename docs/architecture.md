@@ -191,7 +191,7 @@ src/
 | Component | Description |
 |-----------|-------------|
 | `ChatSidebar` | Fixed right sidebar, appears under header |
-| `ChatButton` | "Check my eligibility" button in Hero |
+| `ChatButton` | "Interview me right now!" button in Hero |
 | `CookieToggle` | Icon in header nav (next to theme toggle) |
 | `ChatComponent` | Messages list + input area |
 | `ChatContainer` | Message state + API calls |

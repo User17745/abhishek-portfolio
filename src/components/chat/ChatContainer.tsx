@@ -1,24 +1,84 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChatComponent } from "./ChatComponent";
-import type { ChatMessage } from "./ChatContext";
+import type { ChatAttachment, ChatMessage } from "./ChatContext";
+
+const CHAT_STORAGE_KEY = "cookie_chat_history_v1";
 
 export function ChatContainer() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(CHAT_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as Array<Omit<ChatMessage, "timestamp"> & { timestamp: string }>;
+      const hydrated = parsed.map((msg) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp),
+      }));
+      setMessages(hydrated);
+    } catch (error) {
+      console.error("Failed to load chat history:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const serializable = messages.map((msg) => ({
+        ...msg,
+        timestamp: msg.timestamp.toISOString(),
+      }));
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(serializable));
+    } catch (error) {
+      console.error("Failed to save chat history:", error);
+    }
+  }, [messages]);
+
   const addMessage = (message: ChatMessage) => {
     setMessages(prev => [...prev, message]);
   };
 
-  const handleSendMessage = async (message: string, fileContent?: string) => {
-    if (!message.trim() && !fileContent) return;
+  const clearSuggestedQuestions = () => {
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (!msg.metadata?.suggested_questions?.length) {
+          return msg;
+        }
+        return {
+          ...msg,
+          metadata: {
+            ...msg.metadata,
+            suggested_questions: [],
+          },
+        };
+      })
+    );
+  };
+
+  const handleClearChat = () => {
+    setMessages([]);
+    localStorage.removeItem(CHAT_STORAGE_KEY);
+  };
+
+  const handleSendMessage = async (message: string, attachment?: ChatAttachment) => {
+    if (!message.trim() && !attachment) return;
+
+    // Suggestions are ephemeral and should disappear after any next user action.
+    clearSuggestedQuestions();
 
     // Add user message
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
-      content: fileContent ? `${message}\n\n[Attached file content]\n${fileContent}` : message,
+      content: message.trim() || `Uploaded file: ${attachment?.name}`,
       timestamp: new Date(),
+      attachment: attachment
+        ? {
+            name: attachment.name,
+            mimeType: attachment.mimeType,
+          }
+        : undefined,
     };
 
     addMessage(userMessage);
@@ -31,7 +91,12 @@ export function ChatContainer() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          jdText: message || fileContent || "",
+          message,
+          attachment,
+          conversationHistory: messages.slice(-10).map((item) => ({
+            role: item.role,
+            content: item.content,
+          })),
         }),
       });
 
@@ -40,14 +105,26 @@ export function ChatContainer() {
       }
 
       const data = await response.json();
+      const isAnalysis = data?.mode === "analysis" || typeof data?.fit_score === "number";
+      const assistantContent =
+        data?.mode === "conversation" && typeof data?.response_text === "string"
+          ? data.response_text
+          : isAnalysis
+            ? "Here is the fitment analysis."
+            : "I processed your request.";
 
       // Add assistant message
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: JSON.stringify(data),
+        content: assistantContent,
         timestamp: new Date(),
-        metadata: data,
+        metadata: {
+          ...data,
+          mode: isAnalysis ? "analysis" : "conversation",
+          suggested_questions:
+            Array.isArray(data?.suggested_questions) ? data.suggested_questions.slice(0, 3) : [],
+        },
       };
 
       addMessage(assistantMessage);
@@ -72,6 +149,7 @@ export function ChatContainer() {
     <ChatComponent
       messages={messages}
       onSendMessage={handleSendMessage}
+      onClearChat={handleClearChat}
       isLoading={isLoading}
     />
   );

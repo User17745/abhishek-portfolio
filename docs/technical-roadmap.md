@@ -68,7 +68,7 @@ MVP ──────────────────→ Target Maturity
 - [x] Multi-provider LLM support (OpenRouter, Gemini, ZhipuAI, Nvidia NIM)
 - [x] Automatic provider fallback on failure
 - [x] Sidebar UI (right side, under header)
-- [x] "Check my eligibility" button in Hero
+- [x] "Interview me right now!" button in Hero
 - [x] Cookie icon in header navigation
 - [x] Fit score visualization
 - [x] Strong/partial matches and gaps display
