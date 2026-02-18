@@ -1,4 +1,4 @@
-import { useState, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, type ChangeEvent } from "react";
 import { Send, Upload, X, FileText, Bot, User, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

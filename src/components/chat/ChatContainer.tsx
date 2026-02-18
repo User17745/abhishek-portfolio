@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChatComponent, type ChatMessage } from "./ChatComponent";
 
 export function ChatContainer() {

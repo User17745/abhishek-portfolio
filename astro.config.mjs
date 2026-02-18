@@ -13,12 +13,18 @@ export default defineConfig({
   site: 'https://abhishekaggarwal.com',
   output: 'server',
   adapter: vercel(),
-  integrations: [react(), sitemap({
+  integrations: [react({
+    experimentalReactChildren: true,
+  }), sitemap({
     changefreq: 'monthly',
     priority: 0.7,
     lastmod: new Date(),
   }), mdx()],
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    esbuild: {
+      jsx: 'automatic',
+      jsxImportSource: 'react'
+    }
   }
 });
