@@ -110,7 +110,7 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
 
       {metadata.recommended_positioning && (
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold">How To Position Abhishek For This Role</h4>
+          <h4 className="text-sm font-semibold">Abhishek For This Role?</h4>
           <p className="text-sm text-muted-foreground">{renderAssistantTextWithEmphasis(metadata.recommended_positioning)}</p>
         </div>
       )}
