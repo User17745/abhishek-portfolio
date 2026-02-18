@@ -65,7 +65,7 @@ function ConfidenceBadge({ level }: { level: "High" | "Medium" | "Low" }) {
 
 function MatchList({ title, items, icon: Icon, colorClass }: { 
   title: string; 
-  items: string[]; 
+  items?: string[]; 
   icon: typeof CheckCircle;
   colorClass: string;
 }) {
@@ -102,21 +102,21 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
 
       <MatchList
         title="Strong Matches"
-        items={metadata.strong_matches || []}
+        items={metadata.strong_matches}
         icon={CheckCircle}
         colorClass="text-green-500"
       />
 
       <MatchList
         title="Partial Matches"
-        items={metadata.partial_matches || []}
+        items={metadata.partial_matches}
         icon={AlertCircle}
         colorClass="text-amber-500"
       />
 
       <MatchList
         title="Gaps"
-        items={metadata.gaps || []}
+        items={metadata.gaps}
         icon={AlertCircle}
         colorClass="text-red-500"
       />
@@ -138,6 +138,7 @@ export function ChatComponent({
 }: ChatComponentProps) {
   const [input, setInput] = useState("");
   const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
+  const [hasError, setHasError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -150,7 +151,12 @@ export function ChatComponent({
     setInput("");
     setAttachedFile(null);
 
-    await onSendMessage(messageToSend, fileContent);
+    try {
+      await onSendMessage(messageToSend, fileContent);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setHasError(true);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -202,6 +208,20 @@ export function ChatComponent({
     }
     return null;
   };
+
+  if (hasError) {
+    return (
+      <Card className="w-full max-w-2xl mx-auto p-8 text-center">
+        <p className="text-red-500">Something went wrong. Please refresh the page.</p>
+        <Button 
+          onClick={() => window.location.reload()} 
+          className="mt-4"
+        >
+          Refresh
+        </Button>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto h-[700px] flex flex-col">
