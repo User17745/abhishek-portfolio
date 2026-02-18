@@ -252,11 +252,12 @@ async function callNvidia(
 }
 
 // Get active provider from environment
+// NOTE: Use private env vars (not PUBLIC_) to prevent key exposure
 export function getActiveLLMConfig(): LLMConfig | null {
-  const geminiKey = import.meta.env.PUBLIC_GEMINI_API_KEY;
-  const zhipuaiKey = import.meta.env.PUBLIC_ZHIPUAI_API_KEY;
-  const openrouterKey = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
-  const nvidiaKey = import.meta.env.PUBLIC_NVIDIA_API_KEY;
+  const geminiKey = import.meta.env.GEMINI_API_KEY;
+  const zhipuaiKey = import.meta.env.ZHIPUAI_API_KEY;
+  const openrouterKey = import.meta.env.OPENROUTER_API_KEY;
+  const nvidiaKey = import.meta.env.NVIDIA_API_KEY;
 
   console.log("[LLM] Checking API keys:");
   console.log("[LLM] Gemini:", geminiKey ? `${geminiKey.substring(0, 10)}...` : "not set");
@@ -280,7 +281,6 @@ export function getActiveLLMConfig(): LLMConfig | null {
     return { provider: "zhipuai", apiKey: zhipuaiKey };
   }
 
-  // Nvidia last - it's slow and often times out
   if (nvidiaKey && nvidiaKey !== "your_nvidia_api_key_here") {
     console.log("[LLM] Using Nvidia");
     return { provider: "nvidia", apiKey: nvidiaKey };
@@ -292,10 +292,10 @@ export function getActiveLLMConfig(): LLMConfig | null {
 
 // Get fallback config for a specific provider
 export function getFallbackConfig(provider: LLMProvider): LLMConfig | null {
-  const geminiKey = import.meta.env.PUBLIC_GEMINI_API_KEY;
-  const zhipuaiKey = import.meta.env.PUBLIC_ZHIPUAI_API_KEY;
-  const openrouterKey = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
-  const nvidiaKey = import.meta.env.PUBLIC_NVIDIA_API_KEY;
+  const geminiKey = import.meta.env.GEMINI_API_KEY;
+  const zhipuaiKey = import.meta.env.ZHIPUAI_API_KEY;
+  const openrouterKey = import.meta.env.OPENROUTER_API_KEY;
+  const nvidiaKey = import.meta.env.NVIDIA_API_KEY;
 
   switch (provider) {
     case "gemini":

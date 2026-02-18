@@ -117,14 +117,17 @@ User Input (JD/Question)
 Create a `.env` file:
 
 ```bash
-# Gemini (for embeddings)
-PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+# IMPORTANT: Use private env vars (NOT PUBLIC_) to prevent key exposure
+# These are server-side only and won't be exposed to the client
+
+# Gemini (for embeddings) - Required
+GEMINI_API_KEY=your_gemini_api_key
 
 # LLM Providers (at least one required)
-PUBLIC_OPENROUTER_API_KEY=your_openrouter_api_key
-PUBLIC_GEMINI_API_KEY=your_gemini_api_key
-PUBLIC_ZHIPUAI_API_KEY=your_zhipuai_api_key
-PUBLIC_NVIDIA_API_KEY=your_nvidia_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+GEMINI_API_KEY=your_gemini_api_key
+ZHIPUAI_API_KEY=your_zhipuai_api_key
+NVIDIA_API_KEY=your_nvidia_api_key
 ```
 
 ## Local Development
