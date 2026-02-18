@@ -36,28 +36,18 @@ export function ChatSidebar() {
   return (
     <div 
       data-sidebar-open="true"
-      className="fixed right-0 top-0 w-full md:w-[450px] h-screen bg-background border-l border-border z-50 flex flex-col"
+      className="fixed right-0 top-16 w-full md:w-[450px] h-[calc(100vh-4rem)] bg-background border-l border-border z-30 flex flex-col overscroll-y-contain"
+      style={{ overscrollBehavior: 'contain' }}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-muted/50 shrink-0">
-        <div className="flex items-center gap-3">
-          <img 
-            src="/cookie-avatar.gif" 
-            alt="Cookie" 
-            className="w-10 h-10 rounded-full"
-          />
-          <div>
-            <span className="font-semibold text-lg">Cookie</span>
-            <p className="text-xs text-muted-foreground">- My personal agent, he will help you with all your queries.</p>
-          </div>
-        </div>
+      {/* Close button - positioned lower */}
+      <div className="flex justify-end p-3 shrink-0">
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={closeChat}
-          className="h-8 w-8"
+          className="h-9 w-9 bg-muted/80 hover:bg-muted"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </Button>
       </div>
 

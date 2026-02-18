@@ -198,12 +198,14 @@ export function ChatComponent({
   return (
     <div className="flex flex-col h-full">
       {/* Messages - Scrollable area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-y-contain" style={{ overscrollBehavior: 'contain' }}>
         {messages.length === 0 && (
-          <div className="text-center text-muted-foreground py-8">
-            <img src="/cookie-avatar.gif" alt="Cookie" className="h-12 w-12 mx-auto mb-4 rounded-full opacity-80" />
-            <p>Welcome! I&apos;m Cookie, Abhishek&apos;s personal agent.</p>
-            <p className="text-sm mt-2">Paste a job description or upload a file and I&apos;ll analyze the fit.</p>
+          <div className="h-full flex flex-col items-center justify-center text-center space-y-3 min-h-[200px]">
+            <img src="/cookie-avatar.gif" alt="Cookie" className="h-16 w-16 rounded-full opacity-90" />
+            <div>
+              <p className="font-medium text-foreground">Welcome! I&apos;m Cookie</p>
+              <p className="text-sm text-muted-foreground mt-1">Paste a job description or upload a file and I&apos;ll analyze the fit.</p>
+            </div>
           </div>
         )}
 
@@ -273,16 +275,16 @@ export function ChatComponent({
       </div>
 
       {/* Input Area - Sticky at bottom */}
-      <div className="p-4 border-t bg-background shrink-0">
+      <div className="p-3 border-t bg-background shrink-0">
         {/* Attached File */}
         {attachedFile && (
-          <div className="mb-3">
+          <div className="mb-2">
             <div className="flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
-              <FileText className="h-4 w-4 text-muted-foreground" />
+              <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
               <span className="text-sm flex-1 truncate">{attachedFile.name}</span>
               <button
                 onClick={removeFile}
-                className="p-1 hover:bg-muted-foreground/20 rounded"
+                className="p-1 hover:bg-muted-foreground/20 rounded shrink-0"
                 disabled={isLoading}
               >
                 <X className="h-3 w-3" />
@@ -291,7 +293,7 @@ export function ChatComponent({
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className="flex items-end gap-2">
           <input
             type="file"
             ref={fileInputRef}
@@ -307,23 +309,28 @@ export function ChatComponent({
             size="icon"
             onClick={() => fileInputRef.current?.click()}
             disabled={isLoading}
+            className="shrink-0 h-10 w-10"
           >
             <Upload className="h-4 w-4" />
           </Button>
 
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Paste job description or ask a question..."
-            className="min-h-[44px] max-h-[200px] resize-none"
-            disabled={isLoading}
-          />
+          <div className="flex-1">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about eligibility..."
+              className="min-h-[40px] max-h-[120px] resize-none text-sm"
+              disabled={isLoading}
+              rows={1}
+            />
+          </div>
 
           <Button
             onClick={handleSubmit}
             disabled={(!input.trim() && !attachedFile) || isLoading}
             size="icon"
+            className="shrink-0 h-10 w-10"
           >
             {isLoading ? (
               <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -333,8 +340,8 @@ export function ChatComponent({
           </Button>
         </div>
 
-        <p className="text-xs text-muted-foreground mt-2 text-center">
-          Press Enter to send • Supports .txt and .md file uploads
+        <p className="text-[10px] text-muted-foreground mt-1.5 text-center">
+          Press Enter to send • Supports .txt and .md files
         </p>
       </div>
     </div>
