@@ -65,7 +65,7 @@ async function callGemini(
   };
 
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
+    model: "gemini-1.5-flash",
     generationConfig: {
       temperature: 0.3,
       responseMimeType: "application/json",
@@ -155,28 +155,44 @@ async function callOpenRouter(
     .map((chunk, i) => `--- Context ${i + 1} ---\n${chunk}`)
     .join("\n\n");
 
+  // Explicitly request JSON format in the prompt
+  const enhancedPrompt = `${systemPrompt}
+
+IMPORTANT: You must respond with ONLY valid JSON. No markdown formatting, no explanations, no code blocks. Just the raw JSON object.
+
+Context:
+${context}
+
+Question:
+${userQuestion}`;
+
   const result = await client.chat.completions.create({
     model: "google/gemini-2.0-flash-001",
     messages: [
-      { role: "system", content: systemPrompt },
-      {
-        role: "user",
-        content: `Context:\n${context}\n\nQuestion:\n${userQuestion}`,
-      },
+      { role: "user", content: enhancedPrompt },
     ],
     temperature: 0.3,
-    response_format: { type: "json_object" },
+    max_tokens: 2048,
   });
 
-  const content = result.choices[0]?.message?.content;
+  let content = result.choices[0]?.message?.content;
   if (!content) {
     throw new Error("No response from OpenRouter");
   }
 
+  // Clean up the response - remove markdown code blocks if present
+  content = content.trim();
+  if (content.startsWith("```json")) {
+    content = content.replace(/```json\n?/, "").replace(/\n?```$/, "");
+  } else if (content.startsWith("```")) {
+    content = content.replace(/```\n?/, "").replace(/\n?```$/, "");
+  }
+
   try {
     return JSON.parse(content);
-  } catch {
-    throw new Error("Invalid JSON response from OpenRouter");
+  } catch (error) {
+    console.error("Failed to parse OpenRouter response:", content);
+    throw new Error(`Invalid JSON response from OpenRouter: ${error.message}`);
   }
 }
 
@@ -187,31 +203,43 @@ async function callNvidia(
   contextChunks: string[],
   userQuestion: string
 ): Promise<LLMResponse> {
-  const OpenAI = (await import("openai")).default;
-  
-  const client = new OpenAI({
-    apiKey,
-    baseURL: "https://integrate.api.nvidia.com/v1",
-  });
-
   const context = contextChunks
     .map((chunk, i) => `--- Context ${i + 1} ---\n${chunk}`)
     .join("\n\n");
 
-  const result = await client.chat.completions.create({
-    model: "moonshotai/kimi-k2.5",
-    messages: [
-      { role: "system", content: systemPrompt },
-      {
-        role: "user",
-        content: `Context:\n${context}\n\nQuestion:\n${userQuestion}`,
-      },
-    ],
-    temperature: 0.3,
-    response_format: { type: "json_object" },
+  const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "moonshotai/kimi-k2.5",
+      messages: [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: `Context:\n${context}\n\nQuestion:\n${userQuestion}`,
+        },
+      ],
+      max_tokens: 4096,
+      temperature: 0.3,
+      top_p: 1.0,
+      stream: false,
+      chat_template_kwargs: {
+        thinking: false
+      }
+    }),
   });
 
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Nvidia NIM API error: ${response.status} ${errorText}`);
+  }
+
+  const result = await response.json();
   const content = result.choices[0]?.message?.content;
+  
   if (!content) {
     throw new Error("No response from Nvidia NIM");
   }

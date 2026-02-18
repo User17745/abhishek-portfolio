@@ -2,16 +2,8 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from "openai";
-import ZhipuAI from "zhipuai";
 
 const SYSTEM_PROMPT = `You are the AI professional representation for Abhishek Aggarwal. Your name is Cookie.
-
-You must:
-- Only use the provided career context.
-- Never fabricate experience.
-- If insufficient data exists, say: "Insufficient data to confirm."
-- Be concise, recruiter-focused, and analytical.
-- Output strictly valid JSON.
 
 Return:
 {
@@ -23,240 +15,177 @@ Return:
   "confidence_level": "High" | "Medium" | "Low"
 }`;
 
-const testContext = [
-  "Abhishek Aggarwal is a Technology Solutions Architect with 12+ years of experience in eCommerce and enterprise platforms.",
-  "He has worked with brands like Victoria's Secret, Philips, and Metro Shoes.",
-];
+const testQuestion = "We need a Technical Project Manager with eCommerce experience.";
 
-const testQuestion = "We need a Technical Project Manager with eCommerce experience for a Shopify Plus implementation.";
-
-async function testGemini(apiKey) {
-  console.log("\n" + "=".repeat(60));
-  console.log("Testing GEMINI...");
+async function testWithTimeout(name, testFn, timeout = 30000) {
+  console.log(`\n${"=".repeat(60)}`);
+  console.log(`Testing ${name}...`);
   console.log("=".repeat(60));
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
-      generationConfig: {
-        temperature: 0.3,
-        responseMimeType: "application/json",
-      },
-    });
-
-    const context = testContext.join("\n\n");
-    const prompt = `${SYSTEM_PROMPT}\n\n## Context\n${context}\n\n## Question\n${testQuestion}`;
-
-    const startTime = Date.now();
-    const result = await model.generateContent(prompt);
-    const duration = Date.now() - startTime;
-
-    const response = JSON.parse(result.response.text());
-    console.log("✓ SUCCESS");
-    console.log(`  Response time: ${duration}ms`);
-    console.log(`  Fit score: ${response.fit_score}`);
-    console.log(`  Confidence: ${response.confidence_level}`);
-    return true;
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("Timeout after 30s")), timeout)
+    );
+    const result = await Promise.race([testFn(), timeoutPromise]);
+    return result;
   } catch (error) {
     console.log("✗ FAILED");
     console.log(`  Error: ${error.message}`);
     return false;
   }
+}
+
+async function testGemini(apiKey) {
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash",
+    generationConfig: { temperature: 0.3, responseMimeType: "application/json" },
+  });
+
+  const startTime = Date.now();
+  const result = await model.generateContent(`${SYSTEM_PROMPT}\n\nQuestion: ${testQuestion}`);
+  const duration = Date.now() - startTime;
+
+  const response = JSON.parse(result.response.text());
+  console.log("✓ SUCCESS");
+  console.log(`  Response time: ${duration}ms`);
+  console.log(`  Fit score: ${response.fit_score}`);
+  return true;
 }
 
 async function testZhipuAI(apiKey) {
-  console.log("\n" + "=".repeat(60));
-  console.log("Testing ZHIPUAI (GLM-4.7-Flash)...");
-  console.log("=".repeat(60));
+  const { ZhipuAI } = await import("zhipuai");
+  const client = new ZhipuAI({ apiKey });
+  
+  const startTime = Date.now();
+  const result = await client.chat.completions.create({
+    model: "glm-4.7-flash",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: testQuestion },
+    ],
+    temperature: 0.3,
+  });
+  const duration = Date.now() - startTime;
 
+  const content = result.choices[0]?.message?.content;
+  let response;
   try {
-    const client = new ZhipuAI({ apiKey });
-    
-    const context = testContext.join("\n\n");
-    const startTime = Date.now();
-    
-    const result = await client.chat.completions.create({
-      model: "glm-4.7-flash",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: `Context:\n${context}\n\nQuestion:\n${testQuestion}` },
-      ],
-      temperature: 0.3,
-    });
-    
-    const duration = Date.now() - startTime;
-    const content = result.choices[0]?.message?.content;
-    
-    if (!content) {
-      throw new Error("No response content");
-    }
-
-    // Try to extract JSON from response
-    let response;
-    try {
-      response = JSON.parse(content);
-    } catch {
-      // Try to extract JSON from markdown code blocks
-      const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/);
-      if (jsonMatch) {
-        response = JSON.parse(jsonMatch[1]);
-      } else {
-        throw new Error("Could not parse JSON response");
-      }
-    }
-
-    console.log("✓ SUCCESS");
-    console.log(`  Response time: ${duration}ms`);
-    console.log(`  Fit score: ${response.fit_score}`);
-    console.log(`  Confidence: ${response.confidence_level}`);
-    return true;
-  } catch (error) {
-    console.log("✗ FAILED");
-    console.log(`  Error: ${error.message}`);
-    if (error.message.includes("404")) {
-      console.log("  Note: Model 'glm-4.7-flash' may not be available. Try 'glm-4-flash' instead.");
-    }
-    return false;
+    response = JSON.parse(content);
+  } catch {
+    const match = content.match(/```json\n([\s\S]*?)\n```/);
+    response = JSON.parse(match[1]);
   }
+
+  console.log("✓ SUCCESS");
+  console.log(`  Response time: ${duration}ms`);
+  console.log(`  Fit score: ${response.fit_score}`);
+  return true;
 }
 
 async function testOpenRouter(apiKey) {
-  console.log("\n" + "=".repeat(60));
-  console.log("Testing OPENROUTER...");
-  console.log("=".repeat(60));
+  const client = new OpenAI({ apiKey, baseURL: "https://openrouter.ai/api/v1" });
+  
+  const startTime = Date.now();
+  const result = await client.chat.completions.create({
+    model: "google/gemini-2.0-flash-001",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: testQuestion },
+    ],
+    temperature: 0.3,
+  });
+  const duration = Date.now() - startTime;
 
-  try {
-    const client = new OpenAI({
-      apiKey,
-      baseURL: "https://openrouter.ai/api/v1",
-    });
-
-    const context = testContext.join("\n\n");
-    const startTime = Date.now();
-    
-    const result = await client.chat.completions.create({
-      model: "google/gemini-2.0-flash-001",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: `Context:\n${context}\n\nQuestion:\n${testQuestion}` },
-      ],
-      temperature: 0.3,
-    });
-    
-    const duration = Date.now() - startTime;
-    const content = result.choices[0]?.message?.content;
-    
-    if (!content) {
-      throw new Error("No response content");
-    }
-
-    const response = JSON.parse(content);
-    console.log("✓ SUCCESS");
-    console.log(`  Response time: ${duration}ms`);
-    console.log(`  Fit score: ${response.fit_score}`);
-    console.log(`  Confidence: ${response.confidence_level}`);
-    return true;
-  } catch (error) {
-    console.log("✗ FAILED");
-    console.log(`  Error: ${error.message}`);
-    return false;
-  }
+  const response = JSON.parse(result.choices[0].message.content);
+  console.log("✓ SUCCESS");
+  console.log(`  Response time: ${duration}ms`);
+  console.log(`  Fit score: ${response.fit_score}`);
+  return true;
 }
 
 async function testNvidia(apiKey) {
-  console.log("\n" + "=".repeat(60));
-  console.log("Testing NVIDIA NIM...");
-  console.log("=".repeat(60));
+  const client = new OpenAI({ apiKey, baseURL: "https://integrate.api.nvidia.com/v1" });
+  
+  const startTime = Date.now();
+  const result = await client.chat.completions.create({
+    model: "moonshotai/kimi-k2.5",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: testQuestion },
+    ],
+    temperature: 0.3,
+  });
+  const duration = Date.now() - startTime;
 
-  try {
-    const client = new OpenAI({
-      apiKey,
-      baseURL: "https://integrate.api.nvidia.com/v1",
-    });
-
-    const context = testContext.join("\n\n");
-    const startTime = Date.now();
-    
-    const result = await client.chat.completions.create({
-      model: "nvidia/llama-3.3-nemotron-super-49b-v1",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: `Context:\n${context}\n\nQuestion:\n${testQuestion}` },
-      ],
-      temperature: 0.3,
-    });
-    
-    const duration = Date.now() - startTime;
-    const content = result.choices[0]?.message?.content;
-    
-    if (!content) {
-      throw new Error("No response content");
-    }
-
-    const response = JSON.parse(content);
-    console.log("✓ SUCCESS");
-    console.log(`  Response time: ${duration}ms`);
-    console.log(`  Fit score: ${response.fit_score}`);
-    console.log(`  Confidence: ${response.confidence_level}`);
-    return true;
-  } catch (error) {
-    console.log("✗ FAILED");
-    console.log(`  Error: ${error.message}`);
-    return false;
-  }
+  const response = JSON.parse(result.choices[0].message.content);
+  console.log("✓ SUCCESS");
+  console.log(`  Response time: ${duration}ms`);
+  console.log(`  Fit score: ${response.fit_score}`);
+  return true;
 }
 
 async function main() {
   console.log("Testing all LLM providers...\n");
 
-  const results = {
-    nvidia: false,
-    zhipuai: false,
-    openrouter: false,
-    gemini: false,
-  };
+  // Load env vars
+  const env = {};
+  try {
+    const fs = await import("fs");
+    const envContent = fs.readFileSync(".env", "utf-8");
+    envContent.split("\n").forEach(line => {
+      const [key, ...valueParts] = line.split("=");
+      if (key && valueParts.length > 0 && !key.startsWith("#")) {
+        env[key.trim()] = valueParts.join("=").trim();
+      }
+    });
+  } catch (e) {}
 
-  // Test Nvidia
-  if (process.env.PUBLIC_NVIDIA_API_KEY && 
-      process.env.PUBLIC_NVIDIA_API_KEY !== "your_nvidia_api_key_here") {
-    results.nvidia = await testNvidia(process.env.PUBLIC_NVIDIA_API_KEY);
+  const getEnv = (key) => process.env[key] || env[key];
+  const results = {};
+
+  // Test Gemini
+  const geminiKey = getEnv("PUBLIC_GEMINI_API_KEY");
+  if (geminiKey && !geminiKey.includes("your_")) {
+    results.gemini = await testWithTimeout("GEMINI", () => testGemini(geminiKey));
   } else {
-    console.log("\n⚠ SKIPPED: Nvidia (no API key)");
+    console.log("\n⚠ SKIPPED: Gemini");
+    results.gemini = false;
   }
 
   // Test ZhipuAI
-  if (process.env.PUBLIC_ZHIPUAI_API_KEY && 
-      process.env.PUBLIC_ZHIPUAI_API_KEY !== "your_zhipuai_api_key_here") {
-    results.zhipuai = await testZhipuAI(process.env.PUBLIC_ZHIPUAI_API_KEY);
+  const zhipuKey = getEnv("PUBLIC_ZHIPUAI_API_KEY");
+  if (zhipuKey && !zhipuKey.includes("your_")) {
+    results.zhipuai = await testWithTimeout("ZHIPUAI", () => testZhipuAI(zhipuKey));
   } else {
-    console.log("\n⚠ SKIPPED: ZhipuAI (no API key)");
+    console.log("\n⚠ SKIPPED: ZhipuAI");
+    results.zhipuai = false;
   }
 
   // Test OpenRouter
-  if (process.env.PUBLIC_OPENROUTER_API_KEY && 
-      process.env.PUBLIC_OPENROUTER_API_KEY !== "your_openrouter_api_key_here") {
-    results.openrouter = await testOpenRouter(process.env.PUBLIC_OPENROUTER_API_KEY);
+  const routerKey = getEnv("PUBLIC_OPENROUTER_API_KEY");
+  if (routerKey && !routerKey.includes("your_")) {
+    results.openrouter = await testWithTimeout("OPENROUTER", () => testOpenRouter(routerKey));
   } else {
-    console.log("\n⚠ SKIPPED: OpenRouter (no API key)");
+    console.log("\n⚠ SKIPPED: OpenRouter");
+    results.openrouter = false;
   }
 
-  // Test Gemini
-  if (process.env.PUBLIC_GEMINI_API_KEY && 
-      process.env.PUBLIC_GEMINI_API_KEY !== "your_gemini_api_key_here") {
-    results.gemini = await testGemini(process.env.PUBLIC_GEMINI_API_KEY);
+  // Test Nvidia
+  const nvidiaKey = getEnv("PUBLIC_NVIDIA_API_KEY");
+  if (nvidiaKey && !nvidiaKey.includes("your_")) {
+    results.nvidia = await testWithTimeout("NVIDIA NIM", () => testNvidia(nvidiaKey));
   } else {
-    console.log("\n⚠ SKIPPED: Gemini (no API key)");
+    console.log("\n⚠ SKIPPED: Nvidia");
+    results.nvidia = false;
   }
 
   // Summary
   console.log("\n" + "=".repeat(60));
   console.log("SUMMARY");
   console.log("=".repeat(60));
-  
   for (const [provider, success] of Object.entries(results)) {
-    const status = success ? "✓ WORKING" : "✗ FAILED/SKIPPED";
-    console.log(`${provider.padEnd(12)} ${status}`);
+    console.log(`${provider.padEnd(12)} ${success ? "✓ WORKING" : "✗ FAILED/SKIPPED"}`);
   }
 }
 

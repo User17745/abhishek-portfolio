@@ -12,7 +12,7 @@ const ACTION_QUERY_PARAMS$1 = {
   actionName: "_action"};
 const ACTION_RPC_ROUTE_PATTERN = "/_actions/[...path]";
 
-const __vite_import_meta_env__ = {"ASSETS_PREFIX": undefined, "BASE_URL": "/", "DEV": false, "MODE": "production", "PROD": true, "PUBLIC_GEMINI_API_KEY": "AIzaSyCQDBi3Zg_7KEmTXRS1IiBykMxgw1SLqXo", "PUBLIC_NVIDIA_API_KEY": "your_nvidia_api_key_here", "PUBLIC_OPENROUTER_API_KEY": "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", "PUBLIC_ZHIPUAI_API_KEY": "bd2882b418604d73bac0cb99382661b3.b6N4dMbdcBfz5lIS", "SITE": "https://abhishekaggarwal.com", "SSR": true};
+const __vite_import_meta_env__ = {"ASSETS_PREFIX": undefined, "BASE_URL": "/", "DEV": false, "MODE": "production", "PROD": true, "PUBLIC_GEMINI_API_KEY": "AIzaSyCEVXixuzgU5SdCqu0iEBW5YMwH3TJ_QT0", "PUBLIC_NVIDIA_API_KEY": "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", "PUBLIC_OPENROUTER_API_KEY": "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", "PUBLIC_ZHIPUAI_API_KEY": "bd2882b418604d73bac0cb99382661b3.b6N4dMbdcBfz5lIS", "SITE": "https://abhishekaggarwal.com", "SSR": true};
 const ACTION_QUERY_PARAMS = ACTION_QUERY_PARAMS$1;
 const codeToStatusMap = {
   // Implemented from IANA HTTP Status Code Registry
