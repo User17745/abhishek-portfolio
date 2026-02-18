@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import OpenAI from "openai";
 
 const SYSTEM_PROMPT = `You are the AI professional representation for Abhishek Aggarwal. Your name is Cookie.
 
@@ -38,7 +37,7 @@ async function testWithTimeout(name, testFn, timeout = 30000) {
 async function testGemini(apiKey) {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
+    model: "gemini-pro",
     generationConfig: { temperature: 0.3, responseMimeType: "application/json" },
   });
 
@@ -53,75 +52,95 @@ async function testGemini(apiKey) {
   return true;
 }
 
-async function testZhipuAI(apiKey) {
-  const { ZhipuAI } = await import("zhipuai");
-  const client = new ZhipuAI({ apiKey });
-  
+async function testOpenRouter(apiKey) {
   const startTime = Date.now();
-  const result = await client.chat.completions.create({
-    model: "glm-4.7-flash",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: testQuestion },
-    ],
-    temperature: 0.3,
-  });
-  const duration = Date.now() - startTime;
+  
+  const enhancedPrompt = `${SYSTEM_PROMPT}
 
-  const content = result.choices[0]?.message?.content;
-  let response;
-  try {
-    response = JSON.parse(content);
-  } catch {
-    const match = content.match(/```json\n([\s\S]*?)\n```/);
-    response = JSON.parse(match[1]);
+IMPORTANT: You must respond with ONLY valid JSON. No markdown formatting, no explanations, no code blocks. Just the raw JSON object.
+
+Question: ${testQuestion}`;
+
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "google/gemini-2.0-flash-001",
+      messages: [{ role: "user", content: enhancedPrompt }],
+      temperature: 0.3,
+      max_tokens: 2048,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
   }
 
-  console.log("✓ SUCCESS");
-  console.log(`  Response time: ${duration}ms`);
-  console.log(`  Fit score: ${response.fit_score}`);
-  return true;
-}
-
-async function testOpenRouter(apiKey) {
-  const client = new OpenAI({ apiKey, baseURL: "https://openrouter.ai/api/v1" });
-  
-  const startTime = Date.now();
-  const result = await client.chat.completions.create({
-    model: "google/gemini-2.0-flash-001",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: testQuestion },
-    ],
-    temperature: 0.3,
-  });
+  const result = await response.json();
   const duration = Date.now() - startTime;
+  
+  let content = result.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No response content");
+  }
 
-  const response = JSON.parse(result.choices[0].message.content);
+  // Clean up response
+  content = content.trim();
+  if (content.startsWith("```json")) {
+    content = content.replace(/```json\n?/, "").replace(/\n?```$/, "");
+  } else if (content.startsWith("```")) {
+    content = content.replace(/```\n?/, "").replace(/\n?```$/, "");
+  }
+
+  const parsed = JSON.parse(content);
   console.log("✓ SUCCESS");
   console.log(`  Response time: ${duration}ms`);
-  console.log(`  Fit score: ${response.fit_score}`);
+  console.log(`  Fit score: ${parsed.fit_score}`);
   return true;
 }
 
 async function testNvidia(apiKey) {
-  const client = new OpenAI({ apiKey, baseURL: "https://integrate.api.nvidia.com/v1" });
-  
   const startTime = Date.now();
-  const result = await client.chat.completions.create({
-    model: "moonshotai/kimi-k2.5",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: testQuestion },
-    ],
-    temperature: 0.3,
+  
+  const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "moonshotai/kimi-k2.5",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: testQuestion },
+      ],
+      max_tokens: 4096,
+      temperature: 0.3,
+      top_p: 1.0,
+      stream: false,
+      chat_template_kwargs: { thinking: false }
+    }),
   });
-  const duration = Date.now() - startTime;
 
-  const response = JSON.parse(result.choices[0].message.content);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+  }
+
+  const result = await response.json();
+  const duration = Date.now() - startTime;
+  
+  const content = result.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No response content");
+  }
+
+  const parsed = JSON.parse(content);
   console.log("✓ SUCCESS");
   console.log(`  Response time: ${duration}ms`);
-  console.log(`  Fit score: ${response.fit_score}`);
+  console.log(`  Fit score: ${parsed.fit_score}`);
   return true;
 }
 
@@ -147,19 +166,10 @@ async function main() {
   // Test Gemini
   const geminiKey = getEnv("PUBLIC_GEMINI_API_KEY");
   if (geminiKey && !geminiKey.includes("your_")) {
-    results.gemini = await testWithTimeout("GEMINI", () => testGemini(geminiKey));
+    results.gemini = await testWithTimeout("GEMINI (1.5-flash)", () => testGemini(geminiKey));
   } else {
     console.log("\n⚠ SKIPPED: Gemini");
     results.gemini = false;
-  }
-
-  // Test ZhipuAI
-  const zhipuKey = getEnv("PUBLIC_ZHIPUAI_API_KEY");
-  if (zhipuKey && !zhipuKey.includes("your_")) {
-    results.zhipuai = await testWithTimeout("ZHIPUAI", () => testZhipuAI(zhipuKey));
-  } else {
-    console.log("\n⚠ SKIPPED: ZhipuAI");
-    results.zhipuai = false;
   }
 
   // Test OpenRouter
@@ -171,10 +181,10 @@ async function main() {
     results.openrouter = false;
   }
 
-  // Test Nvidia
+  // Test Nvidia (longer timeout as it can be slow)
   const nvidiaKey = getEnv("PUBLIC_NVIDIA_API_KEY");
   if (nvidiaKey && !nvidiaKey.includes("your_")) {
-    results.nvidia = await testWithTimeout("NVIDIA NIM", () => testNvidia(nvidiaKey));
+    results.nvidia = await testWithTimeout("NVIDIA NIM", () => testNvidia(nvidiaKey), 60000);
   } else {
     console.log("\n⚠ SKIPPED: Nvidia");
     results.nvidia = false;
