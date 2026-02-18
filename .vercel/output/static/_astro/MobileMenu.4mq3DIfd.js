@@ -1,0 +1,6 @@
+import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as a}from"./index.DJ4e78gH.js";import{c as r,B as l}from"./button.mTApM3jn.js";import{X as c}from"./x.CzY0kmTK.js";import"./utils.CiB0LXSo.js";/**
+ * @license lucide-react v0.564.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const i=[["path",{d:"M4 5h16",key:"1tepv9"}],["path",{d:"M4 12h16",key:"1lakjw"}],["path",{d:"M4 19h16",key:"1djgab"}]],d=r("menu",i);function x({items:n}){const[s,t]=a.useState(!1);return a.useEffect(()=>(s?document.body.style.overflow="hidden":document.body.style.overflow="unset",()=>{document.body.style.overflow="unset"}),[s]),e.jsxs("div",{className:"md:hidden",children:[e.jsx(l,{variant:"ghost",size:"icon",onClick:()=>t(!s),"aria-label":"Toggle menu",children:s?e.jsx(c,{className:"h-5 w-5"}):e.jsx(d,{className:"h-5 w-5"})}),s&&e.jsx("div",{className:"fixed inset-x-0 top-16 h-auto min-h-[calc(100vh-4rem)] bg-white dark:bg-zinc-900 z-50 p-6",children:e.jsx("nav",{className:"flex flex-col gap-4",children:n.map(o=>e.jsx("a",{href:o.href,className:"text-lg font-medium py-3 px-4 rounded-lg hover:bg-muted transition-colors",onClick:()=>t(!1),children:o.label},o.href))})})]})}export{x as default};

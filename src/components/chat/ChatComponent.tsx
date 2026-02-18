@@ -1,5 +1,5 @@
 import { useState, useRef, type ChangeEvent } from "react";
-import { Send, Upload, X, FileText, Bot, User, CheckCircle, AlertCircle, HelpCircle, ArrowRight } from "lucide-react";
+import { Send, Upload, X, FileText, Bot, User, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,28 +12,12 @@ export interface ChatMessage {
   timestamp: Date;
   metadata?: {
     fit_score?: number;
-    strong_matches?: Array<{ category: string; evidence: string; relevance: string }>;
-    gaps?: Array<{ requirement: string; severity: "critical" | "major" | "minor" | "none"; mitigation: string }>;
-    positioning?: {
-      primary_angle: string;
-      differentiators: string[];
-      talking_points: string[];
-    };
+    strong_matches?: string[];
+    partial_matches?: string[];
+    gaps?: string[];
+    recommended_positioning?: string;
+    confidence_level?: "High" | "Medium" | "Low";
   };
-}
-
-interface FitAnalysisResult {
-  fit_score: number;
-  summary: string;
-  strong_matches: Array<{ category: string; evidence: string; relevance: string }>;
-  gaps: Array<{ requirement: string; severity: "critical" | "major" | "minor" | "none"; mitigation: string }>;
-  positioning: {
-    primary_angle: string;
-    differentiators: string[];
-    talking_points: string[];
-  };
-  questions: string[];
-  next_steps: string[];
 }
 
 interface ChatComponentProps {
@@ -65,116 +49,82 @@ function FitScoreProgress({ score }: { score: number }) {
   );
 }
 
-function StrongMatches({ matches }: { matches: Array<{ category: string; evidence: string; relevance: string }> }) {
-  if (!matches || matches.length === 0) return null;
-
-  return (
-    <div className="space-y-2">
-      <h4 className="text-sm font-semibold flex items-center gap-2">
-        <CheckCircle className="h-4 w-4 text-green-500" />
-        Strong Matches
-      </h4>
-      <div className="space-y-2">
-        {matches.map((match, i) => (
-          <div key={i} className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
-            <p className="text-sm font-medium text-green-700 dark:text-green-400">{match.category}</p>
-            <p className="text-xs text-muted-foreground mt-1">{match.evidence}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Gaps({ gaps }: { gaps: Array<{ requirement: string; severity: "critical" | "major" | "minor" | "none"; mitigation: string }> }) {
-  if (!gaps || gaps.length === 0 || gaps.every(g => g.severity === "none")) return null;
-
-  const severityColors = {
-    critical: "bg-red-500/10 border-red-500/20 text-red-700 dark:text-red-400",
-    major: "bg-orange-500/10 border-orange-500/20 text-orange-700 dark:text-orange-400",
-    minor: "bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400",
-    none: "bg-green-500/10 border-green-500/20 text-green-700 dark:text-green-400",
+function ConfidenceBadge({ level }: { level: "High" | "Medium" | "Low" }) {
+  const colors = {
+    High: "bg-green-500/10 text-green-700 border-green-500/20",
+    Medium: "bg-amber-500/10 text-amber-700 border-amber-500/20",
+    Low: "bg-red-500/10 text-red-700 border-red-500/20",
   };
 
   return (
+    <Badge variant="outline" className={colors[level]}>
+      {level} Confidence
+    </Badge>
+  );
+}
+
+function MatchList({ title, items, icon: Icon, colorClass }: { 
+  title: string; 
+  items: string[]; 
+  icon: typeof CheckCircle;
+  colorClass: string;
+}) {
+  if (!items || items.length === 0) return null;
+
+  return (
     <div className="space-y-2">
       <h4 className="text-sm font-semibold flex items-center gap-2">
-        <AlertCircle className="h-4 w-4 text-amber-500" />
-        Gaps
+        <Icon className={`h-4 w-4 ${colorClass}`} />
+        {title}
       </h4>
-      <div className="space-y-2">
-        {gaps.filter(g => g.severity !== "none").map((gap, i) => (
-          <div key={i} className={`rounded-lg p-3 ${severityColors[gap.severity]}`}>
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium">{gap.requirement}</p>
-              <Badge variant="outline" className="text-xs capitalize">{gap.severity}</Badge>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{gap.mitigation}</p>
-          </div>
+      <ul className="space-y-1">
+        {items.map((item, i) => (
+          <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+            <span className="text-foreground">•</span>
+            <span>{item}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
 
-function Positioning({ positioning }: { positioning: { primary_angle: string; differentiators: string[]; talking_points: string[] } }) {
-  if (!positioning) return null;
-
-  return (
-    <div className="space-y-3">
-      <h4 className="text-sm font-semibold flex items-center gap-2">
-        <ArrowRight className="h-4 w-4 text-blue-500" />
-        Positioning
-      </h4>
-      <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-        <p className="text-sm">{positioning.primary_angle}</p>
-      </div>
-      {positioning.differentiators && positioning.differentiators.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {positioning.differentiators.map((diff, i) => (
-            <Badge key={i} variant="secondary" className="text-xs">{diff}</Badge>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AnalysisResult({ result }: { result: FitAnalysisResult }) {
+function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage["metadata"]> }) {
   return (
     <div className="space-y-4 mt-4">
-      <FitScoreProgress score={result.fit_score} />
-      
-      <p className="text-sm text-muted-foreground">{result.summary}</p>
-      
-      <StrongMatches matches={result.strong_matches} />
-      
-      <Gaps gaps={result.gaps} />
-      
-      <Positioning positioning={result.positioning} />
-
-      {result.questions && result.questions.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <HelpCircle className="h-4 w-4 text-purple-500" />
-            Clarifying Questions
-          </h4>
-          <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-            {result.questions.map((q, i) => (
-              <li key={i}>{q}</li>
-            ))}
-          </ul>
-        </div>
+      {metadata.fit_score !== undefined && (
+        <FitScoreProgress score={metadata.fit_score} />
       )}
 
-      {result.next_steps && result.next_steps.length > 0 && (
+      {metadata.confidence_level && (
+        <ConfidenceBadge level={metadata.confidence_level} />
+      )}
+
+      <MatchList
+        title="Strong Matches"
+        items={metadata.strong_matches || []}
+        icon={CheckCircle}
+        colorClass="text-green-500"
+      />
+
+      <MatchList
+        title="Partial Matches"
+        items={metadata.partial_matches || []}
+        icon={AlertCircle}
+        colorClass="text-amber-500"
+      />
+
+      <MatchList
+        title="Gaps"
+        items={metadata.gaps || []}
+        icon={AlertCircle}
+        colorClass="text-red-500"
+      />
+
+      {metadata.recommended_positioning && (
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold">Recommended Next Steps</h4>
-          <ul className="list-decimal list-inside text-sm text-muted-foreground space-y-1">
-            {result.next_steps.map((step, i) => (
-              <li key={i}>{step}</li>
-            ))}
-          </ul>
+          <h4 className="text-sm font-semibold">Recommended Positioning</h4>
+          <p className="text-sm text-muted-foreground">{metadata.recommended_positioning}</p>
         </div>
       )}
     </div>
@@ -186,10 +136,6 @@ export function ChatComponent({ messages, onSendMessage, isLoading }: ChatCompon
   const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const handleSubmit = async () => {
     if ((!input.trim() && !attachedFile) || isLoading) return;
@@ -241,12 +187,16 @@ export function ChatComponent({ messages, onSendMessage, isLoading }: ChatCompon
     }
   };
 
-  const parseAssistantMessage = (content: string): FitAnalysisResult | null => {
+  const tryParseCookieResponse = (content: string): ChatMessage["metadata"] | null => {
     try {
-      return JSON.parse(content);
+      const parsed = JSON.parse(content);
+      if (typeof parsed.fit_score === "number") {
+        return parsed;
+      }
     } catch {
-      return null;
+      // Not JSON
     }
+    return null;
   };
 
   return (
@@ -273,7 +223,9 @@ export function ChatComponent({ messages, onSendMessage, isLoading }: ChatCompon
           )}
 
           {messages.map((message) => {
-            const analysisResult = message.role === "assistant" ? parseAssistantMessage(message.content) : null;
+            const cookieMetadata = message.role === "assistant" 
+              ? tryParseCookieResponse(message.content) 
+              : null;
 
             return (
               <div
@@ -295,8 +247,8 @@ export function ChatComponent({ messages, onSendMessage, isLoading }: ChatCompon
                 </div>
 
                 <div className={`flex-1 ${message.role === "user" ? "text-right" : ""}`}>
-                  {analysisResult ? (
-                    <AnalysisResult result={analysisResult} />
+                  {cookieMetadata ? (
+                    <CookieResponseDisplay metadata={cookieMetadata} />
                   ) : (
                     <div
                       className={`inline-block max-w-[85%] rounded-lg px-4 py-2 ${

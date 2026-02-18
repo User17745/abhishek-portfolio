@@ -1,0 +1,71 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+---
+
+<Layout 
+  title="Blog" 
+  description="Thoughts on eCommerce, product management, and digital transformation from Abhishek Aggarwal."
+>
+  <Header />
+  <main class="pt-16">
+    <section class="py-20 px-4">
+      <div class="container mx-auto max-w-4xl">
+        <div class="fade-in">
+          <h1 class="text-4xl font-bold mb-4 text-center">Blog</h1>
+        </div>
+        <div class="fade-in stagger-1">
+          <p class="text-muted-foreground text-center mb-12">
+            Thoughts on eCommerce, product management, and digital transformation.
+          </p>
+        </div>
+        
+        <div class="space-y-6">
+          {posts.map((post, index) => (
+            <div class={`fade-in stagger-${((index % 3) + 2)}`}>
+              <a href={`/blog/${post.slug}`} class="block">
+                <Card className="hover-lift hover-glow gradient-border">
+                  <CardHeader>
+                    <div class="flex flex-wrap items-center gap-3 mb-2">
+                      <time class="text-sm text-accent font-medium">{formatDate(post.data.publishedAt)}</time>
+                      <span class="text-muted-foreground">•</span>
+                      <span class="text-sm text-muted-foreground">{post.data.author}</span>
+                    </div>
+                    <CardTitle className="text-xl">{post.data.title}</CardTitle>
+                    <CardDescription className="text-base">{post.data.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div class="flex flex-wrap gap-2">
+                      {post.data.tags.map((tag) => (
+                        <Badge variant="outline" className="text-xs hover:bg-accent/10 hover:text-accent hover:border-accent/50 transition-colors">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

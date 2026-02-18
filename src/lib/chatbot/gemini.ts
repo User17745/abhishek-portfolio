@@ -8,79 +8,36 @@ const JSON_SCHEMA = {
   type: "object",
   properties: {
     fit_score: { type: "number" },
-    summary: { type: "string" },
-    strong_matches: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          category: { type: "string" },
-          evidence: { type: "string" },
-          relevance: { type: "string" },
-        },
-        required: ["category", "evidence", "relevance"],
-      },
-    },
-    gaps: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          requirement: { type: "string" },
-          severity: { type: "string", enum: ["critical", "major", "minor", "none"] },
-          mitigation: { type: "string" },
-        },
-        required: ["requirement", "severity", "mitigation"],
-      },
-    },
-    positioning: {
-      type: "object",
-      properties: {
-        primary_angle: { type: "string" },
-        differentiators: { type: "array", items: { type: "string" } },
-        talking_points: { type: "array", items: { type: "string" } },
-      },
-      required: ["primary_angle", "differentiators", "talking_points"],
-    },
-    questions: { type: "array", items: { type: "string" } },
-    next_steps: { type: "array", items: { type: "string" } },
+    strong_matches: { type: "array", items: { type: "string" } },
+    partial_matches: { type: "array", items: { type: "string" } },
+    gaps: { type: "array", items: { type: "string" } },
+    recommended_positioning: { type: "string" },
+    confidence_level: { type: "string", enum: ["High", "Medium", "Low"] },
   },
   required: [
     "fit_score",
-    "summary",
     "strong_matches",
+    "partial_matches",
     "gaps",
-    "positioning",
-    "questions",
-    "next_steps",
+    "recommended_positioning",
+    "confidence_level",
   ],
 };
+
+export interface CookieResponse {
+  fit_score: number;
+  strong_matches: string[];
+  partial_matches: string[];
+  gaps: string[];
+  recommended_positioning: string;
+  confidence_level: "High" | "Medium" | "Low";
+}
 
 export async function callGeminiWithContext(
   systemPrompt: string,
   contextChunks: string[],
   userQuestion: string
-): Promise<{
-  fit_score: number;
-  summary: string;
-  strong_matches: Array<{
-    category: string;
-    evidence: string;
-    relevance: string;
-  }>;
-  gaps: Array<{
-    requirement: string;
-    severity: "critical" | "major" | "minor" | "none";
-    mitigation: string;
-  }>;
-  positioning: {
-    primary_angle: string;
-    differentiators: string[];
-    talking_points: string[];
-  };
-  questions: string[];
-  next_steps: string[];
-}> {
+): Promise<CookieResponse> {
   if (!GEMINI_API_KEY) {
     throw new Error("GEMINI_API_KEY is not configured");
   }
@@ -96,17 +53,13 @@ export async function callGeminiWithContext(
 
   const context = contextChunks.map((chunk, i) => `--- Context ${i + 1} ---\n${chunk}`).join("\n\n");
 
-  const prompt = `You are Cookie, an AI career assistant. Use ONLY the context provided below to answer.
+  const prompt = `${systemPrompt}
 
-${systemPrompt}
-
-## Retrieved Context
+## Context
 ${context}
 
-## User Question
-${userQuestion}
-
-Respond with valid JSON only. Do not include any text outside the JSON.`;
+## Question
+${userQuestion}`;
 
   const result = await model.generateContent(prompt);
   const response = result.response.text();

@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getEmbedding } from "@/lib/embeddings/gemini";
 import { findTopMatches, type EmbeddingChunk } from "@/lib/embeddings/search";
-import { callGeminiWithContext } from "@/lib/chatbot/gemini";
+import { callGeminiWithContext, type CookieResponse } from "@/lib/chatbot/gemini";
 import { SYSTEM_PROMPT } from "@/lib/chatbot/system-prompt";
 
 export const prerender = false;
@@ -43,7 +43,7 @@ export const POST: APIRoute = async ({ request }) => {
     const contextChunks = topMatches.map((m) => m.chunk.text);
 
     // Call Gemini with context to get structured analysis
-    const analysis = await callGeminiWithContext(
+    const analysis: CookieResponse = await callGeminiWithContext(
       SYSTEM_PROMPT,
       contextChunks,
       body.userQuestion
