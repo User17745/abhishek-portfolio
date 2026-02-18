@@ -44,10 +44,26 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Load stored embeddings
     console.log("[API] Loading embeddings...");
-    const fs = await import("fs");
-    const path = await import("path");
-    const embeddingsPath = path.join(process.cwd(), "docs/resources/rag/embeddings.json");
-    const embeddingsData = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
+    let embeddingsData;
+    try {
+      // Try fetching from public URL first (works on Vercel)
+      console.log("[API] Trying to fetch embeddings from /embeddings.json...");
+      const response = await fetch(`${import.meta.env.SITE || 'http://localhost:4321'}/embeddings.json`);
+      if (response.ok) {
+        embeddingsData = await response.json();
+        console.log("[API] Loaded embeddings from public URL");
+      } else {
+        throw new Error(`HTTP ${response.status}`);
+      }
+    } catch (fetchError) {
+      // Fallback: load from file system (local dev)
+      console.log("[API] Falling back to filesystem...");
+      const fs = await import("fs");
+      const path = await import("path");
+      const embeddingsPath = path.join(process.cwd(), "docs/resources/rag/embeddings.json");
+      embeddingsData = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
+      console.log("[API] Loaded embeddings from filesystem");
+    }
     const storedEmbeddings: EmbeddingChunk[] = embeddingsData;
     console.log("[API] Loaded embeddings:", storedEmbeddings.length);
 

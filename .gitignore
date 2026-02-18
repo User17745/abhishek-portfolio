@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # vercel output
 .vercel/output
+
+# embeddings (generated during build)
+public/embeddings.json
