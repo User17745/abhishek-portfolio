@@ -38,7 +38,7 @@ export default defineConfig({
       experimentalReactChildren: true,
     }), 
     sitemap({
-      changefreq: 'monthly',
+      changefreq: "monthly",
       priority: 0.7,
       lastmod: new Date(),
     }), 

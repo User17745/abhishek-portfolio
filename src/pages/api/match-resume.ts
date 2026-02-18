@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getEmbedding } from "@/lib/embeddings/gemini";
 import { findTopMatches, type EmbeddingChunk } from "@/lib/embeddings/search";
-import { callLLM, getActiveLLMConfig, type LLMResponse } from "@/lib/chatbot/llm-providers";
+import { callLLM, getActiveLLMConfig, getFallbackConfig, type LLMResponse, type LLMProvider } from "@/lib/chatbot/llm-providers";
 import { SYSTEM_PROMPT } from "@/lib/chatbot/system-prompt";
 
 // Import embeddings at build time - this will be bundled
@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
     
     if (!llmConfig) {
       return new Response(
-        JSON.stringify({ error: "No LLM API key configured" }),
+        JSON.stringify({ error: "No LLM API key configured. Please set PUBLIC_OPENROUTER_API_KEY, PUBLIC_GEMINI_API_KEY, or other LLM provider keys in .env" }),
         { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
@@ -60,16 +60,54 @@ export const POST: APIRoute = async ({ request }) => {
     console.log("[API] Context chunks:", contextChunks.length);
 
     // Call LLM with context to get structured analysis
-    console.log("[API] Calling LLM...");
-    const analysis: LLMResponse = await callLLM(
-      llmConfig,
-      SYSTEM_PROMPT,
-      contextChunks,
-      body.userQuestion
-        ? body.userQuestion
-        : `Analyze how Abhishek Aggarwal fits for this job description:\n\n${body.jdText}`
-    );
-    console.log("[API] Got LLM response");
+    let analysis: LLMResponse;
+    try {
+      console.log("[API] Calling LLM...");
+      analysis = await callLLM(
+        llmConfig,
+        SYSTEM_PROMPT,
+        contextChunks,
+        body.userQuestion
+          ? body.userQuestion
+          : `Analyze how Abhishek Aggarwal fits for this job description:\n\n${body.jdText}`
+      );
+      console.log("[API] Got LLM response");
+    } catch (llmError) {
+      console.error("[API] LLM Error:", llmError);
+      // Try fallback providers
+      const fallbackProviders: LLMProvider[] = ["gemini", "zhipuai", "nvidia"];
+      const currentIndex = fallbackProviders.indexOf(llmConfig.provider);
+      
+      for (let i = currentIndex + 1; i < fallbackProviders.length; i++) {
+        const fallbackConfig = getFallbackConfig(fallbackProviders[i]);
+        if (fallbackConfig) {
+          console.log(`[API] Trying fallback provider: ${fallbackProviders[i]}`);
+          try {
+            analysis = await callLLM(
+              fallbackConfig,
+              SYSTEM_PROMPT,
+              contextChunks,
+              body.userQuestion || `Analyze how Abhishek Aggarwal fits for this job description:\n\n${body.jdText}`
+            );
+            console.log(`[API] Got response from fallback: ${fallbackProviders[i]}`);
+            break;
+          } catch (fallbackError) {
+            console.error(`[API] Fallback ${fallbackProviders[i]} also failed:`, fallbackError);
+            continue;
+          }
+        }
+      }
+      
+      if (!analysis) {
+        return new Response(
+          JSON.stringify({ 
+            error: "All LLM providers failed. Please check your API keys.",
+            details: llmError instanceof Error ? llmError.message : "Unknown error"
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    }
 
     // Return the structured response
     return new Response(JSON.stringify(analysis), {

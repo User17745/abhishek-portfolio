@@ -258,23 +258,66 @@ export function getActiveLLMConfig(): LLMConfig | null {
   const openrouterKey = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
   const nvidiaKey = import.meta.env.PUBLIC_NVIDIA_API_KEY;
 
+  console.log("[LLM] Checking API keys:");
+  console.log("[LLM] Gemini:", geminiKey ? `${geminiKey.substring(0, 10)}...` : "not set");
+  console.log("[LLM] ZhipuAI:", zhipuaiKey ? `${zhipuaiKey.substring(0, 10)}...` : "not set");
+  console.log("[LLM] OpenRouter:", openrouterKey ? `${openrouterKey.substring(0, 10)}...` : "not set");
+  console.log("[LLM] Nvidia:", nvidiaKey ? `${nvidiaKey.substring(0, 10)}...` : "not set");
+
   // Priority order - fastest/most reliable first
   if (openrouterKey && openrouterKey !== "your_openrouter_api_key_here") {
+    console.log("[LLM] Using OpenRouter");
     return { provider: "openrouter", apiKey: openrouterKey };
   }
 
   if (geminiKey && geminiKey !== "your_gemini_api_key_here") {
+    console.log("[LLM] Using Gemini");
     return { provider: "gemini", apiKey: geminiKey };
   }
 
   if (zhipuaiKey && zhipuaiKey !== "your_zhipuai_api_key_here") {
+    console.log("[LLM] Using ZhipuAI");
     return { provider: "zhipuai", apiKey: zhipuaiKey };
   }
 
   // Nvidia last - it's slow and often times out
   if (nvidiaKey && nvidiaKey !== "your_nvidia_api_key_here") {
+    console.log("[LLM] Using Nvidia");
     return { provider: "nvidia", apiKey: nvidiaKey };
   }
 
+  console.log("[LLM] No valid API key found");
+  return null;
+}
+
+// Get fallback config for a specific provider
+export function getFallbackConfig(provider: LLMProvider): LLMConfig | null {
+  const geminiKey = import.meta.env.PUBLIC_GEMINI_API_KEY;
+  const zhipuaiKey = import.meta.env.PUBLIC_ZHIPUAI_API_KEY;
+  const openrouterKey = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
+  const nvidiaKey = import.meta.env.PUBLIC_NVIDIA_API_KEY;
+
+  switch (provider) {
+    case "gemini":
+      if (geminiKey && geminiKey !== "your_gemini_api_key_here") {
+        return { provider: "gemini", apiKey: geminiKey };
+      }
+      break;
+    case "zhipuai":
+      if (zhipuaiKey && zhipuaiKey !== "your_zhipuai_api_key_here") {
+        return { provider: "zhipuai", apiKey: zhipuaiKey };
+      }
+      break;
+    case "openrouter":
+      if (openrouterKey && openrouterKey !== "your_openrouter_api_key_here") {
+        return { provider: "openrouter", apiKey: openrouterKey };
+      }
+      break;
+    case "nvidia":
+      if (nvidiaKey && nvidiaKey !== "your_nvidia_api_key_here") {
+        return { provider: "nvidia", apiKey: nvidiaKey };
+      }
+      break;
+  }
   return null;
 }
