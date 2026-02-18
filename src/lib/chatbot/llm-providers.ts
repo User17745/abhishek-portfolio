@@ -1,4 +1,4 @@
-export type LLMProvider = "gemini" | "zhipuai" | "openrouter";
+export type LLMProvider = "gemini" | "zhipuai" | "openrouter" | "nvidia";
 
 export interface LLMConfig {
   provider: LLMProvider;
@@ -27,6 +27,8 @@ export async function callLLM(
       return callZhipuAI(config.apiKey, systemPrompt, contextChunks, userQuestion);
     case "openrouter":
       return callOpenRouter(config.apiKey, systemPrompt, contextChunks, userQuestion);
+    case "nvidia":
+      return callNvidia(config.apiKey, systemPrompt, contextChunks, userQuestion);
     default:
       throw new Error(`Unknown provider: ${config.provider}`);
   }
@@ -87,7 +89,7 @@ async function callGemini(
   }
 }
 
-// ZhipuAI (GLM-4-Flash) Implementation
+// ZhipuAI (GLM-4.7-Flash) Implementation
 async function callZhipuAI(
   apiKey: string,
   systemPrompt: string,
@@ -112,7 +114,7 @@ ${userQuestion}
 Respond with valid JSON only.`;
 
   const result = await client.chat.completions.create({
-    model: "glm-4-flash",
+    model: "glm-4.7-flash",
     messages: [
       { role: "system", content: systemPrompt },
       {
@@ -178,11 +180,60 @@ async function callOpenRouter(
   }
 }
 
+// Nvidia NIM (Kimi K2.5) Implementation
+async function callNvidia(
+  apiKey: string,
+  systemPrompt: string,
+  contextChunks: string[],
+  userQuestion: string
+): Promise<LLMResponse> {
+  const OpenAI = (await import("openai")).default;
+  
+  const client = new OpenAI({
+    apiKey,
+    baseURL: "https://integrate.api.nvidia.com/v1",
+  });
+
+  const context = contextChunks
+    .map((chunk, i) => `--- Context ${i + 1} ---\n${chunk}`)
+    .join("\n\n");
+
+  const result = await client.chat.completions.create({
+    model: "nvidia/llama-3.3-nemotron-super-49b-v1",
+    messages: [
+      { role: "system", content: systemPrompt },
+      {
+        role: "user",
+        content: `Context:\n${context}\n\nQuestion:\n${userQuestion}`,
+      },
+    ],
+    temperature: 0.3,
+    response_format: { type: "json_object" },
+  });
+
+  const content = result.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No response from Nvidia NIM");
+  }
+
+  try {
+    return JSON.parse(content);
+  } catch {
+    throw new Error("Invalid JSON response from Nvidia NIM");
+  }
+}
+
 // Get active provider from environment
 export function getActiveLLMConfig(): LLMConfig | null {
   const geminiKey = import.meta.env.PUBLIC_GEMINI_API_KEY;
   const zhipuaiKey = import.meta.env.PUBLIC_ZHIPUAI_API_KEY;
   const openrouterKey = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
+  const nvidiaKey = import.meta.env.PUBLIC_NVIDIA_API_KEY;
+
+  // Priority order
+  if (nvidiaKey && nvidiaKey !== "your_nvidia_api_key_here") {
+    return { provider: "nvidia", apiKey: nvidiaKey };
+  }
 
   if (zhipuaiKey && zhipuaiKey !== "your_zhipuai_api_key_here") {
     return { provider: "zhipuai", apiKey: zhipuaiKey };

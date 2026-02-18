@@ -48,6 +48,8 @@ async function callLLM(config, systemPrompt, contextChunks, userQuestion) {
       return callZhipuAI(config.apiKey, systemPrompt, contextChunks, userQuestion);
     case "openrouter":
       return callOpenRouter(config.apiKey, systemPrompt, contextChunks, userQuestion);
+    case "nvidia":
+      return callNvidia(config.apiKey, systemPrompt, contextChunks, userQuestion);
     default:
       throw new Error(`Unknown provider: ${config.provider}`);
   }
@@ -105,7 +107,7 @@ async function callZhipuAI(apiKey, systemPrompt, contextChunks, userQuestion) {
   const context = contextChunks.map((chunk, i) => `--- Context ${i + 1} ---
 ${chunk}`).join("\n\n");
   const result = await client.chat.completions.create({
-    model: "glm-4-flash",
+    model: "glm-4.7-flash",
     messages: [
       { role: "system", content: systemPrompt },
       {
@@ -164,10 +166,44 @@ ${userQuestion}`
     throw new Error("Invalid JSON response from OpenRouter");
   }
 }
+async function callNvidia(apiKey, systemPrompt, contextChunks, userQuestion) {
+  const OpenAI = (await import('openai')).default;
+  const client = new OpenAI({
+    apiKey,
+    baseURL: "https://integrate.api.nvidia.com/v1"
+  });
+  const context = contextChunks.map((chunk, i) => `--- Context ${i + 1} ---
+${chunk}`).join("\n\n");
+  const result = await client.chat.completions.create({
+    model: "nvidia/llama-3.3-nemotron-super-49b-v1",
+    messages: [
+      { role: "system", content: systemPrompt },
+      {
+        role: "user",
+        content: `Context:
+${context}
+
+Question:
+${userQuestion}`
+      }
+    ],
+    temperature: 0.3,
+    response_format: { type: "json_object" }
+  });
+  const content = result.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No response from Nvidia NIM");
+  }
+  try {
+    return JSON.parse(content);
+  } catch {
+    throw new Error("Invalid JSON response from Nvidia NIM");
+  }
+}
 function getActiveLLMConfig() {
-  const geminiKey = "AIzaSyCQDBi3Zg_7KEmTXRS1IiBykMxgw1SLqXo";
+  const zhipuaiKey = "bd2882b418604d73bac0cb99382661b3.b6N4dMbdcBfz5lIS";
   {
-    return { provider: "gemini", apiKey: geminiKey };
+    return { provider: "zhipuai", apiKey: zhipuaiKey };
   }
 }
 

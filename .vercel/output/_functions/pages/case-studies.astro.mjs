@@ -3,7 +3,7 @@ import 'piccolore';
 import { $ as $$Layout, a as Badge } from '../chunks/badge_C3Zljwn0.mjs';
 import { $ as $$Header, a as $$Footer } from '../chunks/Footer_Di6c884w.mjs';
 import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_BNVl2YLU.mjs';
-import { g as getCollection } from '../chunks/_astro_content_B3hW9DhL.mjs';
+import { g as getCollection } from '../chunks/_astro_content_Bc5dHd3R.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
