@@ -1,5 +1,5 @@
 import React, { useState, useRef, type ChangeEvent } from "react";
-import { Send, Upload, X, FileText, Bot, User, CheckCircle, AlertCircle } from "lucide-react";
+import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -227,7 +227,7 @@ export function ChatComponent({
     <Card className="w-full max-w-2xl mx-auto h-[700px] flex flex-col">
       <CardHeader className="pb-4 border-b shrink-0">
         <CardTitle className="flex items-center gap-2">
-          <Bot className="h-5 w-5 text-primary" />
+          <img src="/cookie-avatar.jpg" alt="Cookie" className="h-8 w-8 rounded-full object-cover" />
           <span>Cookie - Career Fit Analyzer</span>
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -240,7 +240,7 @@ export function ChatComponent({
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground py-8">
-              <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <img src="/cookie-avatar.jpg" alt="Cookie" className="h-12 w-12 mx-auto mb-4 rounded-full opacity-80" />
               <p>Welcome! Paste a job description or upload a file to get started.</p>
               <p className="text-sm mt-2">I&apos;ll analyze how Abhishek Aggarwal fits your requirements.</p>
             </div>
@@ -257,7 +257,7 @@ export function ChatComponent({
                 className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden ${
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-secondary"
@@ -266,7 +266,7 @@ export function ChatComponent({
                   {message.role === "user" ? (
                     <User className="h-4 w-4" />
                   ) : (
-                    <Bot className="h-4 w-4" />
+                    <img src="/cookie-avatar.jpg" alt="Cookie" className="h-full w-full object-cover" />
                   )}
                 </div>
 
@@ -295,8 +295,8 @@ export function ChatComponent({
 
           {isLoading && (
             <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                <Bot className="h-4 w-4" />
+              <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
+                <img src="/cookie-avatar.jpg" alt="Cookie" className="h-full w-full object-cover" />
               </div>
               <div className="bg-muted rounded-lg px-4 py-3">
                 <div className="flex gap-1">

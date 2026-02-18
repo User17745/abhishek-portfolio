@@ -36,12 +36,10 @@ export const POST: APIRoute = async ({ request }) => {
     const jdEmbedding = await getEmbedding(searchQuery);
 
     // Load stored embeddings
-    const embeddingsPath = new URL(
-      "../../docs/resources/rag/embeddings.json",
-      import.meta.url
-    );
-    const embeddingsFile = await fetch(embeddingsPath.href);
-    const embeddingsData = await embeddingsFile.json();
+    const fs = await import("fs");
+    const path = await import("path");
+    const embeddingsPath = path.join(process.cwd(), "docs/resources/rag/embeddings.json");
+    const embeddingsData = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
     const storedEmbeddings: EmbeddingChunk[] = embeddingsData;
 
     // Find top 5 matches
