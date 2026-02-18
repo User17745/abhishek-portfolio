@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 import { getEmbedding } from "@/lib/embeddings/gemini";
-import { findTopMatches, formatMatchResults, type EmbeddingChunk } from "@/lib/embeddings/search";
+import { findTopMatches, type EmbeddingChunk } from "@/lib/embeddings/search";
+import { callGeminiWithContext } from "@/lib/chatbot/gemini";
+import { SYSTEM_PROMPT } from "@/lib/chatbot/system-prompt";
 
 export const prerender = false;
 
@@ -37,25 +39,23 @@ export const POST: APIRoute = async ({ request }) => {
     // Find top 5 matches
     const topMatches = findTopMatches(jdEmbedding, storedEmbeddings, 5);
 
-    // Format response
-    const formattedResults = formatMatchResults(topMatches);
+    // Extract context chunks for LLM
+    const contextChunks = topMatches.map((m) => m.chunk.text);
 
-    return new Response(
-      JSON.stringify({
-        query: searchQuery,
-        matches: topMatches.map((m) => ({
-          id: m.chunk.id,
-          title: m.chunk.metadata.title,
-          role: m.chunk.metadata.role,
-          focus: m.chunk.metadata.focus,
-          heading: m.chunk.metadata.heading,
-          score: m.score,
-          text: m.chunk.text,
-        })),
-        formatted: formattedResults,
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+    // Call Gemini with context to get structured analysis
+    const analysis = await callGeminiWithContext(
+      SYSTEM_PROMPT,
+      contextChunks,
+      body.userQuestion
+        ? body.userQuestion
+        : `Analyze how Abhishek Aggarwal fits for this job description:\n\n${body.jdText}`
     );
+
+    // Return the structured response
+    return new Response(JSON.stringify(analysis), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("API Error:", error);
     return new Response(
