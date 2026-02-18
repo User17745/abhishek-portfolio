@@ -3,31 +3,26 @@
 ## System Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        ASTRO APP                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │   Pages     │  │  Layouts    │  │     Components      │ │
-│  │  (Astro)    │  │  (Astro)    │  │  (Astro + React)    │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-│                          │                                  │
-│                          ▼                                  │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │              shadcn/ui Components                    │   │
-│  │         (React + Tailwind CSS)                       │   │
-│  └─────────────────────────────────────────────────────┘   │
-│                          │                                  │
-│                          ▼                                  │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │   Content   │  │   Styles    │  │      Assets         │ │
-│  │ Collections │  │  (Tailwind) │  │     (Images)        │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-                          │
-                          ▼
-              ┌───────────────────────┐
-              │    Static Hosting     │
-              │  (Vercel / Netlify)   │
-              └───────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                         ASTRO APPLICATION                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐   │
+│  │   Pages     │  │  Layouts    │  │      Components         │   │
+│  │  (Astro)    │  │  (Astro)    │  │   (Astro + React)      │   │
+│  └─────────────┘  └─────────────┘  └─────────────────────────┘   │
+│                          │                                           │
+│                          ▼                                           │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │                    shadcn/ui Components                      │  │
+│  │               (React + Tailwind CSS)                         │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴────────                    ▼                               ▼───────┐
+
+        ┌───────────────────────┐       ┌───────────────────────┐
+        │   Static Hosting      │       │   Server API          │
+        │    (Vercel)          │       │  (Chatbot /match-resume)│
+        └───────────────────────┘       └───────────────────────┘
 ```
 
 ## Technology Stack
@@ -35,70 +30,190 @@
 ### Frontend Framework
 | Layer | Technology | Rationale |
 |-------|------------|-----------|
-| Meta-framework | Astro 4.x | SSG performance, partial hydration |
-| UI Components | React 18 | Required for shadcn/ui |
+| Meta-framework | Astro 5.x | SSR support, partial hydration |
+| UI Components | React 19 | Required for shadcn/ui |
 | Component Library | shadcn/ui | Accessible, customizable, Tailwind-based |
-| Styling | Tailwind CSS 3.x | Utility-first, rapid development |
+| Styling | Tailwind CSS 4.x | Utility-first, rapid development |
 | Language | TypeScript | Type safety, better DX |
 
-### Build & Tooling
+### Build & Deployment
 | Tool | Purpose |
 |------|---------|
 | Vite | Build tool (Astro default) |
 | ESLint | Code linting |
 | Prettier | Code formatting |
-| Vitest | Unit testing |
-| Playwright | E2E testing |
+| Vercel | Hosting + Server functions |
 
-### Deployment
-| Component | Choice | Rationale |
-|-----------|--------|-----------|
-| Hosting | Vercel | Automatic deploys, edge functions |
-| Domain | Custom | Professional branding |
-| Forms | Formspree/Resend | Contact form handling |
+### AI/ML Stack
+| Component | Technology |
+|-----------|------------|
+| Embeddings | Gemini embedding-001 (1536-dim) |
+| Vector Similarity | Cosine similarity |
+| LLM Providers | OpenRouter, Gemini, ZhipuAI, Nvidia NIM |
+| RAG | Custom implementation with JSON embeddings |
 
 ## Component Architecture
 
 ```
 src/
 ├── components/
-│   ├── ui/                    # shadcn/ui components
+│   ├── ui/                         # shadcn/ui components
 │   │   ├── button.tsx
 │   │   ├── card.tsx
 │   │   ├── input.tsx
 │   │   └── ...
-│   ├── sections/              # Page sections
+│   ├── sections/                   # Page sections
 │   │   ├── Hero.astro
 │   │   ├── About.astro
 │   │   ├── Experience.astro
 │   │   ├── Projects.astro
 │   │   ├── Brands.astro
 │   │   └── Contact.astro
-│   ├── layout/                # Layout components
-│   │   ├── Header.astro
+│   ├── layout/                     # Layout components
+│   │   ├── Header.astro           # Includes CookieToggle
 │   │   ├── Footer.astro
-│   │   └── ThemeToggle.tsx
-│   └── shared/                # Reusable components
-│       ├── ProjectCard.tsx
-│       ├── ExperienceCard.tsx
-│       └── BrandLogo.astro
+│   │   ├── ThemeToggle.tsx
+│   │   └── CookieToggle.tsx        # Chat toggle in header
+│   └── chat/                       # Chatbot components
+│       ├── ChatSidebar.tsx         # Sidebar panel (right side)
+│       ├── ChatContainer.tsx        # Message handling logic
+│       ├── ChatComponent.tsx       # Chat UI (messages + input)
+│       └── ChatContext.tsx         # React context for state
 ├── layouts/
-│   └── Layout.astro
+│   └── Layout.astro                # Main layout with ChatSidebar
 ├── pages/
-│   └── index.astro
-├── content/
-│   └── config.ts              # Content collections
+│   ├── index.astro                 # Homepage
+│   ├── chat.astro                  # Standalone chat page
+│   ├── case-studies/               # Case study pages
+│   │   ├── index.astro
+│   │   └── [slug].astro
+│   └── api/
+│       └── match-resume.ts         # Chatbot API endpoint
+├── content/                        # MDX content
+│   ├── config.ts                   # Content collections schema
+│   ├── case-studies/               # Case study MDX files
+│   └── blog/                       # Blog post MDX files
+├── data/                           # Static data
+│   ├── projects.ts
+│   ├── experience.ts
+│   ├── brands.ts
+│   └── summary.ts
 ├── lib/
-│   └── utils.ts               # Utility functions
+│   ├── utils.ts                    # Utilities (cn, decodeHTML)
+│   ├── config.ts                   # Site configuration
+│   ├── chatbot/
+│   │   ├── llm-providers.ts       # Multi-provider LLM calls
+│   │   ├── system-prompt.ts       # Cookie's prompt
+│   │   └── gemini.ts              # Gemini API helpers
+│   └── embeddings/
+│       ├── gemini.ts               # Embedding generation
+│       ├── cosineSimilarity.ts     # Vector similarity
+│       └── search.ts                # Top-k search
 └── styles/
     └── global.css
 ```
 
-## Data Flow
+## Chatbot Architecture (Cookie)
+
+### Data Flow
 
 ```
 ┌─────────────────┐
-│ Content Files   │  (MDX/JSON for projects, experience)
+│  User Input     │  Job description or question
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  API Endpoint   │  POST /api/match-resume
+│  (SSR)         │
+└────────┬────────┘
+         │
+    ┌────┴────┐
+    │         │
+    ▼         ▼
+┌─────────┐ ┌──────────────┐
+│ Gemini  │ │ Bundled      │
+│ Embed-  │ │ Embeddings   │
+│ ding    │ │ (38 chunks)  │
+│ API     │ │ JSON         │
+└────┬────┘ └──────┬───────┘
+     │              │
+     └──────┬───────┘
+            │
+            ▼
+┌─────────────────┐
+│  Cosine         │  Find top-3 similar chunks
+│  Similarity     │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Context        │  Combine top chunks
+│  Preparation    │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  LLM Provider   │  Generate structured response
+│  (with         │  - OpenRouter (primary, fastest)
+│   fallback)    │  - Gemini (fallback)
+│                │  - ZhipuAI (fallback)
+│                │  - Nvidia NIM (fallback)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  JSON Response  │
+│  - fit_score   │
+│  - matches     │
+│  - gaps        │
+│  - positioning │
+└─────────────────┘
+```
+
+### RAG Data
+
+- **Source Documents:** 8 markdown files in `docs/resources/rag/`
+  - `career-journey.md`
+  - `ecommerce.md`
+  - `product-manager.md`
+  - `pre-sales-solutions-engineering.md`
+  - `project-portfolio.md`
+  - `program-management-office-pmo.md`
+  - `shopify-tpm.md`
+  - `technical-project-manager-tpm.md`
+
+- **Chunks:** 38 text chunks with metadata
+- **Embeddings:** Pre-generated Gemini embeddings (1536-dim), bundled at build time
+
+### UI Components
+
+| Component | Description |
+|-----------|-------------|
+| `ChatSidebar` | Fixed right sidebar, appears under header |
+| `ChatButton` | "Check my eligibility" button in Hero |
+| `CookieToggle` | Icon in header nav (next to theme toggle) |
+| `ChatComponent` | Messages list + input area |
+| `ChatContainer` | Message state + API calls |
+
+### API Response Format
+
+```json
+{
+  "fit_score": 92,
+  "strong_matches": [...],
+  "partial_matches": [...],
+  "gaps": [],
+  "recommended_positioning": "A seasoned product leader...",
+  "confidence_level": "High"
+}
+```
+
+## Data Flow (Content)
+
+```
+┌─────────────────┐
+│ Content Files   │  (MDX for case studies, blog)
 └────────┬────────┘
          │
          ▼
@@ -110,7 +225,7 @@ src/
          ▼
 ┌─────────────────┐
 │ Page Templates  │  Static generation at build time
-│ (Astro)         │
+│ (Astro)        │
 └────────┬────────┘
          │
          ▼
@@ -122,15 +237,21 @@ src/
 
 ## Performance Strategy
 
-1. **Static Generation** - All pages pre-rendered at build time
+1. **Static Generation** - Most pages pre-rendered at build time
 2. **Partial Hydration** - Only interactive components ship JS
-3. **Image Optimization** - Astro Image component for responsive images
-4. **Font Loading** - Preload critical fonts, font-display: swap
-5. **CSS** - Tailwind purges unused styles
+3. **Bundled Embeddings** - Embeddings JSON copied at build time
+4. **API Fallbacks** - Multiple LLM providers for reliability
+5. **Image Optimization** - Astro Image component
+6. **Font Loading** - Preload critical fonts
 
 ## Security Considerations
 
+- API keys use `PUBLIC_` prefix (exposed to client but safe for public APIs)
 - No sensitive data stored client-side
-- Contact form uses CSRF protection (via Formspree)
-- No API keys exposed in frontend code
-- HTTPS enforced
+- Contact form uses Formspree (handles CSRF)
+- HTTPS enforced via Vercel
+- Environment variables set in Vercel dashboard (not committed)
+
+## Known Issues
+
+- **HTML Encoding:** Content collections may double-encode apostrophes. See `docs/HTML_ENCODING_ISSUE.md`.
