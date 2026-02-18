@@ -4,6 +4,9 @@ import { findTopMatches, type EmbeddingChunk } from "@/lib/embeddings/search";
 import { callLLM, getActiveLLMConfig, type LLMResponse } from "@/lib/chatbot/llm-providers";
 import { SYSTEM_PROMPT } from "@/lib/chatbot/system-prompt";
 
+// Import embeddings at build time - this will be bundled
+import embeddingsData from "../../../docs/resources/rag/embeddings.json" assert { type: "json" };
+
 export const prerender = false;
 
 interface RequestBody {
@@ -42,29 +45,9 @@ export const POST: APIRoute = async ({ request }) => {
     const jdEmbedding = await getEmbedding(searchQuery);
     console.log("[API] Got embedding, length:", jdEmbedding.length);
 
-    // Load stored embeddings
+    // Use imported embeddings
     console.log("[API] Loading embeddings...");
-    let embeddingsData;
-    try {
-      // Try fetching from public URL first (works on Vercel)
-      console.log("[API] Trying to fetch embeddings from /embeddings.json...");
-      const response = await fetch(`${import.meta.env.SITE || 'http://localhost:4321'}/embeddings.json`);
-      if (response.ok) {
-        embeddingsData = await response.json();
-        console.log("[API] Loaded embeddings from public URL");
-      } else {
-        throw new Error(`HTTP ${response.status}`);
-      }
-    } catch (fetchError) {
-      // Fallback: load from file system (local dev)
-      console.log("[API] Falling back to filesystem...");
-      const fs = await import("fs");
-      const path = await import("path");
-      const embeddingsPath = path.join(process.cwd(), "docs/resources/rag/embeddings.json");
-      embeddingsData = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
-      console.log("[API] Loaded embeddings from filesystem");
-    }
-    const storedEmbeddings: EmbeddingChunk[] = embeddingsData;
+    const storedEmbeddings: EmbeddingChunk[] = embeddingsData as EmbeddingChunk[];
     console.log("[API] Loaded embeddings:", storedEmbeddings.length);
 
     // Find top 3 matches (reduced from 5 for speed)
