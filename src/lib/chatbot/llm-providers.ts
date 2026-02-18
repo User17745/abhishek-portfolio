@@ -199,7 +199,7 @@ async function callNvidia(
     .join("\n\n");
 
   const result = await client.chat.completions.create({
-    model: "nvidia/llama-3.3-nemotron-super-49b-v1",
+    model: "moonshotai/kimi-k2.5",
     messages: [
       { role: "system", content: systemPrompt },
       {
