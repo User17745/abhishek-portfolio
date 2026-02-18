@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { ChatComponent } from "@/components/chat/ChatComponent";
+import { ChatContainer } from "@/components/chat/ChatContainer";
 ---
 
 <Layout title="Cookie - Career Fit Analyzer">
@@ -13,7 +13,7 @@ import { ChatComponent } from "@/components/chat/ChatComponent";
         </p>
       </div>
 
-      <ChatComponent client:load />
+      <ChatContainer client:load />
     </div>
   </main>
 </Layout>

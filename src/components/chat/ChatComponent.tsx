@@ -21,8 +21,8 @@ export interface ChatMessage {
 }
 
 interface ChatComponentProps {
-  messages: ChatMessage[];
-  onSendMessage: (message: string, fileContent?: string) => Promise<void>;
+  messages?: ChatMessage[];
+  onSendMessage?: (message: string, fileContent?: string) => Promise<void>;
   isLoading?: boolean;
 }
 
@@ -131,7 +131,11 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
   );
 }
 
-export function ChatComponent({ messages, onSendMessage, isLoading }: ChatComponentProps) {
+export function ChatComponent({ 
+  messages = [], 
+  onSendMessage = async () => {}, 
+  isLoading = false 
+}: ChatComponentProps) {
   const [input, setInput] = useState("");
   const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
