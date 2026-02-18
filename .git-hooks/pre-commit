@@ -28,6 +28,11 @@ for FILE in $FILES; do
     continue
   fi
   
+  # Skip this hook file
+  if [[ "$FILE" == .git-hooks/* ]]; then
+    continue
+  fi
+  
   # Check each pattern
   for PATTERN in "${PATTERNS[@]}"; do
     if grep -iq "$PATTERN" "$FILE" 2>/dev/null; then
