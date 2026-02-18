@@ -1,12 +1,15 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 export { renderers } from '../../renderers.mjs';
 
-const GEMINI_API_KEY$1 = "";
-new GoogleGenerativeAI(GEMINI_API_KEY$1);
+const GEMINI_API_KEY = "AIzaSyCQDBi3Zg_7KEmTXRS1IiBykMxgw1SLqXo";
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 async function getEmbedding(text) {
-  {
-    throw new Error("GEMINI_API_KEY is not configured");
-  }
+  const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
+  const result = await model.embedContent({
+    content: { role: "user", parts: [{ text }] },
+    taskType: "SEMANTIC_SIMILARITY"
+  });
+  return result.embedding.values;
 }
 
 function cosineSimilarity(a, b) {
@@ -37,11 +40,134 @@ function findTopMatches(jobDescriptionEmbedding, storedEmbeddings, topK = 5) {
   return results.slice(0, topK);
 }
 
-const GEMINI_API_KEY = "";
-new GoogleGenerativeAI(GEMINI_API_KEY);
-async function callGeminiWithContext(systemPrompt, contextChunks, userQuestion) {
+async function callLLM(config, systemPrompt, contextChunks, userQuestion) {
+  switch (config.provider) {
+    case "gemini":
+      return callGemini(config.apiKey, systemPrompt, contextChunks, userQuestion);
+    case "zhipuai":
+      return callZhipuAI(config.apiKey, systemPrompt, contextChunks, userQuestion);
+    case "openrouter":
+      return callOpenRouter(config.apiKey, systemPrompt, contextChunks, userQuestion);
+    default:
+      throw new Error(`Unknown provider: ${config.provider}`);
+  }
+}
+async function callGemini(apiKey, systemPrompt, contextChunks, userQuestion) {
+  const { GoogleGenerativeAI } = await import('@google/generative-ai');
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const JSON_SCHEMA = {
+    type: "object",
+    properties: {
+      fit_score: { type: "number" },
+      strong_matches: { type: "array", items: { type: "string" } },
+      partial_matches: { type: "array", items: { type: "string" } },
+      gaps: { type: "array", items: { type: "string" } },
+      recommended_positioning: { type: "string" },
+      confidence_level: { type: "string", enum: ["High", "Medium", "Low"] }
+    },
+    required: [
+      "fit_score",
+      "strong_matches",
+      "partial_matches",
+      "gaps",
+      "recommended_positioning",
+      "confidence_level"
+    ]
+  };
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash",
+    generationConfig: {
+      temperature: 0.3,
+      responseMimeType: "application/json",
+      responseSchema: JSON_SCHEMA
+    }
+  });
+  const context = contextChunks.map((chunk, i) => `--- Context ${i + 1} ---
+${chunk}`).join("\n\n");
+  const prompt = `${systemPrompt}
+
+## Context
+${context}
+
+## Question
+${userQuestion}`;
+  const result = await model.generateContent(prompt);
+  const response = result.response.text();
+  try {
+    return JSON.parse(response);
+  } catch {
+    throw new Error("Invalid JSON response from Gemini");
+  }
+}
+async function callZhipuAI(apiKey, systemPrompt, contextChunks, userQuestion) {
+  const ZhipuAI = (await import('zhipuai')).default;
+  const client = new ZhipuAI({ apiKey });
+  const context = contextChunks.map((chunk, i) => `--- Context ${i + 1} ---
+${chunk}`).join("\n\n");
+  const result = await client.chat.completions.create({
+    model: "glm-4-flash",
+    messages: [
+      { role: "system", content: systemPrompt },
+      {
+        role: "user",
+        content: `Context:
+${context}
+
+Question:
+${userQuestion}`
+      }
+    ],
+    temperature: 0.3,
+    response_format: { type: "json_object" }
+  });
+  const content = result.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No response from ZhipuAI");
+  }
+  try {
+    return JSON.parse(content);
+  } catch {
+    throw new Error("Invalid JSON response from ZhipuAI");
+  }
+}
+async function callOpenRouter(apiKey, systemPrompt, contextChunks, userQuestion) {
+  const OpenAI = (await import('openai')).default;
+  const client = new OpenAI({
+    apiKey,
+    baseURL: "https://openrouter.ai/api/v1"
+  });
+  const context = contextChunks.map((chunk, i) => `--- Context ${i + 1} ---
+${chunk}`).join("\n\n");
+  const result = await client.chat.completions.create({
+    model: "google/gemini-2.0-flash-001",
+    messages: [
+      { role: "system", content: systemPrompt },
+      {
+        role: "user",
+        content: `Context:
+${context}
+
+Question:
+${userQuestion}`
+      }
+    ],
+    temperature: 0.3,
+    response_format: { type: "json_object" }
+  });
+  const content = result.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No response from OpenRouter");
+  }
+  try {
+    return JSON.parse(content);
+  } catch {
+    throw new Error("Invalid JSON response from OpenRouter");
+  }
+}
+function getActiveLLMConfig() {
+  const geminiKey = "AIzaSyCQDBi3Zg_7KEmTXRS1IiBykMxgw1SLqXo";
   {
-    throw new Error("GEMINI_API_KEY is not configured");
+    return { provider: "gemini", apiKey: geminiKey };
   }
 }
 
@@ -74,6 +200,13 @@ const POST = async ({ request }) => {
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
+    const llmConfig = getActiveLLMConfig();
+    if (!llmConfig) {
+      return new Response(
+        JSON.stringify({ error: "No LLM API key configured. Please set PUBLIC_GEMINI_API_KEY, PUBLIC_ZHIPUAI_API_KEY, or PUBLIC_OPENROUTER_API_KEY" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
     const searchQuery = body.userQuestion || body.jdText;
     const jdEmbedding = await getEmbedding(searchQuery);
     const embeddingsPath = new URL(
@@ -85,7 +218,8 @@ const POST = async ({ request }) => {
     const storedEmbeddings = embeddingsData;
     const topMatches = findTopMatches(jdEmbedding, storedEmbeddings, 5);
     const contextChunks = topMatches.map((m) => m.chunk.text);
-    const analysis = await callGeminiWithContext(
+    const analysis = await callLLM(
+      llmConfig,
       SYSTEM_PROMPT,
       contextChunks,
       body.userQuestion ? body.userQuestion : `Analyze how Abhishek Aggarwal fits for this job description:

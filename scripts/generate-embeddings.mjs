@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const CHUNKS_FILE = path.join(__dirname, '../docs/resources/rag/chunks.json');
 const OUTPUT_FILE = path.join(__dirname, '../docs/resources/rag/embeddings.json');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.PUBLIC_GEMINI_API_KEY;
 
 if (!GEMINI_API_KEY) {
   console.error('Error: GEMINI_API_KEY environment variable is not set');
@@ -21,8 +21,9 @@ if (!GEMINI_API_KEY) {
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-async function getEmbedding(text: string): Promise<number[]> {
-  const model = genAI.getGenerativeModel({ model: 'embedding-001' });
+async function getEmbedding(text) {
+  // Use the newer embeddings API approach
+  const model = genAI.getGenerativeModel({ model: 'gemini-embedding-001' });
   
   const result = await model.embedContent({
     content: { role: 'user', parts: [{ text }] },
@@ -32,17 +33,12 @@ async function getEmbedding(text: string): Promise<number[]> {
   return result.embedding.values;
 }
 
-async function processEmbeddings(): Promise<void> {
+async function processEmbeddings() {
   console.log('Loading chunks from:', CHUNKS_FILE);
   const chunks = JSON.parse(fs.readFileSync(CHUNKS_FILE, 'utf-8'));
   console.log(`Loaded ${chunks.length} chunks\n`);
   
-  const embeddings: Array<{
-    id: string;
-    text: string;
-    embedding: number[];
-    metadata: Record<string, string>;
-  }> = [];
+  const embeddings = [];
   
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
@@ -69,7 +65,7 @@ async function processEmbeddings(): Promise<void> {
       console.log(`  ✓ Got embedding (${embedding.length} dimensions)\n`);
       
     } catch (error) {
-      console.error(`  ✗ Error: ${(error as Error).message}\n`);
+      console.error(`  ✗ Error: ${error.message}\n`);
     }
   }
   

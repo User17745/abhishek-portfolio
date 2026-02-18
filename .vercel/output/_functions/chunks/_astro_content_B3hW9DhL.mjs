@@ -98,7 +98,7 @@ function dataStoreSingleton() {
 }
 const globalDataStore = dataStoreSingleton();
 
-const __vite_import_meta_env__ = {"ASSETS_PREFIX": undefined, "BASE_URL": "/", "DEV": false, "MODE": "production", "PROD": true, "SITE": "https://abhishekaggarwal.com", "SSR": true};
+const __vite_import_meta_env__ = {"ASSETS_PREFIX": undefined, "BASE_URL": "/", "DEV": false, "MODE": "production", "PROD": true, "PUBLIC_GEMINI_API_KEY": "AIzaSyCQDBi3Zg_7KEmTXRS1IiBykMxgw1SLqXo", "PUBLIC_OPENROUTER_API_KEY": "your_openrouter_api_key_here", "PUBLIC_ZHIPUAI_API_KEY": "your_zhipuai_api_key_here", "SITE": "https://abhishekaggarwal.com", "SSR": true};
 function createCollectionToGlobResultMap({
   globResult,
   contentDir

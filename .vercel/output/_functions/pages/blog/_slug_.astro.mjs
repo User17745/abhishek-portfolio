@@ -2,7 +2,7 @@ import { c as createAstro, a as createComponent, r as renderComponent, b as rend
 import 'piccolore';
 import { $ as $$Layout, B as Button, a as Badge } from '../../chunks/badge_C3Zljwn0.mjs';
 import { $ as $$Header, a as $$Footer } from '../../chunks/Footer_Di6c884w.mjs';
-import { g as getCollection } from '../../chunks/_astro_content_BHcVUcto.mjs';
+import { g as getCollection } from '../../chunks/_astro_content_B3hW9DhL.mjs';
 import { ArrowLeft } from 'lucide-react';
 export { renderers } from '../../renderers.mjs';
 

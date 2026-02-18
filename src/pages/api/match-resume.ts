@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getEmbedding } from "@/lib/embeddings/gemini";
 import { findTopMatches, type EmbeddingChunk } from "@/lib/embeddings/search";
-import { callGeminiWithContext, type CookieResponse } from "@/lib/chatbot/gemini";
+import { callLLM, getActiveLLMConfig, type LLMResponse } from "@/lib/chatbot/llm-providers";
 import { SYSTEM_PROMPT } from "@/lib/chatbot/system-prompt";
 
 export const prerender = false;
@@ -19,6 +19,14 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({ error: "jdText is required" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const llmConfig = getActiveLLMConfig();
+    if (!llmConfig) {
+      return new Response(
+        JSON.stringify({ error: "No LLM API key configured. Please set PUBLIC_GEMINI_API_KEY, PUBLIC_ZHIPUAI_API_KEY, or PUBLIC_OPENROUTER_API_KEY" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
 
@@ -42,8 +50,9 @@ export const POST: APIRoute = async ({ request }) => {
     // Extract context chunks for LLM
     const contextChunks = topMatches.map((m) => m.chunk.text);
 
-    // Call Gemini with context to get structured analysis
-    const analysis: CookieResponse = await callGeminiWithContext(
+    // Call LLM with context to get structured analysis
+    const analysis: LLMResponse = await callLLM(
+      llmConfig,
       SYSTEM_PROMPT,
       contextChunks,
       body.userQuestion
