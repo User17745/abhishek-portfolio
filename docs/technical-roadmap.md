@@ -5,120 +5,103 @@
 ```
 MVP ──────────────────→ Target Maturity
  │                        │
- ├─ Core Structure        ├─ Blog/Writing
- ├─ All Sections          ├─ Case Study Pages
- ├─ Responsive            ├─ Animations
- ├─ Contact Form          ├─ Analytics
- └─ Deployed              └─ SEO Optimization
+ ├─ Core Structure        ├─ Analytics
+ ├─ All Sections         ├─ SEO Optimization
+ ├─ Responsive           ├─ Performance Tuning
+ ├─ Contact Form         └─ Mobile Polish
+ ├─ Deployed            │
+ ├─ Case Studies        │
+ ├─ Blog                │
+ ├─ Animations          │
+ ├─ Dark/Light Mode     │
+ └─ AI Chatbot (Cookie) │  ← NEW!
 ```
 
 ---
 
-## Milestone 1: MVP (v0.1.0)
+## Completed Milestones
 
-### Scope
-Core portfolio structure with all essential sections, deployed and functional.
+### Milestone 1: MVP (v0.1.0) ✅
 
-### Goals
-- Establish project foundation with Astro + React + shadcn/ui
-- Implement all core sections (Hero, About, Experience, Projects, Brands, Contact)
-- Ensure responsive design across devices
-- Deploy to production
+**Status:** Complete
 
-### Functional Requirements
-| ID | Requirement | Priority |
-|----|-------------|----------|
-| F1 | Hero section with name, title, and CTA | P0 |
-| F2 | About section with bio and skills | P0 |
-| F3 | Experience timeline with career journey | P0 |
-| F4 | Projects grid showcasing key implementations | P0 |
-| F5 | Brands logo showcase | P0 |
-| F6 | Contact form with email delivery | P0 |
-| F7 | Responsive navigation header | P0 |
-| F8 | Footer with social links | P0 |
-
-### Non-Functional Requirements
-| ID | Requirement | Target |
-|----|-------------|--------|
-| NF1 | Performance | Lighthouse > 90 |
-| NF2 | Accessibility | WCAG 2.1 AA |
-| NF3 | Mobile-first | 320px+ support |
-| NF4 | Browser Support | Chrome, Firefox, Safari, Edge (last 2 versions) |
-
-### Automated Tests
-- [ ] Component snapshot tests for all UI components
-- [ ] E2E tests for navigation flow
-- [ ] Form validation tests
-- [ ] Responsive breakpoint tests
-
-### Deployment
-- Platform: Vercel or Netlify
-- Domain: TBD (abhishekaggarwal.dev or similar)
-- SSL: Automatic
-
-### Demo Expectations
-- Load site on mobile and desktop
-- Navigate through all sections
-- Submit test contact form
-- Verify all links work
+- [x] Hero section with name, title, and CTA
+- [x] About section with bio and skills
+- [x] Experience timeline with career journey
+- [x] Projects grid showcasing key implementations
+- [x] Brands logo showcase
+- [x] Contact form with email delivery
+- [x] Responsive navigation header
+- [x] Footer with social links
+- [x] Deployed to production
 
 ---
 
-## Milestone 2: Enhanced UX (v0.2.0)
+### Milestone 2: Enhanced UX (v0.2.0) ✅
 
-### Scope
-Polish and enhance user experience with animations and dark mode.
+**Status:** Complete
 
-### Goals
-- Add smooth scroll animations
-- Implement dark/light mode toggle
-- Add micro-interactions
-- Improve SEO
-
-### Functional Requirements
-| ID | Requirement | Priority |
-|----|-------------|----------|
-| F9 | Dark/light mode with system preference detection | P1 |
-| F10 | Scroll-triggered animations | P1 |
-| F11 | Hover effects on interactive elements | P1 |
-| F12 | SEO meta tags and Open Graph | P1 |
-
-### Automated Tests
-- [ ] Theme persistence tests
-- [ ] Animation behavior tests
-- [ ] SEO meta validation
+- [x] Dark/light mode with system preference detection
+- [x] Scroll-triggered animations
+- [x] Hover effects on interactive elements
+- [x] SEO meta tags and Open Graph
+- [x] Mobile responsive polish
 
 ---
 
-## Milestone 3: Target Maturity (v1.0.0)
+### Milestone 3: Content & Blog (v0.3.0) ✅
 
-### Scope
-Full-featured portfolio with case studies and analytics.
+**Status:** Complete
 
-### Goals
-- Add dedicated case study pages
-- Implement blog section
-- Add analytics tracking
-- Performance optimization
+- [x] Case study detail pages (3 case studies)
+- [x] Blog section with MDX support
+- [x] RSS feed for blog
+- [x] Content collections with type safety
 
-### Functional Requirements
+---
+
+### Milestone 4: AI Chatbot "Cookie" (v0.4.0) ✅
+
+**Status:** Complete
+
+- [x] RAG-based career fit analyzer
+- [x] Multi-provider LLM support (OpenRouter, Gemini, ZhipuAI, Nvidia NIM)
+- [x] Automatic provider fallback on failure
+- [x] Sidebar UI (right side, under header)
+- [x] "Interview me right now!" button in Hero
+- [x] Cookie icon in header navigation
+- [x] Fit score visualization
+- [x] Strong/partial matches and gaps display
+- [x] Recommended positioning suggestions
+- [x] Confidence level indicator
+
+---
+
+## Pending Features
+
+### Milestone 5: Polish & Analytics (v1.0.0)
+
+#### Functional Requirements
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| F13 | Case study detail pages (3-5) | P2 |
-| F14 | Blog section with MDX support | P2 |
-| F15 | Analytics integration | P2 |
-| F16 | RSS feed for blog | P2 |
+| F17 | Google Analytics integration | P2 |
+| F18 | Performance optimization (Lighthouse > 90) | P2 |
+| F19 | Additional case studies (5+) | P3 |
+| F20 | Portfolio filtering by category | P3 |
 
-### Automated Tests
-- [ ] Blog post rendering tests
-- [ ] Case study page tests
-- [ ] Analytics event tests
+#### Known Issues
+| ID | Issue | Priority |
+|----|-------|----------|
+| K1 | HTML double-encoding in content collections | P1 |
 
 ---
 
 ## Version History
+
 | Version | Date | Milestone |
 |---------|------|-----------|
-| 0.1.0 | TBD | MVP |
-| 0.2.0 | TBD | Enhanced UX |
-| 1.0.0 | TBD | Target Maturity |
+| 0.1.0 | 2024 | MVP |
+| 0.2.0 | 2024 | Enhanced UX |
+| 0.3.0 | 2024 | Content & Blog |
+| 0.4.0 | 2026 | AI Chatbot "Cookie" |
+| 1.0.0 | TBD | Polish & Analytics |

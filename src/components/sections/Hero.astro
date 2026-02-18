@@ -3,6 +3,7 @@ import { summary, stats } from "@/data/summary";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Linkedin, Info, Copy, Check } from "lucide-react";
 import { siteConfig } from "@/lib/config";
+import { ChatButton } from "@/components/chat/ChatSidebar";
 ---
 
 <section id="hero" class="min-h-screen flex items-center justify-center pt-24 px-4 hero-bg">
@@ -18,6 +19,10 @@ import { siteConfig } from "@/lib/config";
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
           {summary.headline}
         </h1>
+      </div>
+      
+      <div class="fade-in stagger-2 pt-4">
+        <ChatButton client:load />
       </div>
       
       <p class="fade-in stagger-2 text-sm text-muted-foreground max-w-md mx-auto">

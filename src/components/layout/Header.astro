@@ -2,11 +2,12 @@
 import { navItems, siteConfig } from "@/lib/config";
 import ThemeToggle from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
+import { CookieToggle } from "./CookieToggle";
 
 const items = navItems;
 ---
 
-<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
+<header class="fixed top-0 w-full z-40 bg-background/80 backdrop-blur-md border-b border-border">
   <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
     <a href="/" class="flex items-center gap-2 group">
       <img 
@@ -28,7 +29,8 @@ const items = navItems;
       ))}
     </div>
     
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2">
+      <CookieToggle client:load />
       <ThemeToggle client:load />
       <a
         href={siteConfig.links.linkedin}
