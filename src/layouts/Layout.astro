@@ -2,6 +2,7 @@
 import "@/styles/global.css";
 import { siteConfig } from "@/lib/config";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
+import { ChatSidebar } from "@/components/chat/ChatSidebar";
 
 interface Props {
   title?: string;
@@ -96,7 +97,10 @@ const structuredData = {
     <GoogleAnalytics measurementId={siteConfig.analytics.googleMeasurementId} client:only="react" />
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
-    <slot />
+    <div id="main-content" class="transition-all duration-300">
+      <slot />
+    </div>
+    <ChatSidebar client:load />
     <script>
       function initScrollAnimations() {
         const observer = new IntersectionObserver(
@@ -120,6 +124,33 @@ const structuredData = {
       if (document.readyState === 'complete' || document.readyState === 'interactive') {
         initScrollAnimations();
       }
+    </script>
+    <script>
+      // Handle sidebar state for content squeezing
+      function initSidebarHandler() {
+        const mainContent = document.getElementById('main-content');
+        
+        // Listen for sidebar open/close events
+        document.addEventListener('sidebar-state-change', (e: any) => {
+          if (e.detail?.isOpen && window.innerWidth >= 768) {
+            mainContent?.classList.add('mr-[450px]');
+          } else {
+            mainContent?.classList.remove('mr-[450px]');
+          }
+        });
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+          const isOpen = document.querySelector('[data-sidebar-open="true"]') !== null;
+          if (isOpen && window.innerWidth >= 768) {
+            mainContent?.classList.add('mr-[450px]');
+          } else {
+            mainContent?.classList.remove('mr-[450px]');
+          }
+        });
+      }
+      
+      document.addEventListener('DOMContentLoaded', initSidebarHandler);
     </script>
   </body>
 </html>

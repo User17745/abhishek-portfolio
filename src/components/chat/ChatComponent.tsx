@@ -1,30 +1,9 @@
-import React, { useState, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-  metadata?: {
-    fit_score?: number;
-    strong_matches?: string[];
-    partial_matches?: string[];
-    gaps?: string[];
-    recommended_positioning?: string;
-    confidence_level?: "High" | "Medium" | "Low";
-  };
-}
-
-interface ChatComponentProps {
-  messages?: ChatMessage[];
-  onSendMessage?: (message: string, fileContent?: string) => Promise<void>;
-  isLoading?: boolean;
-}
+import type { ChatMessage } from "./ChatContext";
 
 function FitScoreProgress({ score }: { score: number }) {
   const getColor = (s: number) => {
@@ -131,35 +110,42 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
   );
 }
 
+interface ChatComponentProps {
+  messages: ChatMessage[];
+  onSendMessage: (message: string, fileContent?: string) => void;
+  isLoading?: boolean;
+}
+
 export function ChatComponent({ 
-  messages = [], 
-  onSendMessage = async () => {}, 
+  messages,
+  onSendMessage,
   isLoading = false 
 }: ChatComponentProps) {
   const [input, setInput] = useState("");
   const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
-  const [hasError, setHasError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = async () => {
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSubmit = () => {
     if ((!input.trim() && !attachedFile) || isLoading) return;
 
     const messageToSend = input.trim();
     const fileContent = attachedFile?.content;
 
+    onSendMessage(messageToSend, fileContent);
     setInput("");
     setAttachedFile(null);
-
-    try {
-      await onSendMessage(messageToSend, fileContent);
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setHasError(true);
-    }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -209,111 +195,88 @@ export function ChatComponent({
     return null;
   };
 
-  if (hasError) {
-    return (
-      <Card className="w-full max-w-2xl mx-auto p-8 text-center">
-        <p className="text-red-500">Something went wrong. Please refresh the page.</p>
-        <Button 
-          onClick={() => window.location.reload()} 
-          className="mt-4"
-        >
-          Refresh
-        </Button>
-      </Card>
-    );
-  }
-
   return (
-    <Card className="w-full max-w-2xl mx-auto h-[700px] flex flex-col">
-      <CardHeader className="pb-4 border-b shrink-0">
-        <CardTitle className="flex items-center gap-2">
-          <img src="/cookie-avatar.jpg" alt="Cookie" className="h-8 w-8 rounded-full object-cover" />
-          <span>Cookie - Career Fit Analyzer</span>
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Paste a job description or upload a file to analyze fit
-        </p>
-      </CardHeader>
+    <div className="flex flex-col h-full">
+      {/* Messages - Scrollable area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 && (
+          <div className="text-center text-muted-foreground py-8">
+            <img src="/cookie-avatar.gif" alt="Cookie" className="h-12 w-12 mx-auto mb-4 rounded-full opacity-80" />
+            <p>Welcome! I&apos;m Cookie, Abhishek&apos;s personal agent.</p>
+            <p className="text-sm mt-2">Paste a job description or upload a file and I&apos;ll analyze the fit.</p>
+          </div>
+        )}
 
-      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.length === 0 && (
-            <div className="text-center text-muted-foreground py-8">
-              <img src="/cookie-avatar.jpg" alt="Cookie" className="h-12 w-12 mx-auto mb-4 rounded-full opacity-80" />
-              <p>Welcome! Paste a job description or upload a file to get started.</p>
-              <p className="text-sm mt-2">I&apos;ll analyze how Abhishek Aggarwal fits your requirements.</p>
-            </div>
-          )}
+        {messages.map((message) => {
+          const cookieMetadata = message.role === "assistant" 
+            ? tryParseCookieResponse(message.content) 
+            : null;
 
-          {messages.map((message) => {
-            const cookieMetadata = message.role === "assistant" 
-              ? tryParseCookieResponse(message.content) 
-              : null;
-
-            return (
+          return (
+            <div
+              key={message.id}
+              className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
+            >
               <div
-                key={message.id}
-                className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden ${
+                  message.role === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary"
+                }`}
               >
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden ${
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary"
-                  }`}
-                >
-                  {message.role === "user" ? (
-                    <User className="h-4 w-4" />
-                  ) : (
-                    <img src="/cookie-avatar.jpg" alt="Cookie" className="h-full w-full object-cover" />
-                  )}
-                </div>
-
-                <div className={`flex-1 ${message.role === "user" ? "text-right" : ""}`}>
-                  {cookieMetadata ? (
-                    <CookieResponseDisplay metadata={cookieMetadata} />
-                  ) : (
-                    <div
-                      className={`inline-block max-w-[85%] rounded-lg px-4 py-2 ${
-                        message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
-                      }`}
-                    >
-                      <p className="whitespace-pre-wrap text-sm">{message.content}</p>
-                    </div>
-                  )}
-
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {message.timestamp.toLocaleTimeString()}
-                  </p>
-                </div>
+                {message.role === "user" ? (
+                  <User className="h-4 w-4" />
+                ) : (
+                  <img src="/cookie-avatar.gif" alt="Cookie" className="h-full w-full object-cover" />
+                )}
               </div>
-            );
-          })}
 
-          {isLoading && (
-            <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
-                <img src="/cookie-avatar.jpg" alt="Cookie" className="h-full w-full object-cover" />
-              </div>
-              <div className="bg-muted rounded-lg px-4 py-3">
-                <div className="flex gap-1">
-                  <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
-                  <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]" />
-                  <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]" />
-                </div>
+              <div className={`flex-1 ${message.role === "user" ? "text-right" : ""}`}>
+                {cookieMetadata ? (
+                  <CookieResponseDisplay metadata={cookieMetadata} />
+                ) : (
+                  <div
+                    className={`inline-block max-w-[85%] rounded-lg px-4 py-2 ${
+                      message.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap text-sm">{message.content}</p>
+                  </div>
+                )}
+
+                <p className="text-xs text-muted-foreground mt-2">
+                  {new Date(message.timestamp).toLocaleTimeString()}
+                </p>
               </div>
             </div>
-          )}
+          );
+        })}
 
-          <div ref={messagesEndRef} />
-        </div>
+        {isLoading && (
+          <div className="flex gap-3">
+            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
+              <img src="/cookie-avatar.gif" alt="Cookie" className="h-full w-full object-cover" />
+            </div>
+            <div className="bg-muted rounded-lg px-4 py-3">
+              <div className="flex gap-1">
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]" />
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]" />
+              </div>
+            </div>
+          </div>
+        )}
 
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area - Sticky at bottom */}
+      <div className="p-4 border-t bg-background shrink-0">
         {/* Attached File */}
         {attachedFile && (
-          <div className="px-4 pb-2 shrink-0">
+          <div className="mb-3">
             <div className="flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
               <FileText className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm flex-1 truncate">{attachedFile.name}</span>
@@ -328,55 +291,52 @@ export function ChatComponent({
           </div>
         )}
 
-        {/* Input Area */}
-        <div className="p-4 border-t shrink-0">
-          <div className="flex gap-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              accept=".txt,.md,text/plain,text/markdown"
-              className="hidden"
-              disabled={isLoading}
-            />
+        <div className="flex gap-2">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            accept=".txt,.md,text/plain,text/markdown"
+            className="hidden"
+            disabled={isLoading}
+          />
 
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-            >
-              <Upload className="h-4 w-4" />
-            </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isLoading}
+          >
+            <Upload className="h-4 w-4" />
+          </Button>
 
-            <Textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Paste job description or ask a question..."
-              className="min-h-[44px] max-h-[200px] resize-none"
-              disabled={isLoading}
-            />
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Paste job description or ask a question..."
+            className="min-h-[44px] max-h-[200px] resize-none"
+            disabled={isLoading}
+          />
 
-            <Button
-              onClick={handleSubmit}
-              disabled={(!input.trim() && !attachedFile) || isLoading}
-              size="icon"
-            >
-              {isLoading ? (
-                <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-
-          <p className="text-xs text-muted-foreground mt-2 text-center">
-            Press Enter to send • Supports .txt and .md file uploads
-          </p>
+          <Button
+            onClick={handleSubmit}
+            disabled={(!input.trim() && !attachedFile) || isLoading}
+            size="icon"
+          >
+            {isLoading ? (
+              <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+          </Button>
         </div>
-      </CardContent>
-    </Card>
+
+        <p className="text-xs text-muted-foreground mt-2 text-center">
+          Press Enter to send • Supports .txt and .md file uploads
+        </p>
+      </div>
+    </div>
   );
 }

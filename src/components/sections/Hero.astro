@@ -3,7 +3,7 @@ import { summary, stats } from "@/data/summary";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Linkedin, Info, Copy, Check } from "lucide-react";
 import { siteConfig } from "@/lib/config";
-import { ChatButton, ChatWidget } from "@/components/chat/ChatWidget";
+import { ChatButton } from "@/components/chat/ChatSidebar";
 ---
 
 <section id="hero" class="min-h-screen flex items-center justify-center pt-24 px-4 hero-bg">
@@ -162,9 +162,6 @@ import { ChatButton, ChatWidget } from "@/components/chat/ChatWidget";
       </div>
     </div>
   </div>
-  
-  <!-- Chat Widget -->
-  <ChatWidget client:load />
 </section>
 
 <style>

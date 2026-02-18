@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { ChatComponent, type ChatMessage } from "./ChatComponent";
+import { ChatComponent } from "./ChatComponent";
+import type { ChatMessage } from "./ChatContext";
 
 export function ChatContainer() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const addMessage = (message: ChatMessage) => {
+    setMessages(prev => [...prev, message]);
+  };
 
   const handleSendMessage = async (message: string, fileContent?: string) => {
     if (!message.trim() && !fileContent) return;
@@ -16,7 +21,7 @@ export function ChatContainer() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    addMessage(userMessage);
     setIsLoading(true);
 
     try {
@@ -45,7 +50,7 @@ export function ChatContainer() {
         metadata: data,
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      addMessage(assistantMessage);
     } catch (error) {
       console.error("Error:", error);
       
@@ -57,7 +62,7 @@ export function ChatContainer() {
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, errorMessage]);
+      addMessage(errorMessage);
     } finally {
       setIsLoading(false);
     }
