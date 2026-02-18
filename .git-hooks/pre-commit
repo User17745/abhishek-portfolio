@@ -1,0 +1,49 @@
+#!/bin/bash
+# Pre-commit hook to detect potential secrets in staged files
+
+echo "🔍 Scanning for potential secrets..."
+
+# Patterns that might indicate secrets
+PATTERNS=(
+  "api_key"
+  "apikey"
+  "secret"
+  "password"
+  "token"
+  "Bearer"
+  "sk-"
+  "AIza"
+  "ghp_"
+  "glpat-"
+)
+
+# Files to check
+FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+FOUND_ISSUE=0
+
+for FILE in $FILES; do
+  # Skip certain file types
+  if [[ "$FILE" == *.png ]] || [[ "$FILE" == *.jpg ]] || [[ "$FILE" == *.gif ]] || [[ "$FILE" == *.ico ]]; then
+    continue
+  fi
+  
+  # Check each pattern
+  for PATTERN in "${PATTERNS[@]}"; do
+    if grep -iq "$PATTERN" "$FILE" 2>/dev/null; then
+      echo "⚠️  WARNING: Possible secret found in $FILE (pattern: $PATTERN)"
+      FOUND_ISSUE=1
+    fi
+  done
+done
+
+if [ $FOUND_ISSUE -eq 1 ]; then
+  echo ""
+  echo "❌ Commit blocked - potential secrets detected!"
+  echo "Please review the files above and remove any sensitive data."
+  echo "If you're sure this is a false positive, use: git commit --no-verify"
+  exit 1
+fi
+
+echo "✅ No obvious secrets detected"
+exit 0
