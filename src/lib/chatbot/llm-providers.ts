@@ -212,18 +212,18 @@ async function callNvidia(
     headers: {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
+      "Accept": "text/event-stream",
     },
     body: JSON.stringify({
       model: "moonshotai/kimi-k2.5",
       messages: [
-        { role: "system", content: systemPrompt },
         {
           role: "user",
-          content: `Context:\n${context}\n\nQuestion:\n${userQuestion}`,
+          content: `${systemPrompt}\n\nContext:\n${context}\n\nQuestion:\n${userQuestion}`
         },
       ],
-      max_tokens: 4096,
-      temperature: 0.3,
+      max_tokens: 16384,
+      temperature: 1.0,
       top_p: 1.0,
       stream: false,
       chat_template_kwargs: {
