@@ -28,6 +28,5 @@ export const navItems = [
   { label: "Projects", href: "#projects" },
   { label: "Brands", href: "#brands" },
   { label: "Resume", href: "#resume" },
-  { label: "Chat", href: "/chat" },
   { label: "Contact", href: "#contact" },
 ];

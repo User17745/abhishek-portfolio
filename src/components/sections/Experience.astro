@@ -2,6 +2,7 @@
 import { experiences } from "@/data/experience";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, Building2 } from "lucide-react";
+import { decodeHTMLEntities } from "@/lib/utils";
 ---
 
 <section id="experience" class="py-20 px-4 gradient-bg">
@@ -27,15 +28,15 @@ import { Briefcase, Building2 } from "lucide-react";
                 <!-- Info Column (period, title, company) -->
                 <div class={`flex-1 pl-12 md:pl-0 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-8'}`}>
                   <div class={`flex flex-col ${index % 2 === 0 ? 'md:items-start md:text-left' : 'md:items-end md:text-right'}`}>
-                    <p class="text-sm text-accent font-medium">{exp.period}</p>
-                    <h3 class="font-semibold text-lg">{exp.title}</h3>
+                    <p class="text-sm text-accent font-medium" set:html={decodeHTMLEntities(exp.period)} />
+                    <h3 class="font-semibold text-lg" set:html={decodeHTMLEntities(exp.title)} />
                     <div class={`flex items-center gap-2 text-muted-foreground mb-2 flex-wrap ${index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'}`}>
                       {exp.type === "entrepreneurship" ? (
                         <Building2 className="h-4 w-4 text-accent shrink-0" />
                       ) : (
                         <Briefcase className="h-4 w-4 text-highlight shrink-0" />
                       )}
-                      <span>{exp.company}</span>
+                       <span set:html={decodeHTMLEntities(exp.company)} />
                       <span class="text-muted-foreground/50">•</span>
                       <span>{exp.location}</span>
                     </div>
@@ -45,13 +46,13 @@ import { Briefcase, Building2 } from "lucide-react";
                 <!-- Card Column -->
                 <div class={`flex-1 pl-12 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-8'}`}>
                   <div class="timeline-card bg-card rounded-lg border border-border p-6 hover-lift hover-glow">
-                    <p class="text-muted-foreground text-sm mb-4">{exp.description}</p>
+                    <p class="text-muted-foreground text-sm mb-4" set:html={decodeHTMLEntities(exp.description)} />
                     
                     <ul class="space-y-2 mb-4">
                       {exp.highlights.slice(0, 3).map((highlight) => (
                         <li class="text-sm flex items-start gap-2">
                           <span class="text-accent mt-1.5">•</span>
-                          <span>{highlight}</span>
+                          <span set:html={decodeHTMLEntities(highlight)} />
                         </li>
                       ))}
                     </ul>

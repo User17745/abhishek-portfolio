@@ -54,15 +54,25 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
           </div>
           
           <!-- Tabs -->
-          <div class="px-2 sm:px-3 py-1.5 sm:py-2 border-b border-zinc-100 dark:border-zinc-800 overflow-x-auto no-scrollbar bg-white dark:bg-zinc-900">
-            <div class="flex gap-0.5">
-              <button data-tab="all" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-700 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 whitespace-nowrap">All</button>
-              <button data-tab="sol_eng" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">Solutions</button>
-              <button data-tab="ecom" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">eCom</button>
-              <button data-tab="pmo" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">PMO</button>
-              <button data-tab="prod" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">Product</button>
-              <button data-tab="tpm" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">TPM</button>
-              <button data-tab="shop_pm" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">Shopify</button>
+          <div class="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+            <div class="flex-1 overflow-x-auto no-scrollbar mr-2">
+              <div class="flex gap-0.5">
+                <button data-tab="all" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-700 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 whitespace-nowrap">All</button>
+                <button data-tab="sol_eng" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">Solutions</button>
+                <button data-tab="ecom" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">eCom</button>
+                <button data-tab="pmo" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">PMO</button>
+                <button data-tab="prod" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">Product</button>
+                <button data-tab="tpm" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">TPM</button>
+                <button data-tab="shop_pm" class="tab-btn-hero px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-medium rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap">Shopify</button>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-1.5 pl-3 border-l border-zinc-200 dark:border-zinc-700 shrink-0">
+              <span class="text-[8px] uppercase text-zinc-400 font-bold tracking-tighter">Format</span>
+              <div class="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded shadow-inner">
+                <button data-format="md" class="format-btn-hero active px-1.5 py-0.5 text-[8px] sm:text-[9px] font-bold rounded bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm transition-all">MD</button>
+                <button data-format="pdf" class="format-btn-hero px-1.5 py-0.5 text-[8px] sm:text-[9px] font-bold rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-all">PDF</button>
+              </div>
             </div>
           </div>
           
@@ -71,31 +81,31 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
             <div class="p-2 sm:p-3 font-mono text-[10px] sm:text-[11px] overflow-x-auto">
               <div data-content="all" class="code-content-hero flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"all"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"all"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
               <div data-content="sol_eng" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"sol_eng"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"sol_eng"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
               <div data-content="ecom" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"ecom"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"ecom"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
               <div data-content="pmo" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"pmo"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"pmo"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
               <div data-content="prod" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"prod"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"prod"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
               <div data-content="tpm" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"tpm"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"tpm"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
               <div data-content="shop_pm" class="code-content-hero hidden flex items-center gap-1.5 whitespace-nowrap">
                 <span class="text-green-600 dark:text-green-500 select-none">$</span>
-                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"shop_pm"</span></span>
+                <span class="text-zinc-700 dark:text-zinc-300">curl -fsSL https://abhishekaggarwal.com/install.sh <span class="text-purple-600 dark:text-purple-400">|</span> bash -s -- <span class="text-amber-600 dark:text-amber-400">"shop_pm"</span><span class="format-arg text-amber-600 dark:text-amber-400"> "md"</span></span>
               </div>
             </div>
           </div>
@@ -217,19 +227,22 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
   const tabBtns = document.querySelectorAll('.tab-btn-hero');
   const codeContents = document.querySelectorAll('.code-content-hero');
   const copyBtn = document.getElementById('copy-btn-hero');
-  
-  const commands = {
-    all: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "all"',
-    sol_eng: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "sol_eng"',
-    ecom: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "ecom"',
-    pmo: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "pmo"',
-    prod: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "prod"',
-    tpm: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "tpm"',
-    shop_pm: 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- "shop_pm"',
-  };
+  const formatBtns = document.querySelectorAll('.format-btn-hero');
   
   let currentTab = 'all';
+  let currentFormat = 'md';
   
+  function updateCommand() {
+    const baseCommand = 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s --';
+    const tabArg = `"${currentTab}"`;
+    const formatArg = currentFormat === 'md' ? ' "md"' : '';
+    
+    // Update format args in UI
+    document.querySelectorAll('.format-arg').forEach(el => {
+      el.textContent = formatArg;
+    });
+  }
+
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.getAttribute('data-tab') || 'all';
@@ -244,11 +257,33 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
       
       codeContents.forEach(content => content.classList.add('hidden'));
       document.querySelector(`[data-content="${tab}"]`)?.classList.remove('hidden');
+      updateCommand();
+    });
+  });
+
+  formatBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const format = btn.getAttribute('data-format') || 'md';
+      currentFormat = format;
+      
+      formatBtns.forEach(b => {
+        b.classList.remove('bg-white', 'dark:bg-zinc-700', 'text-zinc-900', 'dark:text-zinc-100', 'shadow-sm');
+        b.classList.add('text-zinc-500', 'dark:text-zinc-400');
+      });
+      btn.classList.remove('text-zinc-500', 'dark:text-zinc-400');
+      btn.classList.add('bg-white', 'dark:bg-zinc-700', 'text-zinc-900', 'dark:text-zinc-100', 'shadow-sm');
+      
+      updateCommand();
     });
   });
   
   copyBtn?.addEventListener('click', async () => {
-    await navigator.clipboard.writeText(commands[currentTab as keyof typeof commands]);
+    const baseCommand = 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s --';
+    const tabArg = `"${currentTab}"`;
+    const formatArg = currentFormat === 'md' ? ' "md"' : '';
+    const fullCommand = `${baseCommand} ${tabArg}${formatArg}`;
+    
+    await navigator.clipboard.writeText(fullCommand);
     
     const copyText = copyBtn.querySelector('.copy-text-hero');
     const copiedText = copyBtn.querySelector('.copied-text-hero');

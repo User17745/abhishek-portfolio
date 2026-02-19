@@ -2,6 +2,7 @@
 import { projects } from "@/data/projects";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { decodeHTMLEntities } from "@/lib/utils";
 ---
 
 <section id="projects" class="py-20 px-4">
@@ -18,24 +19,24 @@ import { Badge } from "@/components/ui/badge";
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project, index) => (
         <div class={`scale-in stagger-${((index % 3) + 2)}`}>
-          <Card className="flex flex-col h-full hover-lift hover-glow cursor-pointer gradient-border">
-            <CardHeader>
+          <div class="flex flex-col h-full rounded-lg border border-border bg-card text-card-foreground shadow-sm hover-lift hover-glow cursor-pointer gradient-border overflow-hidden">
+            <div class="flex flex-col space-y-1.5 p-6 pb-4">
               <div class="flex items-start justify-between gap-2">
-                <CardTitle className="text-lg">{project.title}</CardTitle>
+                <h3 class="text-lg font-semibold leading-none tracking-tight" set:html={decodeHTMLEntities(project.title)} />
                 <Badge className="shrink-0 bg-accent/10 text-accent border-accent/20">{project.year}</Badge>
               </div>
-              <CardDescription>{project.client}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <p class="text-sm text-muted-foreground mb-4">{project.description}</p>
+              <p class="text-sm text-muted-foreground" set:html={decodeHTMLEntities(project.client)} />
+            </div>
+            <div class="p-6 pt-0 flex-1 flex flex-col">
+              <p class="text-sm text-muted-foreground mb-4" set:html={decodeHTMLEntities(project.description)} />
               
-              <Badge variant="outline" className="mb-4 text-highlight border-highlight/30">{project.platform}</Badge>
+              <div class="inline-flex items-center rounded-full border border-highlight/30 px-2.5 py-0.5 text-xs font-semibold text-highlight mb-4 w-fit" set:html={decodeHTMLEntities(project.platform)} />
               
               <ul class="space-y-1.5 mb-4">
                 {project.highlights.slice(0, 2).map((highlight) => (
                   <li class="text-xs text-muted-foreground flex items-start gap-2">
                     <span class="text-accent">•</span>
-                    <span>{highlight}</span>
+                    <span set:html={decodeHTMLEntities(highlight)} />
                   </li>
                 ))}
               </ul>
@@ -50,8 +51,8 @@ import { Badge } from "@/components/ui/badge";
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       ))}
     </div>

@@ -31,9 +31,9 @@ function FitScoreProgress({ score }: { score: number }) {
 
 function ConfidenceBadge({ level }: { level: "High" | "Medium" | "Low" }) {
   const colors = {
-    High: "bg-green-500/10 text-green-700 border-green-500/20",
-    Medium: "bg-amber-500/10 text-amber-700 border-amber-500/20",
-    Low: "bg-red-500/10 text-red-700 border-red-500/20",
+    High: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20",
+    Medium: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
+    Low: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
   };
 
   return (
@@ -231,14 +231,14 @@ export function ChatComponent({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
-  // Check if user has uploaded a resume
-  const hasUploadedResume = messages.some(msg => msg.attachment !== undefined && msg.role === 'user');
+  // Check if user has already performed a fitment analysis
+  const hasDoneAnalysis = messages.some(msg =>
+    msg.role === 'assistant' &&
+    (msg.metadata?.mode === 'analysis' || typeof msg.metadata?.fit_score === 'number')
+  );
 
-  // Count user messages (excluding system/attachment messages)
-  const userMessageCount = messages.filter(msg => msg.role === 'user' && !msg.content.startsWith('Uploaded file')).length;
-
-  // Show trust info after 2-3 user messages without resume upload
-  const shouldShowResumeReminder = userMessageCount >= 3 && !hasUploadedResume;
+  // Show JD upload tip only if analysis not done and no file currently attached
+  const shouldShowResumeReminder = !hasDoneAnalysis && !attachedFile;
 
   // Scroll to first line of last message when new messages arrive
   useEffect(() => {
@@ -354,11 +354,11 @@ export function ChatComponent({
   };
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
+    <div className="flex flex-col h-full bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900 relative overflow-hidden">
       {/* Messages - Scrollable area */}
       <div
         ref={scrollContainerRef}
-        className={`flex-1 overflow-y-auto p-4 space-y-4 overscroll-y-contain ${isDragActive ? "bg-primary/5" : ""}`}
+        className={`flex-1 overflow-y-auto p-4 space-y-4 overscroll-y-contain pb-[320px] ${isDragActive ? "bg-primary/5" : ""}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -418,7 +418,7 @@ export function ChatComponent({
               {/* Message Bubble */}
               <div className={`flex-1 max-w-[85%] ${message.role === "user" ? "flex flex-col items-end" : ""}`}>
                 {isAnalysis && cookieMetadata ? (
-                  <div className="rounded-2xl rounded-br-md bg-white dark:bg-zinc-100 text-foreground px-4 py-3 shadow-sm border-0">
+                  <div className="rounded-2xl rounded-br-md bg-white dark:bg-zinc-900 text-foreground px-4 py-3 shadow-sm border border-gray-100 dark:border-zinc-800/50">
                     <CookieResponseDisplay metadata={cookieMetadata} />
                   </div>
                 ) : (
@@ -430,7 +430,7 @@ export function ChatComponent({
                       <div
                         className={`rounded-2xl px-4 py-2.5 shadow-sm ${message.role === "user"
                           ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md"
-                          : "bg-white dark:bg-zinc-100 text-foreground rounded-bl-md"
+                          : "bg-white dark:bg-zinc-900 text-foreground rounded-bl-md border border-gray-100 dark:border-zinc-800/50"
                           }`}
                       >
                         <p className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -480,7 +480,7 @@ export function ChatComponent({
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center overflow-hidden shadow-sm">
               <CookieIcon className="h-4 w-4" />
             </div>
-            <div className="bg-white dark:bg-zinc-100 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm border border-gray-100 dark:border-zinc-800/50">
               <div className="flex gap-1">
                 <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
                 <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]" />
@@ -492,26 +492,10 @@ export function ChatComponent({
 
       </div>
 
-      {/* Input Area - Sticky at bottom */}
-      <div className="p-3 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-zinc-800/50 shrink-0">
+      {/* Input Area - Absolute at bottom overlay */}
+      <div className="absolute bottom-0 inset-x-0 p-3 pb-6 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-zinc-950 dark:via-zinc-950/80 dark:to-transparent backdrop-blur-[0.1px] z-20">
         {/* Attached File */}
-        {attachedFile && (
-          <div className="mb-2">
-            <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-3 py-2">
-              <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-              <span className="text-sm flex-1 truncate">{attachedFile.name}</span>
-              <button
-                onClick={removeFile}
-                className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full shrink-0 transition-colors"
-                disabled={isLoading}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {!!composerSuggestions.length && (
+        {!!composerSuggestions.length && !input.trim() && !attachedFile && (
           <div className="mb-2.5 flex flex-col items-end gap-1">
             <p className="text-[8px] font-medium uppercase tracking-wide text-muted-foreground mb-0.5">
               Suggestions
@@ -523,11 +507,29 @@ export function ChatComponent({
                   type="button"
                   onClick={() => onSendMessage(question)}
                   disabled={isLoading}
-                  className="text-left bg-white dark:bg-zinc-100 border border-gray-200 dark:border-zinc-700 rounded-xl px-2.5 py-1.5 text-[10px] text-foreground hover:border-blue-300 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                  className="text-left bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-2.5 py-1.5 text-[10px] text-foreground hover:border-blue-300 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
                 >
                   {question}
                 </button>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Attached File */}
+        {attachedFile && (
+          <div className="mb-2">
+            <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-3 py-2 border border-blue-200/50 dark:border-blue-800/20">
+              <FileText className="h-4 w-4 text-blue-500 shrink-0" />
+              <span className="text-sm flex-1 truncate text-foreground/90">{attachedFile.name}</span>
+              <button
+                onClick={removeFile}
+                className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full shrink-0 transition-colors text-muted-foreground hover:text-red-500"
+                disabled={isLoading}
+                title="Remove file"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
         )}
@@ -624,17 +626,17 @@ export function ChatComponent({
               <div className="space-y-1.5">
                 <button
                   onClick={handleDownloadKnowledgeBase}
-                  className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left"
+                  className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left cursor-pointer"
                 >
                   <Download className="h-3 w-3" />
                   <span>Download MD Knowledge Base</span>
                 </button>
                 <button
                   onClick={scrollToResume}
-                  className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left"
+                  className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left cursor-pointer"
                 >
                   <FileText className="h-3 w-3" />
-                  <span>View PDF Resumes (#resume)</span>
+                  <span>View PDF Resumes</span>
                 </button>
               </div>
             </div>
