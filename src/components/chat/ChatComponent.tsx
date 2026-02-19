@@ -191,7 +191,42 @@ export function ChatComponent({
   const [attachedFile, setAttachedFile] = useState<ChatAttachment | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
-  const [showTrustInfo, setShowTrustInfo] = useState(true);
+  const [showTrustInfo, setShowTrustInfo] = useState(false);
+
+  const handleDownloadKnowledgeBase = () => {
+    const links = Object.entries({
+      'Knowledge Base': '/docs/resources/rag/',
+      'eCommerce': '/docs/resources/raw-data/Abhishek Aggarwal - Resume (eCom).md',
+      'Pre-Sales': '/docs/resources/raw-data/Abhishek Aggarwal - Resume (Pre-Sales & Solutions Engineering).md',
+      'Product Manager': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Product Manager.md',
+      'PMO': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Program Managament Office (PMO).md',
+      'Shopify TPM': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Shopify TPM.md',
+      'Technical PM': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Technical Project Manager (TPM).md',
+    });
+
+    links.forEach(([name, url], idx) => {
+      setTimeout(() => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${name}.md`;
+        a.click();
+        setTimeout(() => a.remove(), 100);
+      }, idx * 100);
+    });
+  };
+
+  const scrollToResume = () => {
+    const element = document.getElementById('resume');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const handleToggleTrust = () => setShowTrustInfo(prev => !prev);
+    document.addEventListener('toggle-trust-info', handleToggleTrust);
+    return () => document.removeEventListener('toggle-trust-info', handleToggleTrust);
+  }, []);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -331,7 +366,7 @@ export function ChatComponent({
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-3 min-h-[200px]">
             <img src="/cookie-avatar.gif" alt="Cookie" className="h-16 w-16 rounded-full opacity-90 shadow-lg" />
-            <div>
+            <div className="max-w-[280px]">
               <p className="font-medium text-foreground">Hey there! I'm Cookie 🍪</p>
               <p className="text-sm text-muted-foreground mt-1">
                 Abhishek couldn't be here right now, but I've got his back!
@@ -340,26 +375,20 @@ export function ChatComponent({
               <p className="text-xs text-muted-foreground mt-2">
                 Try: &quot;What makes Abhishek unique?&quot;
               </p>
-            </div>
-          </div>
-        )}
 
-        {/* Resume Upload Reminder */}
-        {shouldShowResumeReminder && (
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/20 rounded-xl p-4 mx-auto max-w-[85%] mb-4 border border-orange-200 dark:border-orange-800/30 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div className="text-3xl">📄</div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground mb-2">
-                  For a better fitment analysis, please upload or copy-paste Abhishek's resume!
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  You can also download the full knowledge base as Markdown, or grab PDF versions directly.
+              <div className="w-12 h-[1px] bg-border mx-auto my-4" />
+
+              <div className="flex flex-col items-center gap-2">
+                <Upload className="h-4 w-4 text-muted-foreground" />
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Upload your JD or copy-paste it here to generate a detailed fitment report.
                 </p>
               </div>
             </div>
           </div>
         )}
+
+
 
         {messages.map((message, index) => {
           const cookieMetadata = message.role === "assistant" ? message.metadata : null;
@@ -374,11 +403,10 @@ export function ChatComponent({
             >
               {/* Avatar */}
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden shadow-sm ${
-                  message.role === "user"
-                    ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
-                    : "bg-gradient-to-br from-amber-400 to-orange-500 text-white"
-                }`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden shadow-sm ${message.role === "user"
+                  ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
+                  : "bg-gradient-to-br from-amber-400 to-orange-500 text-white"
+                  }`}
               >
                 {message.role === "user" ? (
                   <User className="h-4 w-4" />
@@ -388,24 +416,22 @@ export function ChatComponent({
               </div>
 
               {/* Message Bubble */}
-              <div className={`flex-1 max-w-[85%] ${message.role === "user" ? "flex flex-col items-start" : ""}`}>
+              <div className={`flex-1 max-w-[85%] ${message.role === "user" ? "flex flex-col items-end" : ""}`}>
                 {isAnalysis && cookieMetadata ? (
                   <div className="rounded-2xl rounded-br-md bg-white dark:bg-zinc-100 text-foreground px-4 py-3 shadow-sm border-0">
                     <CookieResponseDisplay metadata={cookieMetadata} />
                   </div>
                 ) : (
-                  <div className={`inline-flex flex-col gap-1 ${
-                    message.role === "user"
-                      ? "items-start"
-                      : "items-start"
-                  }`}>
+                  <div className={`inline-flex flex-col gap-1 ${message.role === "user"
+                    ? "items-end"
+                    : "items-start"
+                    }`}>
                     {shouldRenderMessageText(message) && (
                       <div
-                        className={`rounded-2xl px-4 py-2.5 shadow-sm ${
-                          message.role === "user"
-                            ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md"
-                            : "bg-white dark:bg-zinc-100 text-foreground rounded-bl-md"
-                        }`}
+                        className={`rounded-2xl px-4 py-2.5 shadow-sm ${message.role === "user"
+                          ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md"
+                          : "bg-white dark:bg-zinc-100 text-foreground rounded-bl-md"
+                          }`}
                       >
                         <p className="whitespace-pre-wrap text-sm leading-relaxed">
                           {message.role === "assistant"
@@ -417,17 +443,16 @@ export function ChatComponent({
 
                     {message.attachment && (
                       <div
-                        className={`rounded-2xl px-3 py-2 text-left shadow-sm ${
-                          message.role === "user"
-                            ? "bg-gradient-to-br from-blue-500/20 to-blue-600/20 border-blue-500/30 rounded-br-md"
-                            : "bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 rounded-bl-md"
-                        }`}
+                        className={`rounded-2xl px-3 py-2 text-left shadow-sm ${message.role === "user"
+                          ? "bg-gradient-to-br from-blue-500/20 to-blue-600/20 border-blue-500/30 rounded-br-md text-white"
+                          : "bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 rounded-bl-md"
+                          }`}
                       >
                         <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          <FileText className={`h-4 w-4 shrink-0 ${message.role === "user" ? "text-blue-100" : "text-muted-foreground"}`} />
                           <div className="min-w-0">
                             <p className="truncate text-xs font-medium">{message.attachment.name}</p>
-                            <p className="text-[10px] text-muted-foreground">
+                            <p className={`text-[10px] ${message.role === "user" ? "text-blue-200" : "text-muted-foreground"}`}>
                               {formatMimeLabel(message.attachment.mimeType)}
                             </p>
                           </div>
@@ -438,9 +463,8 @@ export function ChatComponent({
                 )}
 
                 {/* Timestamp */}
-                <div className={`flex items-center gap-1 mt-1 ${
-                  message.role === "user" ? "flex-row" : "flex-row"
-                }`}>
+                <div className={`flex items-center gap-1 mt-1 ${message.role === "user" ? "flex-row" : "flex-row"
+                  }`}>
                   <Clock className="h-3 w-3 text-muted-foreground/60" />
                   <p className="text-[10px] text-muted-foreground/60">
                     {formatTime(message.timestamp)}
@@ -489,17 +513,17 @@ export function ChatComponent({
 
         {!!composerSuggestions.length && (
           <div className="mb-2.5 flex flex-col items-end gap-1">
-            <p className="text-[9px] font-medium uppercase tracking-wide text-muted-foreground mb-1">
-              Suggested Follow-ups
+            <p className="text-[8px] font-medium uppercase tracking-wide text-muted-foreground mb-0.5">
+              Suggestions
             </p>
-            <div className="flex flex-wrap gap-1.5 justify-end max-w-[85%]">
+            <div className="flex flex-wrap gap-1 justify-end max-w-[90%]">
               {composerSuggestions.map((question, idx) => (
                 <button
                   key={`composer-suggestion-${idx}`}
                   type="button"
                   onClick={() => onSendMessage(question)}
                   disabled={isLoading}
-                  className="text-left bg-white dark:bg-zinc-100 border border-gray-200 dark:border-zinc-700 rounded-2xl px-3 py-2.5 text-[11px] text-foreground hover:border-blue-300 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                  className="text-left bg-white dark:bg-zinc-100 border border-gray-200 dark:border-zinc-700 rounded-xl px-2.5 py-1.5 text-[10px] text-foreground hover:border-blue-300 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                 >
                   {question}
                 </button>
@@ -512,6 +536,15 @@ export function ChatComponent({
           <div className="mb-2 flex items-center gap-1.5 text-[11px] text-red-500">
             <TriangleAlert className="h-3.5 w-3.5" />
             <span>{uploadError}</span>
+          </div>
+        )}
+        {/* Resume Upload Reminder - Short Indicator */}
+        {shouldShowResumeReminder && (
+          <div className="mb-2 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-800/30 rounded-lg px-3 py-2 flex items-center gap-2">
+            <span className="text-sm">📄</span>
+            <p className="text-[10px] text-amber-800 dark:text-amber-200 leading-tight">
+              Tip: Upload your Job Description or copy paste it here for a quick fitment analysis.
+            </p>
           </div>
         )}
 
@@ -543,6 +576,7 @@ export function ChatComponent({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              onFocus={() => setShowTrustInfo(false)}
               placeholder="Ask about Abhishek..."
               className="min-h-[40px] max-h-[120px] resize-none text-sm rounded-2xl border-gray-200 dark:border-zinc-800 focus:border-blue-400 dark:focus:border-blue-400"
               disabled={isLoading}
@@ -568,81 +602,42 @@ export function ChatComponent({
           Press Enter to send • Drag & drop or upload .txt, .md, .pdf, .doc, .docx
         </p>
 
+
+
         {/* "Don't Trust Cookie" Disclaimer */}
-        <div className="mt-4 border-t border-gray-200/50 dark:border-zinc-800/50 pt-4 pb-2">
-          <div className="flex items-start gap-3 mb-2">
-            <div className="text-2xl">🍪</div>
+        <div className={`relative overflow-hidden transition-all duration-500 ease-in-out ${showTrustInfo ? "max-h-[800px] opacity-100 mt-4 border-t border-gray-200/50 dark:border-zinc-800/50 pt-4 pb-2" : "max-h-0 opacity-0"}`}>
+          <button
+            onClick={() => setShowTrustInfo(false)}
+            className="absolute right-0 top-4 p-1 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-colors z-10"
+            aria-label="Close disclaimer"
+          >
+            <X className="h-3 w-3 text-muted-foreground" />
+          </button>
+          <div className="flex items-start gap-2 pr-6">
             <div className="flex-1">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-1">
+              <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mb-1">
                 Don't trust Cookie?
               </p>
-              <p className="text-sm text-foreground leading-relaxed">
-                Cookie is my trusted side-kick. He runs my other agents and OpenClaw, and I've programmed him to be quite truthful. However, if you don't want to trust my AI agent with your hiring decisions, you can trust yours.
+              <p className="text-xs text-foreground/80 leading-relaxed mb-2">
+                Cookie is truthful, but for manual verification:
               </p>
-              <div className="mt-3 space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  1. <span className="font-medium text-foreground">Download my knowledge base</span> as Markdown files and verify yourself
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  2. <span className="font-medium text-foreground">Grab Abhishek's PDF resumes</span> and go through them yourself, the old-fashioned way!
-                </p>
+              <div className="space-y-1.5">
+                <button
+                  onClick={handleDownloadKnowledgeBase}
+                  className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left"
+                >
+                  <Download className="h-3 w-3" />
+                  <span>Download MD Knowledge Base</span>
+                </button>
+                <button
+                  onClick={scrollToResume}
+                  className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left"
+                >
+                  <FileText className="h-3 w-3" />
+                  <span>View PDF Resumes (#resume)</span>
+                </button>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setShowTrustInfo(!showTrustInfo)}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded transition-colors"
-              aria-label="Toggle trust info"
-            >
-              <Info className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
-            </button>
-            {showTrustInfo && (
-              <div className="mt-3 space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  1. <span className="font-medium text-foreground">Download my knowledge base</span> as Markdown files and verify yourself
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  2. <span className="font-medium text-foreground">Grab Abhishek's PDF resumes</span> and go through them yourself, the old-fashioned way!
-                </p>
-              </div>
-            )}
-          </div>
-              )}
-            </div>
-          </div>
-        </div>
-            </div>
-          </div>
-          <div className="flex gap-2 justify-end mt-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                const links = Object.entries({
-                  'Knowledge Base': '/docs/resources/rag/',
-                  'eCommerce': '/docs/resources/raw-data/Abhishek Aggarwal - Resume (eCom).md',
-                  'Pre-Sales': '/docs/resources/raw-data/Abhishek Aggarwal - Resume (Pre-Sales & Solutions Engineering).md',
-                  'Product Manager': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Product Manager.md',
-                  'PMO': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Program Managament Office (PMO).md',
-                  'Shopify TPM': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Shopify TPM.md',
-                  'Technical PM': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Technical Project Manager (TPM).md',
-                });
-
-                links.forEach(([name, url], idx) => {
-                  setTimeout(() => {
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${name}.md`;
-                    a.click();
-                    setTimeout(() => a.remove(), 100);
-                  }, idx * 100);
-                });
-              }}
-              className="flex items-center gap-2 text-xs"
-            >
-              <Download className="h-3.5 w-3.5" />
-              Download All (Markdown)
-            </Button>
           </div>
         </div>
       </div>

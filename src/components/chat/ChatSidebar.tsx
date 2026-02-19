@@ -8,19 +8,24 @@ export function ChatSidebar() {
   const [isDragActive, setIsDragActive] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
+  const [hasMessages, setHasMessages] = useState(false);
+
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
     const handleToggle = () => setIsOpen(prev => !prev);
+    const handleCountChange = (e: any) => setHasMessages(e.detail.count > 0);
 
     document.addEventListener('open-chat', handleOpen);
     document.addEventListener('close-chat', handleClose);
     document.addEventListener('toggle-chat', handleToggle);
+    document.addEventListener('chat-messages-count', handleCountChange);
 
     return () => {
       document.removeEventListener('open-chat', handleOpen);
       document.removeEventListener('close-chat', handleClose);
       document.removeEventListener('toggle-chat', handleToggle);
+      document.removeEventListener('chat-messages-count', handleCountChange);
     };
   }, []);
 
@@ -85,15 +90,28 @@ export function ChatSidebar() {
       >
         {/* Header with Clear and Close buttons */}
         <div className="flex items-center justify-between px-3 py-3 border-b border-gray-200/50 dark:border-zinc-800/50 shrink-0">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowClearConfirm(true)}
-            className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
-            title="Clear chat"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-1">
+            {hasMessages && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowClearConfirm(true)}
+                className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+                title="Clear chat"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => document.dispatchEvent(new CustomEvent('toggle-trust-info'))}
+              className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              title="Trust Information"
+            >
+              <Info className="h-4 w-4" />
+            </Button>
+          </div>
           <h2 className="text-lg font-semibold text-foreground">Chat with Cookie</h2>
           <Button
             variant="ghost"

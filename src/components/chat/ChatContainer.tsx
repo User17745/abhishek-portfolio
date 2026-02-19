@@ -30,6 +30,11 @@ export function ChatContainer() {
         timestamp: msg.timestamp.toISOString(),
       }));
       localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(serializable));
+
+      // Notify sidebar about message count
+      document.dispatchEvent(new CustomEvent('chat-messages-count', {
+        detail: { count: messages.length }
+      }));
     } catch (error) {
       console.error("Failed to save chat history:", error);
     }
@@ -84,9 +89,9 @@ export function ChatContainer() {
       timestamp: new Date(),
       attachment: attachment
         ? {
-            name: attachment.name,
-            mimeType: attachment.mimeType,
-          }
+          name: attachment.name,
+          mimeType: attachment.mimeType,
+        }
         : undefined,
     };
 
