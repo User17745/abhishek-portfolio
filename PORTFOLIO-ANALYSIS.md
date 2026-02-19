@@ -10,7 +10,7 @@
 
 ### Tech Stack
 - **Framework:** Astro 5.x (Static site generator)
-- **UI:** React 18 + shadcn/ui components
+- **UI:** React 19 + shadcn/ui components
 - **Styling:** Tailwind CSS 4.x
 - **Language:** TypeScript
 - **Testing:** Vitest + Playwright
@@ -35,6 +35,7 @@
 - `sections/` - Page sections (Hero, About, Experience, etc.)
 - `layout/` - Header, Footer, MobileMenu
 - `ui/` - shadcn/ui components
+- `chat/` - AI Chatbot (Cookie) components
 - `shared/` - Scroll animations, analytics
 
 ### Your Current Content

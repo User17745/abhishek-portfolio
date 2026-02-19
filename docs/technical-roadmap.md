@@ -74,6 +74,9 @@ MVP ──────────────────→ Target Maturity
 - [x] Strong/partial matches and gaps display
 - [x] Recommended positioning suggestions
 - [x] Confidence level indicator
+- [x] File upload support (.pdf, .docx, .doc, .txt, .md)
+- [x] Chat history persistence (localStorage)
+- [x] Comprehensive testing suite (Vitest + Playwright)
 
 ---
 

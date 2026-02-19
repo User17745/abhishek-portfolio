@@ -170,11 +170,11 @@ Single page that renders the ChatComponent.
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `PUBLIC_GEMINI_API_KEY` | Yes | Google Gemini API key |
+| `GEMINI_API_KEY` | Yes | Google Gemini API key |
 
 Set in `.env`:
 ```bash
-PUBLIC_GEMINI_API_KEY=AIza...
+GEMINI_API_KEY=AIza...
 ```
 
 ## Testing
@@ -212,14 +212,12 @@ See `DEPLOYMENT.md` for detailed Vercel deployment instructions.
 
 ## Missing Pieces
 
-The following are NOT yet implemented:
+The following are NOT yet implemented (or need improvement):
 
-1. **Embeddings JSON file** - Run `scripts/generate-embeddings.mjs` to generate
-2. **Playwright e2e tests** - Need `@playwright/test` installed
-3. **Production error handling** - More robust error boundaries
-4. **Caching** - Embeddings could be cached to reduce API calls
-5. **Rate limiting** - No rate limiting on API route
-6. **Authentication** - Chat could be behind auth if needed
+1. **Production error handling** - More robust error boundaries
+2. **Caching** - Embeddings could be cached to reduce API calls
+3. **Rate limiting** - No rate limiting on API route
+4. **Authentication** - Chat could be behind auth if needed
 
 ## File Structure
 

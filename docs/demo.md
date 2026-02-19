@@ -70,6 +70,17 @@ npm run dev
 - [ ] Submit button visible
 - [ ] Form validation works
 
+#### AI Chatbot (Cookie)
+- [ ] Click "Interview me right now!" in Hero
+- [ ] Verify Chat Sidebar opens
+- [ ] Toggle chat via header icon
+- [ ] Send a message (e.g., "Hi Cookie")
+- [ ] Verify assistant response
+- [ ] Upload a resume/JD file
+- [ ] Check fitment analysis (progress bar, matches, gaps)
+- [ ] Verify chat history persists after refresh
+- [ ] Header title is centered and dynamic (Cookie icon appears)
+
 ### 5. Responsive Testing
 - [ ] Desktop (1440px)
 - [ ] Tablet (768px)

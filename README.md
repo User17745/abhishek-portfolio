@@ -35,6 +35,8 @@ Personal portfolio website showcasing 12+ years of experience in eCommerce, Prod
 - **Resume upload reminder** - Prompts users to upload/copy paste resume for better analysis
 - **JD Requirements Extraction** - Automatically extracts "What are you looking for" keywords
 - **"Don't trust Cookie" disclaimer** - Clarifies that AI agents should be verified
+- **Dynamic Header** - Cookie's avatar appears in the header when the chat is active
+- **Perfectly Centered Title** - Ensuring the chat header looks premium with balanced side containers
 
 ### Chatbot Features
 - **Fitment Analysis**:
@@ -204,6 +206,26 @@ npm run rag:embeddings
 - **Full Knowledge Base (Markdown)**: `docs/resources/rag/*.md`
 - **RAG Update Guide**: See `docs/RAG_UPDATE_GUIDE.md`
 - **Chatbot Documentation**: See `docs/COOKIE-CHATBOT.md`
+
+## Testing
+
+### Unit & Integration Tests (Vitest)
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+### E2E Tests (Playwright)
+```bash
+# Run E2E tests
+npm run test:e2e
+
+# Run with UI mode
+npx playwright test --ui
+```
 
 ## Testing Chatbot
 

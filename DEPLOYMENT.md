@@ -12,7 +12,7 @@
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `PUBLIC_GEMINI_API_KEY` | Google Gemini API key for embeddings | `AIza...` |
+| `GEMINI_API_KEY` | Google Gemini API key for embeddings | `AIza...` |
 
 ### Setting Environment Variables
 
@@ -23,7 +23,7 @@
 
 **In .env file (local development):**
 ```bash
-PUBLIC_GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEY=your_api_key_here
 ```
 
 ## Build Configuration
@@ -64,7 +64,7 @@ vercel login
 vercel
 
 # Set environment variable
-vercel env add PUBLIC_GEMINI_API_KEY
+vercel env add GEMINI_API_KEY
 # Follow prompts to add your API key
 
 # Deploy to production

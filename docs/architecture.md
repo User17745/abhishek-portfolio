@@ -42,6 +42,8 @@
 | Vite | Build tool (Astro default) |
 | ESLint | Code linting |
 | Prettier | Code formatting |
+| Vitest | Unit & Integration testing |
+| Playwright | E2E testing |
 | Vercel | Hosting + Server functions |
 
 ### AI/ML Stack
@@ -246,11 +248,12 @@ src/
 
 ## Security Considerations
 
-- API keys use `PUBLIC_` prefix (exposed to client but safe for public APIs)
-- No sensitive data stored client-side
-- Contact form uses Formspree (handles CSRF)
-- HTTPS enforced via Vercel
-- Environment variables set in Vercel dashboard (not committed)
+- **Server-Side API Keys**: AI provider keys (`GEMINI_API_KEY`, `OPENROUTER_API_KEY`, etc.) use **private environment variables** (no `PUBLIC_` prefix) to ensure they are never exposed to the client.
+- **SSR API Routes**: Chat analysis happens exclusively on the server to protect intellectual property (system prompts) and secrets.
+- No sensitive data stored client-side.
+- Contact form uses Formspree (handles CSRF/Spam).
+- HTTPS enforced via Vercel.
+- Environment variables set in Vercel dashboard (not committed).
 
 ## Known Issues
 

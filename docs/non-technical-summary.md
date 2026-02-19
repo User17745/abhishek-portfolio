@@ -31,6 +31,8 @@ Abhishek has a rich, diverse career spanning entrepreneurship (TECHNOTRONIC, Rig
 4. **Projects/Case Studies** - Featured implementations with metrics
 5. **Brands Section** - Logo showcase of companies worked with
 6. **Contact Form** - Direct communication channel
+7. **AI Career Assistant (Cookie)** - Interactive RAG-based chatbot for resume analysis and fitment evaluation
+8. **Automated Testing Suite** - Ensuring reliable performance across all devices
 
 ## Tone & Branding
 - Professional yet approachable

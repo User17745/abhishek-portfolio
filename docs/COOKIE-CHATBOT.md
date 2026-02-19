@@ -13,6 +13,10 @@ Cookie is an AI-powered chatbot that helps visitors understand how Abhishek Agga
 - **Gaps** - Areas that may need development
 - **Positioning Recommendations** - How to position Abhishek for the role
 - **Confidence Level** - High/Medium/Low based on information clarity
+- **File Upload Support** - Upload .txt, .md, .pdf, .doc, .docx files for analysis
+- **Persistent History** - Conversations are saved in browser localStorage
+- **Dynamic UI** - Cookie's avatar appears in the header when the chat is active
+- **Balanced Layout** - Perfectly centered header title with action button placeholders
 
 ## How It Works
 
@@ -104,14 +108,13 @@ src/
 ## Environment Variables
 
 ```bash
-# Required for embeddings
-PUBLIC_GEMINI_API_KEY=...
+# Required for embeddings and PDF/DOCX parsing
+GEMINI_API_KEY=...
 
-# At least one required for LLM
-PUBLIC_OPENROUTER_API_KEY=...   # Recommended (fastest)
-PUBLIC_GEMINI_API_KEY=...       # Fallback
-PUBLIC_ZHIPUAI_API_KEY=...      # Fallback
-PUBLIC_NVIDIA_API_KEY=...       # Fallback
+# LLM Providers (at least one required for the chatbot)
+OPENROUTER_API_KEY=...   # Recommended (primary - fastest)
+ZHIPUAI_API_KEY=...      # Fallback
+NVIDIA_API_KEY=...       # Fallback
 ```
 
 ## UI Components
@@ -174,8 +177,7 @@ curl -X POST http://localhost:4321/api/match-resume \
 
 ## Future Improvements
 
-- Add file upload (PDF resume parsing)
 - More LLM providers
 - Streaming responses
-- Chat history persistence (localStorage)
 - Feedback collection on responses
+- Multimodal resume analysis (images/screenshots)
