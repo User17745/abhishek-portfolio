@@ -162,6 +162,11 @@ export function ChatComponent({
   };
 
   const scrollToResume = () => {
+    // Close chat on mobile before scrolling
+    if (window.innerWidth < 768) {
+      document.dispatchEvent(new CustomEvent('close-chat'));
+    }
+
     const element = document.getElementById('resume');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -577,7 +582,7 @@ export function ChatComponent({
                   className="flex items-center gap-2 text-[11px] text-blue-500 hover:text-blue-600 transition-colors text-left cursor-pointer"
                 >
                   <Download className="h-3 w-3" />
-                  <span>Download MD Knowledge Base</span>
+                  <span>Download MD Knowledge Base & Check with your Agent!</span>
                 </button>
                 <button
                   onClick={scrollToResume}
