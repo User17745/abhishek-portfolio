@@ -72,8 +72,9 @@ export const POST: APIRoute = async ({ request }) => {
       console.log("[API] Loaded embeddings:", storedEmbeddings.length);
 
       console.log("[API] Finding matches...");
-      const topMatches = findTopMatches(queryEmbedding, storedEmbeddings, mode === "analysis" ? 3 : 2);
+      const topMatches = findTopMatches(queryEmbedding, storedEmbeddings, 5);
       console.log("[API] Found matches:", topMatches.length);
+      console.log("[API] Top match score:", topMatches[0]?.score?.toFixed(3) || "N/A");
       contextChunks = topMatches.map((m) => m.chunk.text);
     }
 

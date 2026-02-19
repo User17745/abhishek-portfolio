@@ -8,6 +8,18 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load environment variables from .env file
+const envPath = path.join(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const [key, ...valueParts] = line.split('=');
+    if (key && valueParts.length > 0) {
+      process.env[key.trim()] = valueParts.join('=').trim();
+    }
+  });
+}
+
 const CHUNKS_FILE = path.join(__dirname, '../docs/resources/rag/chunks.json');
 const OUTPUT_FILE = path.join(__dirname, '../docs/resources/rag/embeddings.json');
 
