@@ -572,6 +572,22 @@ export function ChatComponent({
         <div className="mt-4 border-t border-gray-200/50 dark:border-zinc-800/50 pt-4 pb-2">
           <div className="flex items-start gap-3 mb-2">
             <div className="text-2xl">🍪</div>
+            <div className="flex-1">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-1">
+                Don't trust Cookie?
+              </p>
+              <p className="text-sm text-foreground leading-relaxed">
+                Cookie is my trusted side-kick. He runs my other agents and OpenClaw, and I've programmed him to be quite truthful. However, if you don't want to trust my AI agent with your hiring decisions, you can trust yours.
+              </p>
+              <div className="mt-3 space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  1. <span className="font-medium text-foreground">Download my knowledge base</span> as Markdown files and verify yourself
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  2. <span className="font-medium text-foreground">Grab Abhishek's PDF resumes</span> and go through them yourself, the old-fashioned way!
+                </p>
+              </div>
+            </div>
             <button
               type="button"
               onClick={() => setShowTrustInfo(!showTrustInfo)}
@@ -580,22 +596,17 @@ export function ChatComponent({
             >
               <Info className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
             </button>
-            <div className="flex-1">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-1">
-                Don't trust Cookie?
-              </p>
-              <p className="text-sm text-foreground leading-relaxed">
-                Cookie is my trusted side-kick. He runs my other agents and OpenClaw, and I've programmed him to be quite truthful. However, if you don't want to trust my AI agent with your hiring decisions, you can trust yours.
-              </p>
-              {showTrustInfo && (
-                <div className="mt-3 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    1. <span className="font-medium text-foreground">Download my knowledge base</span> as Markdown files and verify yourself
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    2. <span className="font-medium text-foreground">Grab Abhishek's PDF resumes</span> and go through them yourself, the old-fashioned way!
-                  </p>
-                </div>
+            {showTrustInfo && (
+              <div className="mt-3 space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  1. <span className="font-medium text-foreground">Download my knowledge base</span> as Markdown files and verify yourself
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  2. <span className="font-medium text-foreground">Grab Abhishek's PDF resumes</span> and go through them yourself, the old-fashioned way!
+                </p>
+              </div>
+            )}
+          </div>
               )}
             </div>
           </div>
