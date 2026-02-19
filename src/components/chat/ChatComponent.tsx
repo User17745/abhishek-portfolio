@@ -191,9 +191,19 @@ export function ChatComponent({
   const [attachedFile, setAttachedFile] = useState<ChatAttachment | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [showTrustInfo, setShowTrustInfo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  // Check if user has uploaded a resume
+  const hasUploadedResume = messages.some(msg => msg.attachment !== undefined && msg.role === 'user');
+
+  // Count user messages (excluding system/attachment messages)
+  const userMessageCount = messages.filter(msg => msg.role === 'user' && !msg.content.startsWith('Uploaded file')).length;
+
+  // Show trust info after 2-3 user messages without resume upload
+  const shouldShowResumeReminder = userMessageCount >= 3 && !hasUploadedResume;
 
   // Scroll to first line of last message when new messages arrive
   useEffect(() => {
@@ -330,6 +340,23 @@ export function ChatComponent({
               <p className="text-xs text-muted-foreground mt-2">
                 Try: &quot;What makes Abhishek unique?&quot;
               </p>
+            </div>
+          </div>
+        )}
+
+        {/* Resume Upload Reminder */}
+        {shouldShowResumeReminder && (
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/20 rounded-xl p-4 mx-auto max-w-[85%] mb-4 border border-orange-200 dark:border-orange-800/30 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="text-3xl">📄</div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-foreground mb-2">
+                  For a better fitment analysis, please upload or copy-paste Abhishek's resume!
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  You can also download the full knowledge base as Markdown, or grab PDF versions directly.
+                </p>
+              </div>
             </div>
           </div>
         )}
