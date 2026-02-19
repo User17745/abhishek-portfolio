@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ChatContainer } from "./ChatContainer";
-import { X, Upload, Trash2, AlertTriangle } from "lucide-react";
+import { X, Upload, Trash2, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ChatSidebar() {
@@ -56,6 +56,11 @@ export function ChatSidebar() {
     // The drop event will be handled by ChatContainer
   };
 
+  const handleClearChat = () => {
+    setShowClearConfirm(false);
+    document.dispatchEvent(new CustomEvent('clear-chat'));
+  };
+
   return (
     <>
       {isDragActive && (
@@ -66,37 +71,6 @@ export function ChatSidebar() {
             <p className="text-sm text-muted-foreground">
               Supports .txt, .md, .pdf, .doc, .docx
             </p>
-          </div>
-        </div>
-      )}
-
-      {showClearConfirm && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 animate-in zoom-in-95 duration-200">
-            <div className="flex flex-col items-center gap-3 mb-4">
-              <AlertTriangle className="h-12 w-12 text-red-500" />
-              <h3 className="text-lg font-semibold text-foreground">Clear chat history?</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              This will remove all messages from this conversation. You can always start a new chat by closing and reopening.
-            </p>
-            <div className="flex gap-2 justify-end">
-              <Button
-                variant="outline"
-                onClick={() => setShowClearConfirm(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  setShowClearConfirm(false);
-                  document.dispatchEvent(new CustomEvent('clear-chat'));
-                }}
-              >
-                Clear Chat
-              </Button>
-            </div>
           </div>
         </div>
       )}
@@ -130,6 +104,35 @@ export function ChatSidebar() {
             <X className="h-4 w-4" />
           </Button>
         </div>
+
+        {/* Clear Chat Confirmation Dialog - positioned within sidebar */}
+        {showClearConfirm && (
+          <div className="absolute inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center">
+            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 animate-in zoom-in-95 duration-200">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <Trash2 className="h-12 w-12 text-foreground" />
+                <h3 className="text-lg font-semibold text-foreground">Clear chat history?</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                This will remove all messages from this conversation. You can always start a new chat.
+              </p>
+              <div className="flex gap-2 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowClearConfirm(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={handleClearChat}
+                >
+                  Clear Chat
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Chat Content */}
         <div className="flex-1 overflow-hidden">
