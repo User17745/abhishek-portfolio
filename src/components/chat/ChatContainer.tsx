@@ -30,6 +30,11 @@ export function ChatContainer() {
         timestamp: msg.timestamp.toISOString(),
       }));
       localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(serializable));
+
+      // Notify sidebar about message count
+      document.dispatchEvent(new CustomEvent('chat-messages-count', {
+        detail: { count: messages.length }
+      }));
     } catch (error) {
       console.error("Failed to save chat history:", error);
     }
@@ -56,10 +61,19 @@ export function ChatContainer() {
     );
   };
 
-  const handleClearChat = () => {
-    setMessages([]);
-    localStorage.removeItem(CHAT_STORAGE_KEY);
-  };
+  // Listen for clear-chat event from sidebar
+  useEffect(() => {
+    const handleClearChat = () => {
+      setMessages([]);
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+    };
+
+    document.addEventListener('clear-chat', handleClearChat);
+
+    return () => {
+      document.removeEventListener('clear-chat', handleClearChat);
+    };
+  }, []);
 
   const handleSendMessage = async (message: string, attachment?: ChatAttachment) => {
     if (!message.trim() && !attachment) return;
@@ -75,9 +89,9 @@ export function ChatContainer() {
       timestamp: new Date(),
       attachment: attachment
         ? {
-            name: attachment.name,
-            mimeType: attachment.mimeType,
-          }
+          name: attachment.name,
+          mimeType: attachment.mimeType,
+        }
         : undefined,
     };
 
@@ -110,7 +124,7 @@ export function ChatContainer() {
         data?.mode === "conversation" && typeof data?.response_text === "string"
           ? data.response_text
           : isAnalysis
-            ? "Here is the fitment analysis."
+            ? "Here is fitment analysis."
             : "I processed your request.";
 
       // Add assistant message
@@ -130,7 +144,7 @@ export function ChatContainer() {
       addMessage(assistantMessage);
     } catch (error) {
       console.error("Error:", error);
-      
+
       // Add error message
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -149,7 +163,6 @@ export function ChatContainer() {
     <ChatComponent
       messages={messages}
       onSendMessage={handleSendMessage}
-      onClearChat={handleClearChat}
       isLoading={isLoading}
     />
   );

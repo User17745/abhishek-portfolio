@@ -72,9 +72,18 @@ export const POST: APIRoute = async ({ request }) => {
       console.log("[API] Loaded embeddings:", storedEmbeddings.length);
 
       console.log("[API] Finding matches...");
-      const topMatches = findTopMatches(queryEmbedding, storedEmbeddings, mode === "analysis" ? 3 : 2);
+      const topMatches = findTopMatches(queryEmbedding, storedEmbeddings, 5);
       console.log("[API] Found matches:", topMatches.length);
+      console.log("[API] Top match score:", topMatches[0]?.score?.toFixed(3) || "N/A");
       contextChunks = topMatches.map((m) => m.chunk.text);
+    }
+
+    // Extract "What are you looking for" section from JD
+    const lookingForMatch = userMessage.match(/(?:what are we looking for|we are looking for|we're looking for|looking for)(.*?)(?:\n|$)/i);
+    let lookingForSection = "";
+    if (lookingForMatch && mode === "analysis") {
+      lookingForSection = `\n\nWhat are you looking for:\n${lookingForMatch[1]?.trim() || userMessage}`;
+      contextChunks.push(lookingForSection);
     }
 
     // Call LLM with context to get structured analysis

@@ -21,14 +21,32 @@ Personal portfolio website showcasing 12+ years of experience in eCommerce, Prod
 - Contact form (Formspree)
 - Case studies with MDX content
 - Blog section
+- Global CSS variables for easy theming
 
 ### AI Chatbot ("Cookie")
-- RAG-based career fit analyzer
-- Analyzes job descriptions against Abhishek's profile
-- Provides fit scores, matches, gaps, and positioning recommendations
-- Multi-provider LLM support (OpenRouter, Gemini, ZhipuAI, Nvidia NIM)
-- Fallback to secondary providers on failure
-- Sidebar UI with persistent chat history
+
+- **RAG-based career fit analyzer** - Analyzes job descriptions against Abhishek's profile
+- **Provides fit scores, matches, gaps, and positioning recommendations**
+- **Multi-provider LLM support** - OpenRouter, Gemini, ZhipuAI, Nvidia NIM (with automatic fallback)
+- **Witty personality** - Cookie is Abhishek's professional yet playful AI assistant
+- **Smart suggestions** - Offers relevant follow-up questions
+- **Persistent chat history** - Stores conversations in localStorage
+- **Sidebar UI with drag-n-drop** - Drop resumes directly into the chat
+- **Resume upload reminder** - Prompts users to upload/copy paste resume for better analysis
+- **JD Requirements Extraction** - Automatically extracts "What are you looking for" keywords
+- **"Don't trust Cookie" disclaimer** - Clarifies that AI agents should be verified
+
+### Chatbot Features
+- **Fitment Analysis**:
+  - Fit score (0-100%) with visual progress bar
+  - JD requirements section (extracted keywords)
+  - Strong matches, partial matches, and gaps (2-3 word phrases)
+  - "Abhishek For This Role?" positioning guidance with expanded context
+  - Confidence level indicator
+- **Conversation mode** - Natural chat responses for career questions
+- **Witty fallback responses** - "Hmm, my cookie jar seems empty on that one!" for unknown queries
+- **iMessage-style UI** - Beautiful chat bubbles with timestamps
+- **Responsive design** - Works seamlessly on mobile and desktop
 
 ## Project Structure
 
@@ -60,61 +78,66 @@ Personal portfolio website showcasing 12+ years of experience in eCommerce, Prod
 │   │   ├── *.md                  # Career profile documents
 │   │   ├── chunks.json           # Text chunks
 │   │   └── embeddings.json       # Vector embeddings
-│   ├── architecture.md
-│   └── COOKIE-CHATBOT.md         # Chatbot detailed docs
+│   ├── architecture.md             # Architecture documentation
+│   ├── COOKIE-CHATBOT.md         # Chatbot detailed docs
+│   ├── RAG_UPDATE_GUIDE.md       # RAG update instructions
+│   └── HTML_ENCODING_ISSUE.md    # Known HTML encoding issues
 ├── public/                        # Static assets
 │   ├── cookie-avatar.gif         # Cookie's avatar
 │   └── embeddings.json            # Bundled embeddings
-└── .env                           # API keys
+├── scripts/
+│   ├── update-rag.mjs           # Full RAG update automation
+│   ├── generate-rag-chunks.mjs  # Generate RAG chunks
+│   └── generate-embeddings.mjs  # Generate embeddings
+└── .env                           # API keys (gitignored)
 ```
 
 ## Chatbot Architecture
 
 ```
 User Input (JD/Question)
-        │
-        ▼
-┌───────────────────┐
-│  API Endpoint     │  /api/match-resume
-│  (Astro SSR)     │
-└────────┬──────────┘
+         ▼
+    ┌───────────────────┐
+    │  API Endpoint     │  /api/match-resume
+    │  (Astro SSR)     │
+    └───────────────────┘
          │
          ▼
-┌───────────────────┐
-│  Gemini Embedding │  Text → Vector (3072 dims)
-│  API              │
-└────────┬──────────┘
+    ┌───────────────────┐
+    │  Gemini Embedding │  Text → Vector (3072 dims)
+    │  API              │
+    └───────────────────┘
          │
          ▼
-┌───────────────────┐
-│  Cosine Similarity│  Find top-k matches
-│  Search           │  (k=3)
-└────────┬──────────┘
+    ┌───────────────────┐
+    │  Cosine Similarity│  Find top-k matches
+    │  Search           │  (k=3-5)
+    └───────────────────┘
          │
          ▼
-┌───────────────────┐
-│  LLM Provider     │  Generate structured response
-│  (with fallback)  │  - OpenRouter (primary)
-│                   │  - Gemini (fallback 1)
-│                   │  - ZhipuAI (fallback 2)
-│                   │  - Nvidia NIM (fallback 3)
-└────────┬──────────┘
+    ┌───────────────────┐
+    │  LLM Provider     │  Generate structured response
+    │  (with fallback)  │  - OpenRouter (primary)
+    │                   │  - Gemini (fallback 1)
+    │                   │  - ZhipuAI (fallback 2)
+    │                   │  - Nvidia NIM (fallback 3)
+    └───────────────────┘
          │
          ▼
-┌───────────────────┐
-│  Fit Score +      │  JSON response
-│  Analysis         │  - fit_score (0-100)
-│                   │  - strong_matches[]
-│                   │  - partial_matches[]
-│                   │  - gaps[]
-│                   │  - recommended_positioning
-│                   │  - confidence_level
-└───────────────────┘
+    Fit Score +     │  JSON response
+    Analysis         │  - fit_score (0-100)
+    │                 │  - strong_matches[]
+    │                 │  - partial_matches[]
+    │                 │  - gaps[]
+    │                 │  - recommended_positioning
+    │                 │  - confidence_level
+    │                 │  - what_looking_for (optional)
+    └───────────────────┘
 ```
 
 ## Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the project root:
 
 ```bash
 # IMPORTANT: Use private env vars (NOT PUBLIC_) to prevent key exposure
@@ -138,13 +161,49 @@ npm install
 
 # Start development server (requires Node.js 18+)
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
 ```
+
+## RAG Knowledge Base Updates
+
+### Quick Update Command
+
+```bash
+npm run rag:update
+```
+
+This single command will:
+1. Generate RAG chunks from all markdown files in `docs/resources/rag/`
+2. Generate embeddings for all chunks using Gemini API
+3. Copy embeddings to `public/embeddings.json` for production use
+
+### Individual Steps
+
+If you need to run individual steps:
+
+```bash
+# Generate chunks only
+npm run rag:chunks
+
+# Generate embeddings only
+npm run rag:embeddings
+```
+
+### Adding New Content
+
+1. Add your new markdown content to `docs/resources/rag/` (e.g., `FAQs.md`, `new-role.md`)
+
+2. The chunk generator automatically picks up any `.md` files in RAG directory
+
+3. Run the update command:
+   ```bash
+   npm run rag:update
+   ```
+
+### Available Resources
+
+- **Full Knowledge Base (Markdown)**: `docs/resources/rag/*.md`
+- **RAG Update Guide**: See `docs/RAG_UPDATE_GUIDE.md`
+- **Chatbot Documentation**: See `docs/COOKIE-CHATBOT.md`
 
 ## Testing Chatbot
 
@@ -160,6 +219,7 @@ curl -X POST http://localhost:4321/api/match-resume \
 - **CI:** Runs on all PRs and feature branch pushes
 - **Checks:** Lint, typecheck, build
 - **CD:** Automatic deployment on main branch to Vercel
+- **Environment:** Vercel automatically loads environment variables from dashboard
 
 ## Deployment
 
@@ -169,7 +229,7 @@ Deployed via Vercel with:
 - Edge functions for chat API
 
 Required environment variables in Vercel:
-- `PUBLIC_GEMINI_API_KEY`
+- `PUBLIC_GEMINI_API_KEY` (for embeddings)
 - `PUBLIC_OPENROUTER_API_KEY` (recommended primary)
 - `PUBLIC_ZHIPUAI_API_KEY`
 - `PUBLIC_NVIDIA_API_KEY`

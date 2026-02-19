@@ -14,6 +14,7 @@ export interface ChatMessage {
     partial_matches?: string[];
     gaps?: string[];
     recommended_positioning?: string;
+    what_looking_for?: string;
     confidence_level?: "High" | "Medium" | "Low";
     suggested_questions?: string[];
   };

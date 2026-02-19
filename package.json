@@ -6,12 +6,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "serve": "astro preview",
     "astro": "astro",
     "lint": "astro check",
     "typecheck": "astro check && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "rag:update": "node scripts/update-rag.mjs",
+    "rag:chunks": "node scripts/generate-rag-chunks.mjs",
+    "rag:embeddings": "node scripts/generate-embeddings.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

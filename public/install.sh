@@ -9,12 +9,12 @@ set -e
 RESUME_BASE_URL="https://docs.google.com/document/d"
 
 RESUMES=(
-  "sol_eng:1kP1IX6OMXoYBPBxpyfoNv1vDUrM-LMvPbMXuderXbNw:Pre-Sales_&_Solutions.pdf"
-  "ecom:1J9Sqk0MlkItlSzXT1Xe3bxncScvFmAr2I1X7zgCfZhE:eCommerce.pdf"
-  "pmo:1xjjTG_PsVGTjcSQie6i2F_vIESs0ISu2PSVdWdm6X0E:PMO.pdf"
-  "shop_pm:1my5wMbzS0cvvYUm1mN7P0yVwmCLFkOlA3tgScoVnSjo:Shopify_TPM.pdf"
-  "prod:1SUbVz3astELSNosjgKb8IZedU3tZ1luiLt-PcfsmEmg:Product_Manager.pdf"
-  "tpm:11pYiI3uY3YhJ4HKQMjIerBxT9s2nXJEGKax-UWM4c24:Technical_PM.pdf"
+  "sol_eng:1kP1IX6OMXoYBPBxpyfoNv1vDUrM-LMvPbMXuderXbNw:Pre-Sales_&_Solutions"
+  "ecom:1J9Sqk0MlkItlSzXT1Xe3bxncScvFmAr2I1X7zgCfZhE:eCommerce"
+  "pmo:1xjjTG_PsVGTjcSQie6i2F_vIESs0ISu2PSVdWdm6X0E:PMO"
+  "shop_pm:1my5wMbzS0cvvYUm1mN7P0yVwmCLFkOlA3tgScoVnSjo:Shopify_TPM"
+  "prod:1SUbVz3astELSNosjgKb8IZedU3tZ1luiLt-PcfsmEmg:Product_Manager"
+  "tpm:11pYiI3uY3YhJ4HKQMjIerBxT9s2nXJEGKax-UWM4c24:Technical_PM"
 )
 
 # Colors
@@ -70,9 +70,18 @@ download_resume() {
   local doc_id="$2"
   local filename="$3"
   local output_dir="$4"
+  local format="${5:-pdf}"
   
-  local url="${RESUME_BASE_URL}/${doc_id}/export?format=pdf"
-  local output_path="${output_dir}/${filename}"
+  local gdoc_format="pdf"
+  local ext="pdf"
+  
+  if [[ "$format" == "md" ]]; then
+    gdoc_format="txt"
+    ext="md"
+  fi
+  
+  local url="${RESUME_BASE_URL}/${doc_id}/export?format=${gdoc_format}"
+  local output_path="${output_dir}/${filename}.${ext}"
   
   echo -e "  ${BLUE}⬇${NC} Downloading ${id}..."
   
@@ -136,7 +145,7 @@ main() {
     
     for resume in "${RESUMES[@]}"; do
       IFS=':' read -r id doc_id filename <<< "$resume"
-      download_resume "$id" "$doc_id" "$filename" "$output_dir"
+      download_resume "$id" "$doc_id" "$filename" "$output_dir" "$2"
     done
     
     echo ""
@@ -154,9 +163,9 @@ main() {
       
       if [[ "$id" == "$flavor" ]]; then
         found=1
-        echo -e "${YELLOW}Downloading ${id} resume...${NC}"
+        echo -e "${YELLOW}Downloading ${id} resume (${2:-pdf})...${NC}"
         echo ""
-        download_resume "$id" "$doc_id" "$filename" "$output_dir"
+        download_resume "$id" "$doc_id" "$filename" "$output_dir" "$2"
         
         echo ""
         echo -e "${GREEN}✓ Resume downloaded to:${NC}"
@@ -181,7 +190,8 @@ main() {
       echo -e "  ${GREEN}prod${NC}      - Product Manager"
       echo -e "  ${GREEN}tpm${NC}       - Technical Project Manager"
       echo ""
-      echo -e "Usage: curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- \"<flavor>\""
+      echo -e "Usage: curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s -- \"<flavor>\" [format]"
+      echo -e "Example: ... | bash -s -- \"all\" \"md\""
       exit 1
     fi
   fi
@@ -194,5 +204,5 @@ main() {
   echo ""
 }
 
-# Run main function with provided argument
-main "$1"
+# Run main function with provided arguments
+main "$1" "$2"

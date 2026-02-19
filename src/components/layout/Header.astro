@@ -7,15 +7,15 @@ import { CookieToggle } from "./CookieToggle";
 const items = navItems;
 ---
 
-<header class="fixed top-0 w-full z-40 bg-background/80 backdrop-blur-md border-b border-border">
-  <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-2 group">
+<header class="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border overflow-x-hidden w-full">
+  <nav class="container mx-auto px-3 sm:px-4 h-16 flex items-center justify-between min-w-0 w-full max-w-full">
+    <a href="/" class="flex items-center gap-1.5 sm:gap-2 group min-w-0 flex-shrink-0">
       <img 
         src="/profile.webp" 
         alt="Abhishek Aggarwal"
-        class="w-8 h-8 rounded-full object-cover border-2 border-border group-hover:border-accent transition-colors"
+        class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-border group-hover:border-accent transition-colors flex-shrink-0"
       />
-      <span class="font-bold text-xl gradient-text">Abhishek</span>
+      <span class="font-bold text-lg sm:text-xl gradient-text truncate hidden sm:inline-block min-w-0">Abhishek</span>
     </a>
     
     <div class="hidden md:flex items-center gap-6">
@@ -29,14 +29,14 @@ const items = navItems;
       ))}
     </div>
     
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
       <CookieToggle client:load />
       <ThemeToggle client:load />
       <a
         href={siteConfig.links.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        class="hidden sm:inline-flex h-9 px-4 items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+        class="hidden sm:inline-flex h-9 px-4 items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex-shrink-0"
       >
         Connect
       </a>

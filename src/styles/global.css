@@ -36,12 +36,18 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  
   body {
     @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  html, body {
+    @apply overflow-x-hidden;
+    max-width: 100vw;
+    min-width: 0;
+  }
+  
+  * {
+    box-sizing: border-box;
   }
   
   html {
@@ -92,6 +98,19 @@
   .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Ensure container doesn't overflow on mobile */
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
+    }
   }
   
   .hover-glow {
