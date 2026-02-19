@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { ChatContainer } from "./ChatContainer";
-import { X, Upload, Trash2 } from "lucide-react";
+import { X, Upload, Trash2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ChatSidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
     const handleToggle = () => setIsOpen(prev => !prev);
-    const handleClear = () => {
-      document.dispatchEvent(new CustomEvent('clear-chat'));
-    };
 
     document.addEventListener('open-chat', handleOpen);
     document.addEventListener('close-chat', handleClose);
     document.addEventListener('toggle-chat', handleToggle);
-    document.addEventListener('clear-chat', handleClear);
 
     return () => {
       document.removeEventListener('open-chat', handleOpen);
       document.removeEventListener('close-chat', handleClose);
       document.removeEventListener('toggle-chat', handleToggle);
-      document.removeEventListener('clear-chat', handleClear);
     };
   }, []);
 
@@ -36,9 +32,6 @@ export function ChatSidebar() {
   }, [isOpen]);
 
   const closeChat = () => setIsOpen(false);
-  const clearChat = () => {
-    document.dispatchEvent(new CustomEvent('clear-chat'));
-  };
 
   if (!isOpen) return null;
 
@@ -77,6 +70,37 @@ export function ChatSidebar() {
         </div>
       )}
 
+      {showClearConfirm && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 animate-in zoom-in-95 duration-200">
+            <div className="flex flex-col items-center gap-3 mb-4">
+              <AlertTriangle className="h-12 w-12 text-red-500" />
+              <h3 className="text-lg font-semibold text-foreground">Clear chat history?</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              This will remove all messages from this conversation. You can always start a new chat by closing and reopening.
+            </p>
+            <div className="flex gap-2 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setShowClearConfirm(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  setShowClearConfirm(false);
+                  document.dispatchEvent(new CustomEvent('clear-chat'));
+                }}
+              >
+                Clear Chat
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div
         data-sidebar-open="true"
         className="fixed right-0 top-16 w-full md:w-[450px] h-[calc(100vh-4rem)] bg-background border-l border-border z-30 flex flex-col overscroll-y-contain"
@@ -90,8 +114,8 @@ export function ChatSidebar() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={clearChat}
-            className="h-8 w-8 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-500 transition-colors"
+            onClick={() => setShowClearConfirm(true)}
+            className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
             title="Clear chat"
           >
             <Trash2 className="h-4 w-4" />

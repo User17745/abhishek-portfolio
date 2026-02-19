@@ -370,15 +370,15 @@ export function ChatComponent({
             <div
               key={message.id}
               ref={isLast ? lastMessageRef : null}
-              className={`flex gap-2 chat-message-enter max-w-full ${message.role === "user" ? "flex-row-reverse" : ""}`}
+              className={`flex gap-2 chat-message-enter max-w-full ${message.role === "user" ? "" : ""}`}
             >
               {/* Avatar */}
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden shadow-sm ${
                   message.role === "user"
-                    ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white order-2"
+                    ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
                     : "bg-gradient-to-br from-amber-400 to-orange-500 text-white"
-                  }`}
+                }`}
               >
                 {message.role === "user" ? (
                   <User className="h-4 w-4" />
