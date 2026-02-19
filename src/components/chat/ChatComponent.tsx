@@ -370,7 +370,7 @@ export function ChatComponent({
             <div
               key={message.id}
               ref={isLast ? lastMessageRef : null}
-              className={`flex gap-2 chat-message-enter max-w-full ${message.role === "user" ? "" : ""}`}
+              className={`flex gap-2 chat-message-enter max-w-full ${message.role === "user" ? "flex-row-reverse" : ""}`}
             >
               {/* Avatar */}
               <div
@@ -388,7 +388,7 @@ export function ChatComponent({
               </div>
 
               {/* Message Bubble */}
-              <div className={`flex-1 max-w-[85%] ${message.role === "user" ? "flex flex-col items-end" : ""}`}>
+              <div className={`flex-1 max-w-[85%] ${message.role === "user" ? "flex flex-col items-start" : ""}`}>
                 {isAnalysis && cookieMetadata ? (
                   <div className="rounded-2xl rounded-br-md bg-white dark:bg-zinc-100 text-foreground px-4 py-3 shadow-sm border-0">
                     <CookieResponseDisplay metadata={cookieMetadata} />
@@ -396,7 +396,7 @@ export function ChatComponent({
                 ) : (
                   <div className={`inline-flex flex-col gap-1 ${
                     message.role === "user"
-                      ? "items-end"
+                      ? "items-start"
                       : "items-start"
                   }`}>
                     {shouldRenderMessageText(message) && (
