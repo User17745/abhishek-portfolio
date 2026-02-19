@@ -102,14 +102,15 @@ export function ChatSidebar() {
         onDrop={handleDrop}
       >
         {/* Header with Clear and Close buttons */}
-        <div className="flex items-center px-3 py-3 border-b border-gray-200/50 dark:border-zinc-800/50 shrink-0">
-          <div className="flex items-center gap-1 w-20">
+        <div className="flex items-center px-4 py-3 border-b border-gray-200/50 dark:border-zinc-800/50 shrink-0 relative h-14">
+          {/* Left side icons */}
+          <div className="flex items-center gap-1 w-24 shrink-0 z-10">
             {hasMessages && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowClearConfirm(true)}
-                className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+                className="h-9 w-9 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
                 title="Clear chat"
               >
                 <Trash2 className="h-4 w-4" />
@@ -119,32 +120,36 @@ export function ChatSidebar() {
               variant="ghost"
               size="icon"
               onClick={() => document.dispatchEvent(new CustomEvent('toggle-trust-info'))}
-              className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              className="h-9 w-9 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
               title="Trust Information"
             >
               <Info className="h-4 w-4" />
             </Button>
           </div>
 
-          <div className="flex-1 flex items-center justify-center gap-2 min-w-0">
+          {/* Centered Title and GIF */}
+          <div className="flex-1 flex items-center justify-center gap-2 min-w-0 px-2 group overflow-hidden">
             {hasMessages && (
               <img
                 src="/cookie-avatar.gif"
                 alt="Cookie"
-                className="h-6 w-6 rounded-full border border-amber-200 dark:border-amber-900/30 shadow-sm animate-in fade-in zoom-in duration-300"
+                className="h-6 w-6 md:h-7 md:w-7 rounded-full border border-amber-200 dark:border-amber-900/30 shadow-sm animate-in fade-in zoom-in duration-300 shrink-0"
               />
             )}
-            <h2 className="text-base md:text-lg font-semibold text-foreground truncate">Chat with Cookie</h2>
+            <h2 className="text-base md:text-lg font-semibold text-foreground truncate select-none">
+              Chat with Cookie
+            </h2>
           </div>
 
-          <div className="flex items-center justify-end w-20">
+          {/* Right side close button */}
+          <div className="flex items-center justify-end w-24 shrink-0 z-10">
             <Button
               variant="ghost"
               size="icon"
               onClick={closeChat}
-              className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              className="h-9 w-9 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
         </div>
