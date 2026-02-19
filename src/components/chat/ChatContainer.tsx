@@ -21,6 +21,20 @@ export function ChatContainer() {
     } catch (error) {
       console.error("Failed to load chat history:", error);
     }
+
+    // Listen for clear-chat event from sidebar
+    const handleClearChat = () => {
+      if (window.confirm("Clear this chat history and start over?")) {
+        setMessages([]);
+        localStorage.removeItem(CHAT_STORAGE_KEY);
+      }
+    };
+
+    document.addEventListener('clear-chat', handleClearChat);
+
+    return () => {
+      document.removeEventListener('clear-chat', handleClearChat);
+    };
   }, []);
 
   useEffect(() => {
@@ -54,11 +68,6 @@ export function ChatContainer() {
         };
       })
     );
-  };
-
-  const handleClearChat = () => {
-    setMessages([]);
-    localStorage.removeItem(CHAT_STORAGE_KEY);
   };
 
   const handleSendMessage = async (message: string, attachment?: ChatAttachment) => {
@@ -149,7 +158,6 @@ export function ChatContainer() {
     <ChatComponent
       messages={messages}
       onSendMessage={handleSendMessage}
-      onClearChat={handleClearChat}
       isLoading={isLoading}
     />
   );

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, RotateCcw, Linkedin, Mail, Github, ExternalLink, Clock } from "lucide-react";
+import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, ExternalLink, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -165,14 +165,12 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
 interface ChatComponentProps {
   messages: ChatMessage[];
   onSendMessage: (message: string, attachment?: ChatAttachment) => void;
-  onClearChat: () => void;
   isLoading?: boolean;
 }
 
 export function ChatComponent({
   messages,
   onSendMessage,
-  onClearChat,
   isLoading = false
 }: ChatComponentProps) {
   const [input, setInput] = useState("");
@@ -201,14 +199,7 @@ export function ChatComponent({
     setUploadError(null);
   };
 
-  const handleClearChat = () => {
-    const shouldClear = window.confirm("Clear this chat history and start over?");
-    if (!shouldClear) return;
-    onClearChat();
-    setInput("");
-    setAttachedFile(null);
-    setUploadError(null);
-  };
+
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -438,22 +429,6 @@ export function ChatComponent({
 
       {/* Input Area - Sticky at bottom */}
       <div className="p-3 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-zinc-800/50 shrink-0">
-        {messages.length > 0 && (
-          <div className="mb-2 flex justify-end">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleClearChat}
-              disabled={isLoading}
-              className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground"
-            >
-              <RotateCcw className="h-3.5 w-3.5 mr-1" />
-              Clear chat
-            </Button>
-          </div>
-        )}
-
         {/* Attached File */}
         {attachedFile && (
           <div className="mb-2">
@@ -472,23 +447,21 @@ export function ChatComponent({
         )}
 
         {!!composerSuggestions.length && (
-          <div className="mb-2.5 flex flex-col items-end gap-1.5">
-            <p className="text-[9px] font-medium uppercase tracking-wide text-muted-foreground">
+          <div className="mb-2.5 flex flex-col items-end gap-1">
+            <p className="text-[9px] font-medium uppercase tracking-wide text-muted-foreground mb-1">
               Suggested Follow-ups
             </p>
-            <div className="flex flex-wrap gap-1.5 justify-end">
+            <div className="flex flex-wrap gap-1.5 justify-end max-w-[85%]">
               {composerSuggestions.map((question, idx) => (
-                <Button
+                <button
                   key={`composer-suggestion-${idx}`}
                   type="button"
-                  variant="outline"
-                  size="sm"
                   onClick={() => onSendMessage(question)}
                   disabled={isLoading}
-                  className="h-auto whitespace-normal text-left justify-start rounded-2xl border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 px-3 py-2 leading-snug text-[11px] text-foreground transition-colors"
+                  className="text-left bg-white dark:bg-zinc-100 border border-gray-200 dark:border-zinc-700 rounded-2xl px-3 py-2.5 text-[11px] text-foreground hover:border-blue-300 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                 >
                   {question}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
