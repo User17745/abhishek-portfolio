@@ -1,47 +1,10 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, ExternalLink, Clock, Info, Download } from "lucide-react";
+import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, Clock, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import type { ChatAttachment, ChatMessage } from "./ChatContext";
 import { siteConfig } from "@/lib/config";
 
-function FitScoreProgress({ score }: { score: number }) {
-  const getColor = (s: number) => {
-    if (s >= 80) return "bg-green-500";
-    if (s >= 60) return "bg-amber-500";
-    return "bg-red-500";
-  };
-
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium">Fit Score</span>
-        <span className="text-2xl font-bold">{score}%</span>
-      </div>
-      <div className="h-3 w-full bg-muted rounded-full overflow-hidden">
-        <div
-          className={`h-full ${getColor(score)} transition-all duration-500`}
-          style={{ width: `${score}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ConfidenceBadge({ level }: { level: "High" | "Medium" | "Low" }) {
-  const colors = {
-    High: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20",
-    Medium: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
-    Low: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
-  };
-
-  return (
-    <Badge variant="outline" className={colors[level]}>
-      {level} Confidence
-    </Badge>
-  );
-}
 
 function MatchList({ title, items, icon: Icon, colorClass }: {
   title: string;
@@ -71,11 +34,6 @@ function MatchList({ title, items, icon: Icon, colorClass }: {
 
 function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage["metadata"]> }) {
   const fitScore = metadata.fit_score ?? 0;
-  const contactMessage = fitScore >= 80
-    ? "Strong fit. Connect with Abhishek to move forward."
-    : fitScore >= 60
-      ? "Good match. Connect with Abhishek for a deeper discussion."
-      : "Context matters. Connect with Abhishek to explore alignment.";
 
   return (
     <div className="space-y-3">
@@ -143,7 +101,7 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
         </a>
         <div className="flex gap-2">
           <a
-            href={`mailto:${siteConfig.links.email}`}
+            href={`mailto:${siteConfig.links.email} `}
             className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-border py-2 text-[11px] font-medium hover:bg-muted/50 transition-colors"
           >
             <Mail className="h-3.5 w-3.5" />
@@ -454,8 +412,7 @@ export function ChatComponent({
                 )}
 
                 {/* Timestamp */}
-                <div className={`flex items-center gap-1 mt-1 ${message.role === "user" ? "flex-row" : "flex-row"
-                  }`}>
+                <div className={`flex items-center gap-1 mt-1 ${message.role === "user" ? "flex-row" : "flex-row"}`}>
                   <Clock className="h-3 w-3 text-muted-foreground/60" />
                   <p className="text-[10px] text-muted-foreground/60">
                     {formatTime(message.timestamp)}

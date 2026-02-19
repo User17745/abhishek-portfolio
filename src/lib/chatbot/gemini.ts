@@ -1,18 +1,18 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 const GEMINI_API_KEY = import.meta.env.PUBLIC_GEMINI_API_KEY || "";
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-const JSON_SCHEMA = {
-  type: "object",
+const JSON_SCHEMA: any = {
+  type: SchemaType.OBJECT,
   properties: {
-    fit_score: { type: "number" },
-    strong_matches: { type: "array", items: { type: "string" } },
-    partial_matches: { type: "array", items: { type: "string" } },
-    gaps: { type: "array", items: { type: "string" } },
-    recommended_positioning: { type: "string" },
-    confidence_level: { type: "string", enum: ["High", "Medium", "Low"] },
+    fit_score: { type: SchemaType.NUMBER },
+    strong_matches: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+    partial_matches: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+    gaps: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+    recommended_positioning: { type: SchemaType.STRING },
+    confidence_level: { type: SchemaType.STRING },
   },
   required: [
     "fit_score",

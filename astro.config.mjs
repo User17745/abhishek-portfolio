@@ -21,7 +21,7 @@ const copyEmbeddings = () => ({
           console.log('✓ Copied embeddings.json to public folder');
         }
       } catch (err) {
-        console.warn('Could not copy embeddings:', err.message);
+        console.warn('Could not copy embeddings:', err instanceof Error ? err.message : String(err));
       }
     }
   }
@@ -36,12 +36,12 @@ export default defineConfig({
     copyEmbeddings(),
     react({
       experimentalReactChildren: true,
-    }), 
+    }),
     sitemap({
       changefreq: "monthly",
       priority: 0.7,
       lastmod: new Date(),
-    }), 
+    }),
     mdx()
   ],
   vite: {

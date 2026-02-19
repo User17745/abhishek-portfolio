@@ -1,7 +1,7 @@
 ---
 import { summary, stats } from "@/data/summary";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Linkedin, Info, Copy, Check } from "lucide-react";
+import { ArrowDown, Linkedin, Copy, Github, Info } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 import { ChatButton } from "@/components/chat/ChatSidebar";
 ---
@@ -25,7 +25,7 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
         <ChatButton client:load />
       </div>
       
-      <p class="fade-in stagger-2 text-sm text-muted-foreground max-w-md mx-auto">
+      <p class="fade-in stagger-2 text-sm text-muted-foreground max-w-lg mx-auto">
         Get started by downloading Abhishek's official documentation (resume):
       </p>
       
@@ -110,6 +110,25 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
             </div>
           </div>
         </div>
+        
+        <!-- Open Source Badge -->
+        <div class="flex justify-center mt-3">
+          <div class="github-badge-wrapper relative">
+            <a 
+              href="https://github.com/User17745/abhishek-portfolio" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 transition-all hover-lift"
+              aria-label="View source on GitHub"
+            >
+              <Github className="w-3.5 h-3.5" />
+              <span>Open Source</span>
+            </a>
+            <div class="github-tooltip">
+              This is an open source website, find it on my GitHub
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="fade-in stagger-4">
@@ -180,10 +199,16 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
     visibility: visible;
     transform: translateX(-50%) translateY(0);
   }
+
+  .github-badge-wrapper:hover .github-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
   
-  .stat-tooltip {
+  .stat-tooltip,
+  .github-tooltip {
     position: absolute;
-    bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%) translateY(4px);
     padding: 8px 12px;
@@ -203,6 +228,14 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     pointer-events: none;
   }
+
+  .stat-tooltip {
+    bottom: calc(100% + 8px);
+  }
+
+  .github-tooltip {
+    top: calc(100% + 8px);
+  }
   
   .stat-tooltip::after {
     content: "";
@@ -212,6 +245,16 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
     transform: translateX(-50%);
     border: 6px solid transparent;
     border-top-color: var(--color-popover);
+  }
+
+  .github-tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--color-popover);
   }
   
   .no-scrollbar::-webkit-scrollbar {
@@ -233,8 +276,6 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
   let currentFormat = 'md';
   
   function updateCommand() {
-    const baseCommand = 'curl -fsSL https://abhishekaggarwal.com/install.sh | bash -s --';
-    const tabArg = `"${currentTab}"`;
     const formatArg = currentFormat === 'md' ? ' "md"' : '';
     
     // Update format args in UI

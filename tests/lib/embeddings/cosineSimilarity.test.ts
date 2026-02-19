@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cosineSimilarity } from "../../src/lib/embeddings/cosineSimilarity";
+import { cosineSimilarity } from "../../../src/lib/embeddings/cosineSimilarity";
 
 describe("cosineSimilarity", () => {
   it("should return 1 for identical vectors", () => {
