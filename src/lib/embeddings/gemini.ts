@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, TaskType } from "@google/generative-ai";
 
 const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY || "";
 
@@ -13,7 +13,7 @@ export async function getEmbedding(text: string): Promise<number[]> {
 
   const result = await model.embedContent({
     content: { role: "user", parts: [{ text }] },
-    taskType: "SEMANTIC_SIMILARITY",
+    taskType: TaskType.RETRIEVAL_DOCUMENT,
   });
 
   return result.embedding.values;

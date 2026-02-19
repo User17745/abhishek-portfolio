@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { findTopMatches, formatMatchResults, type EmbeddingChunk, type SearchResult } from "../../src/lib/embeddings/search";
+import { findTopMatches, formatMatchResults, type EmbeddingChunk, type SearchResult } from "../../../src/lib/embeddings/search";
 
 describe("findTopMatches", () => {
   let mockEmbeddings: EmbeddingChunk[];

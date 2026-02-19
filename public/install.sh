@@ -118,6 +118,7 @@ print_banner() {
 # Main function
 main() {
   local flavor="${1:-all}"
+  local flavor_format="${2:-pdf}"
   
   print_banner
   
@@ -145,7 +146,7 @@ main() {
     
     for resume in "${RESUMES[@]}"; do
       IFS=':' read -r id doc_id filename <<< "$resume"
-      download_resume "$id" "$doc_id" "$filename" "$output_dir" "$2"
+      download_resume "$id" "$doc_id" "$filename" "$output_dir" "$flavor_format"
     done
     
     echo ""
@@ -163,17 +164,20 @@ main() {
       
       if [[ "$id" == "$flavor" ]]; then
         found=1
-        echo -e "${YELLOW}Downloading ${id} resume (${2:-pdf})...${NC}"
+        echo -e "${YELLOW}Downloading ${id} resume in ${flavor_format} format...${NC}"
         echo ""
-        download_resume "$id" "$doc_id" "$filename" "$output_dir" "$2"
+        download_resume "$id" "$doc_id" "$filename" "$output_dir" "$flavor_format"
+        
+        local ext="pdf"
+        if [[ "$flavor_format" == "md" ]]; then ext="md"; fi
         
         echo ""
         echo -e "${GREEN}✓ Resume downloaded to:${NC}"
-        echo -e "  ${output_dir}/${filename}"
+        echo -e "  ${output_dir}/${filename}.${ext}"
         echo ""
         
-        # Open the PDF
-        open_file "${output_dir}/${filename}"
+        # Open the file
+        open_file "${output_dir}/${filename}.${ext}"
         break
       fi
     done

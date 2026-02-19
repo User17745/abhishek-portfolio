@@ -1,47 +1,10 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, ExternalLink, Clock, Info, Download } from "lucide-react";
+import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, Clock, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import type { ChatAttachment, ChatMessage } from "./ChatContext";
 import { siteConfig } from "@/lib/config";
 
-function FitScoreProgress({ score }: { score: number }) {
-  const getColor = (s: number) => {
-    if (s >= 80) return "bg-green-500";
-    if (s >= 60) return "bg-amber-500";
-    return "bg-red-500";
-  };
-
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium">Fit Score</span>
-        <span className="text-2xl font-bold">{score}%</span>
-      </div>
-      <div className="h-3 w-full bg-muted rounded-full overflow-hidden">
-        <div
-          className={`h-full ${getColor(score)} transition-all duration-500`}
-          style={{ width: `${score}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ConfidenceBadge({ level }: { level: "High" | "Medium" | "Low" }) {
-  const colors = {
-    High: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20",
-    Medium: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
-    Low: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
-  };
-
-  return (
-    <Badge variant="outline" className={colors[level]}>
-      {level} Confidence
-    </Badge>
-  );
-}
 
 function MatchList({ title, items, icon: Icon, colorClass }: {
   title: string;
@@ -71,107 +34,90 @@ function MatchList({ title, items, icon: Icon, colorClass }: {
 
 function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage["metadata"]> }) {
   const fitScore = metadata.fit_score ?? 0;
-  const contactMessage = fitScore >= 80
-    ? "This looks like a strong fit. Connect with Abhishek directly to move forward."
-    : fitScore >= 60
-      ? "This can be a good match with the right framing. Connect with Abhishek for deeper discussion."
-      : "There may be gaps, but context matters. Connect with Abhishek to explore practical alignment.";
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className="space-y-3">
       {metadata.fit_score !== undefined && (
-        <FitScoreProgress score={metadata.fit_score} />
+        <div className="flex items-center justify-between gap-4 py-1 border-b border-border/50">
+          <div className="flex-1">
+            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+              <div
+                className={`h-full ${fitScore >= 80 ? "bg-green-500" : fitScore >= 60 ? "bg-amber-500" : "bg-red-500"} transition-all duration-500`}
+                style={{ width: `${fitScore}%` }}
+              />
+            </div>
+          </div>
+          <span className="text-xl font-bold tabular-nums shrink-0">{fitScore}%</span>
+        </div>
       )}
 
       {metadata.what_looking_for && (
-        <div className="bg-primary/5 rounded-lg p-3 space-y-2">
-          <h4 className="text-sm font-semibold mb-2">What you're looking for</h4>
-          <p className="text-sm text-foreground leading-relaxed">
-            {metadata.what_looking_for}
-          </p>
+        <div className="text-[11px] leading-tight text-muted-foreground italic px-1">
+          Searching for: <span className="text-foreground/80 font-medium">{metadata.what_looking_for}</span>
         </div>
       )}
 
-      {metadata.confidence_level && (
-        <ConfidenceBadge level={metadata.confidence_level} />
-      )}
+      <div className="grid grid-cols-1 gap-3 sm:gap-4">
+        <MatchList
+          title="Match"
+          items={metadata.strong_matches}
+          icon={CheckCircle}
+          colorClass="text-green-500"
+        />
 
-      <MatchList
-        title="Strong Matches"
-        items={metadata.strong_matches}
-        icon={CheckCircle}
-        colorClass="text-green-500"
-      />
-
-      <MatchList
-        title="Partial Matches"
-        items={metadata.partial_matches}
-        icon={AlertCircle}
-        colorClass="text-amber-500"
-      />
-
-      <MatchList
-        title="Gaps"
-        items={metadata.gaps}
-        icon={AlertCircle}
-        colorClass="text-red-500"
-      />
+        <div className="grid grid-cols-2 gap-3">
+          <MatchList
+            title="Partial"
+            items={metadata.partial_matches}
+            icon={AlertCircle}
+            colorClass="text-amber-500"
+          />
+          <MatchList
+            title="Gaps"
+            items={metadata.gaps}
+            icon={AlertCircle}
+            colorClass="text-red-500"
+          />
+        </div>
+      </div>
 
       {metadata.recommended_positioning && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold">Abhishek For This Role?</h4>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+        <div className="bg-primary/5 rounded-xl p-3 border border-primary/10">
+          <p className="text-[12px] leading-relaxed text-foreground/90 font-medium">
             {renderAssistantTextWithEmphasis(metadata.recommended_positioning)}
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Abhishek's background spans entrepreneurship, corporate leadership, and enterprise delivery. He thrives in roles combining ownership with evolution, where he can shape direction rather than just execute. His experience with platforms like KartmaX and enterprise clients like Victoria's Secret demonstrates his ability to scale solutions across markets and teams.
           </p>
         </div>
       )}
 
-      {metadata.fit_score !== undefined && (
-        <div className="rounded-xl border bg-muted/40 p-3 space-y-3">
-          <p className="text-xs text-muted-foreground">{contactMessage}</p>
-          <div className="flex flex-col gap-2">
-            <a
-              href={siteConfig.links.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A66C2] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0958a8] transition-colors"
-            >
-              <Linkedin className="h-4 w-4" />
-              Connect on LinkedIn
-            </a>
-            <div className="flex flex-wrap gap-2">
-              <a
-                href={`mailto:${siteConfig.links.email}`}
-                className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent/20 transition-colors"
-              >
-                <Mail className="h-3.5 w-3.5" />
-                Email
-              </a>
-              <a
-                href={siteConfig.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent/20 transition-colors"
-              >
-                <Github className="h-3.5 w-3.5" />
-                Git
-              </a>
-              <a
-                href={siteConfig.links.reddit}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent/20 transition-colors"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Reddit
-              </a>
-            </div>
-          </div>
+      <div className="pt-2 flex flex-col gap-2">
+        <a
+          href={siteConfig.links.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#0A66C2] py-2 text-[13px] font-semibold text-white transition-all hover:bg-[#0958a8] hover:shadow-lg active:scale-[0.98]"
+        >
+          <Linkedin className="h-4 w-4" />
+          LinkedIn Profile
+        </a>
+        <div className="flex gap-2">
+          <a
+            href={`mailto:${siteConfig.links.email} `}
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-border py-2 text-[11px] font-medium hover:bg-muted/50 transition-colors"
+          >
+            <Mail className="h-3.5 w-3.5" />
+            Email
+          </a>
+          <a
+            href={siteConfig.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-border py-2 text-[11px] font-medium hover:bg-muted/50 transition-colors"
+          >
+            <Github className="h-3.5 w-3.5" />
+            Github
+          </a>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -237,8 +183,11 @@ export function ChatComponent({
     (msg.metadata?.mode === 'analysis' || typeof msg.metadata?.fit_score === 'number')
   );
 
-  // Show JD upload tip only if analysis not done and no file currently attached
-  const shouldShowResumeReminder = !hasDoneAnalysis && !attachedFile;
+  // Count user messages
+  const userMessageCount = messages.filter(msg => msg.role === 'user').length;
+
+  // Show JD upload tip only after user has engaged (2+ messages) and no analysis/file-present
+  const shouldShowResumeReminder = userMessageCount >= 2 && !hasDoneAnalysis && !attachedFile;
 
   // Scroll to first line of last message when new messages arrive
   useEffect(() => {
@@ -463,8 +412,7 @@ export function ChatComponent({
                 )}
 
                 {/* Timestamp */}
-                <div className={`flex items-center gap-1 mt-1 ${message.role === "user" ? "flex-row" : "flex-row"
-                  }`}>
+                <div className={`flex items-center gap-1 mt-1 ${message.role === "user" ? "flex-row" : "flex-row"}`}>
                   <Clock className="h-3 w-3 text-muted-foreground/60" />
                   <p className="text-[10px] text-muted-foreground/60">
                     {formatTime(message.timestamp)}
