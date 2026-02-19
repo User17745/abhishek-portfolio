@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, ExternalLink, Clock } from "lucide-react";
+import { Send, Upload, X, FileText, User, CheckCircle, AlertCircle, Cookie as CookieIcon, TriangleAlert, Linkedin, Mail, Github, ExternalLink, Clock, Info, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -567,6 +567,60 @@ export function ChatComponent({
         <p className="text-[10px] text-muted-foreground mt-1.5 text-center">
           Press Enter to send • Drag & drop or upload .txt, .md, .pdf, .doc, .docx
         </p>
+
+        {/* "Don't Trust Cookie" Disclaimer */}
+        <div className="mt-4 border-t border-gray-200/50 dark:border-zinc-800/50 pt-4 pb-2">
+          <div className="flex items-start gap-3 mb-2">
+            <div className="text-2xl">🍪</div>
+            <div className="flex-1">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-1">
+                Don't trust Cookie?
+              </p>
+              <p className="text-sm text-foreground leading-relaxed">
+                Cookie is my trusted side-kick. He runs my other agents and OpenClaw, and I've programmed him to be quite truthful. However, if you don't want to trust my AI agent with your hiring decisions:
+              </p>
+              <div className="mt-3 space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  1. <span className="font-medium text-foreground">Download my knowledge base</span> as Markdown files and verify yourself
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  2. <span className="font-medium text-foreground">Grab Abhishek's PDF resumes</span> and go through them yourself, the old-fashioned way!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-2 justify-end mt-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const links = Object.entries({
+                  'Knowledge Base': '/docs/resources/rag/',
+                  'eCommerce': '/docs/resources/raw-data/Abhishek Aggarwal - Resume (eCom).md',
+                  'Pre-Sales': '/docs/resources/raw-data/Abhishek Aggarwal - Resume (Pre-Sales & Solutions Engineering).md',
+                  'Product Manager': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Product Manager.md',
+                  'PMO': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Program Managament Office (PMO).md',
+                  'Shopify TPM': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Shopify TPM.md',
+                  'Technical PM': '/docs/resources/raw-data/Abhishek Aggarwal - Resume - Technical Project Manager (TPM).md',
+                });
+
+                links.forEach(([name, url], idx) => {
+                  setTimeout(() => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${name}.md`;
+                    a.click();
+                    setTimeout(() => a.remove(), 100);
+                  }, idx * 100);
+                });
+              }}
+              className="flex items-center gap-2 text-xs"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Download All (Markdown)
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
