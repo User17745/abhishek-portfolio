@@ -31,7 +31,7 @@ npm run rag:embeddings
 
 1. Add your new markdown content to `docs/resources/rag/` (e.g., `FAQs.md`, `new-role.md`)
 
-2. The chunk generator automatically picks up any `.md` files in the RAG directory
+2. The chunk generator automatically picks up any `.md` files in RAG directory
 
 3. Run the update command:
    ```bash
@@ -41,13 +41,27 @@ npm run rag:embeddings
 ## Prerequisites
 
 - `GEMINI_API_KEY` must be set in your `.env` file
-- See `.env.example` for the required format
+- See `.env.example` for required format
 
 ## Files Involved
 
 - **Source content**: `docs/resources/rag/*.md`
 - **Chunks output**: `docs/resources/rag/chunks.json`
 - **Embeddings output**: `docs/resources/rag/embeddings.json` and `public/embeddings.json`
+
+## Recent Updates
+
+### 2026-02-19: System Prompt Improvements
+
+- **Conversation mode**: Clarified that questions are **about Abhishek**, not the bot
+  - "When they say 'your' or ask personal questions...they are ALWAYS referring to Abhishek, never to you personally"
+  - Added explicit guidance for "strengths", "weaknesses", "where do you see yourself" questions
+
+- **Analysis mode**: Added structured requirements extraction
+  - Extracts "What you are looking for" keywords (3-7 word phrases, comma-separated)
+  - Strong/Partial/Gap points limited to 2-3 words max
+  - "Abhishek For This Role?" expanded to 2-3 sentences
+  - Keywords should be tech skills: "Shopify, TPM, Headless, Multi-country, RTL, ERP integration"
 
 ## Troubleshooting
 
@@ -64,10 +78,42 @@ If updated content isn't appearing:
 3. Then run: `npm run rag:embeddings`
 4. Or use `npm run rag:update` to do both at once
 
+### Fitment Analysis Issues
+If requirements are showing as full sentences instead of keywords:
+1. Ensure JD text is being parsed correctly
+2. Check that the system prompt is being used correctly
+3. The API will automatically format requirements as comma-separated keywords
+
 ### Deployment
-After updating RAG, ensure you deploy the changes:
+After updating RAG, ensure you deploy with changes:
 ```bash
-git add docs/resources/rag/ public/embeddings.json
+git add docs/resources/rag/ public/embeddings.json src/lib/chatbot/
 git commit -m "Update RAG knowledge base"
 git push
+```
+
+## API Response Format
+
+### Analysis Mode
+```json
+{
+  "mode": "analysis",
+  "fit_score": number (0-100),
+  "strong_matches": string[],
+  "partial_matches": string[],
+  "gaps": string[],
+  "recommended_positioning": string,
+  "what_looking_for": string (optional),
+  "confidence_level": "High" | "Medium" | "Low"
+}
+```
+
+### Conversation Mode
+```json
+{
+  "mode": "conversation",
+  "response_text": string,
+  "suggested_questions": string[] (0 to 3),
+  "confidence_level": "High" | "Medium" | "Low"
+}
 ```

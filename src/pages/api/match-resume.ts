@@ -78,6 +78,14 @@ export const POST: APIRoute = async ({ request }) => {
       contextChunks = topMatches.map((m) => m.chunk.text);
     }
 
+    // Extract "What are you looking for" section from JD
+    const lookingForMatch = userMessage.match(/(?:what are we looking for|we are looking for|we're looking for|looking for)(.*?)(?:\n|$)/i);
+    let lookingForSection = "";
+    if (lookingForMatch && mode === "analysis") {
+      lookingForSection = `\n\nWhat are you looking for:\n${lookingForMatch[1]?.trim() || userMessage}`;
+      contextChunks.push(lookingForSection);
+    }
+
     // Call LLM with context to get structured analysis
     let analysis: LLMResponse | null = null;
     try {

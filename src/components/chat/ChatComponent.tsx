@@ -61,7 +61,7 @@ function MatchList({ title, items, icon: Icon, colorClass }: {
         {items.map((item, i) => (
           <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
             <span className="text-foreground">•</span>
-            <span>{item}</span>
+            <span className="leading-relaxed">{renderAssistantTextWithEmphasis(item)}</span>
           </li>
         ))}
       </ul>
@@ -81,6 +81,15 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
     <div className="space-y-4 mt-4">
       {metadata.fit_score !== undefined && (
         <FitScoreProgress score={metadata.fit_score} />
+      )}
+
+      {metadata.what_looking_for && (
+        <div className="bg-primary/5 rounded-lg p-3 space-y-2">
+          <h4 className="text-sm font-semibold mb-2">What you're looking for</h4>
+          <p className="text-sm text-foreground leading-relaxed">
+            {metadata.what_looking_for}
+          </p>
+        </div>
       )}
 
       {metadata.confidence_level && (
@@ -111,7 +120,12 @@ function CookieResponseDisplay({ metadata }: { metadata: NonNullable<ChatMessage
       {metadata.recommended_positioning && (
         <div className="space-y-2">
           <h4 className="text-sm font-semibold">Abhishek For This Role?</h4>
-          <p className="text-sm text-muted-foreground">{renderAssistantTextWithEmphasis(metadata.recommended_positioning)}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {renderAssistantTextWithEmphasis(metadata.recommended_positioning)}
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Abhishek's background spans entrepreneurship, corporate leadership, and enterprise delivery. He thrives in roles combining ownership with evolution, where he can shape direction rather than just execute. His experience with platforms like KartmaX and enterprise clients like Victoria's Secret demonstrates his ability to scale solutions across markets and teams.
+          </p>
         </div>
       )}
 
