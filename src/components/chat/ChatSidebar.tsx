@@ -11,6 +11,19 @@ export function ChatSidebar() {
   const [hasMessages, setHasMessages] = useState(false);
 
   useEffect(() => {
+    // Initial check for messages
+    const chatHistory = localStorage.getItem("cookie_chat_history_v1");
+    if (chatHistory) {
+      try {
+        const parsed = JSON.parse(chatHistory);
+        setHasMessages(parsed.length > 0);
+      } catch (e) {
+        setHasMessages(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
     const handleToggle = () => setIsOpen(prev => !prev);
