@@ -1,6 +1,126 @@
 [
   {
-    "id": "career-journey-career-overview-0",
+    "id": "FAQs-tell-me-about-yourself-0",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Tell me about yourself",
+    "content": "I'm a product-minded solutions architect with 12+ years in digital commerce, having built platforms, led enterprise programs, and expanded business into new regions. I started as a founder, so I understand commerce from inside out, and today I operate at the intersection of technology, business, and delivery, owning everything from solution blueprints and stakeholder alignment to execution governance. I enjoy building structured systems around complex problems and turning ambiguity into scalable outcomes.",
+    "tokens": 72
+  },
+  {
+    "id": "FAQs-what-are-you-looking-for-in-a-job-role?-1",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "What are you looking for in a job role?",
+    "content": "I'm looking for a role that combines ownership with evolution, where I can shape direction, not just execute tasks. I thrive in environments that encourage initiative, agile thinking, and cross-functional collaboration. Repetition drains me; new challenges, product thinking, and meaningful accountability energise me. I want to be in a place where ideas are tested quickly, responsibility is earned through impact, and growth is a shared journey.",
+    "tokens": 66
+  },
+  {
+    "id": "FAQs-what-are-your-greatest-strengths?-2",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "What are your greatest strengths?",
+    "content": "My biggest strength is connecting dots, between business goals, technical architecture, and people. I'm strong at building clarity where there is noise, whether that's defining a product roadmap, structuring a pre-sales solution, or aligning engineering teams. I also naturally identify strengths in people and organize teams around complementary capabilities, which helps unlock both performance and ownership.",
+    "tokens": 56
+  },
+  {
+    "id": "FAQs-what-is-your-greatest-weakness?-3",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "What is your greatest weakness?",
+    "content": "I've struggled in environments where low accountability affects team morale. Earlier, I would absorb that friction personally; now I've learned to approach it with structure, clear expectations, measurable outputs, and objective feedback loops. I still prefer high-energy, self-driven teams, but I've matured in separating emotion from performance management.",
+    "tokens": 48
+  },
+  {
+    "id": "FAQs-why-are-you-leaving-your-current-job?-4",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Why are you leaving your current job?",
+    "content": "I'm not running away from anything, I've had meaningful growth and responsibility. But I've reached a point where I want a new curve of learning and a broader stage. I've built products, led PMOs, closed enterprise deals, and expanded into GCC; now I'm looking for the next environment where I can stretch differently and create fresh impact.",
+    "tokens": 57
+  },
+  {
+    "id": "FAQs-tell-me-about-a-time-you-handled-conflict-or-stress-5",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Tell me about a time you handled conflict or stress",
+    "content": "During multi-country enterprise implementations with tight timelines and zero-downtime expectations, I've often had to balance client pressure, technical constraints, and team bandwidth. In one instance, conflicting stakeholder expectations around scope and performance targets escalated mid-delivery. I structured chaos, documented risks, reset scope boundaries, aligned on phased releases, and introduced transparent reporting cadences. Stress reduces when ambiguity reduces, and that's usually my role in high-pressure situations. Some examples would include closure for THE One's BRD and Design phases.",
+    "tokens": 77
+  },
+  {
+    "id": "FAQs-where-do-you-see-yourself-in-five-years?-6",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Where do you see yourself in five years?",
+    "content": "I'm less attached to titles and more committed to trajectory. I know I won't be doing the same thing I'm doing today, that's certain. I see myself operating closer to strategic product or business leadership, where I influence direction at scale. Uncertainty doesn't intimidate me; stagnation does. Growth, for me, is non-negotiable.",
+    "tokens": 52
+  },
+  {
+    "id": "FAQs-why-should-we-hire-you?-7",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Why should we hire you?",
+    "content": "You shouldn't hire me for comfort, you should hire me if you want someone who questions assumptions, structures complexity, and owns outcomes. I bring entrepreneurial hunger with enterprise discipline. If there's alignment between your direction and the kind of impact I know I can create, the decision becomes obvious for both of us.",
+    "tokens": 53
+  },
+  {
+    "id": "FAQs-do-you-have-any-questions-for-us?-8",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Do you have any questions for us?",
+    "content": "I'd like to understand what problems truly matter to you right now. What does success look like in the next 12–24 months? Where are the biggest execution or product gaps? And realistically, how would someone with my mix of architecture, product, and delivery experience create disproportionate value here?",
+    "tokens": 48
+  },
+  {
+    "id": "FAQs-how-soon-can-you-join-us?-9",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "How soon can you join us?",
+    "content": "Timelines are negotiable depending on transition expectations and the role's urgency. Typically, I'd plan for 30–60 days to ensure a responsible handover, but if alignment is strong, I'm open to structuring it pragmatically.",
+    "tokens": 33
+  },
+  {
+    "id": "FAQs-can-you-walk-me-through-your-career-journey?-10",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "Can you walk me through your career journey?",
+    "content": "I started building websites in college, which quickly evolved into founding a web and eCommerce services company where I delivered 50 plus projects across India, UAE, UK, and US.\n\nIn parallel, I launched my own D2C brand, which gave me first-hand exposure to catalog design, logistics, conversion challenges, and unit economics. In 2020, I joined GreenHonchos when it was still small and took on product development, delivery leadership, and eventually pre-sales and PMO responsibilities.\n\nI led the build and rollout of KartXO and later owned key enterprise capabilities of KartmaX including hyperlocal, omni-channel, and marketplace models.\n\nOver time, I moved into enterprise solutions engineering and GCC expansion, operating across architecture, governance, and client strategy.\n\nMy journey has consistently expanded from building things myself to building systems and teams that scale.",
+    "tokens": 130
+  },
+  {
+    "id": "FAQs-what-are-some-of-your-marquee-projects?-11",
+    "source": "FAQs",
+    "title": "FAQs",
+    "role": "",
+    "focus": "",
+    "heading": "What are some of your marquee projects?",
+    "content": "Here are a few that reflect scale, complexity, and impact:\n\n### Victoria's Secret India Launch\n\nLed consulting and project management for Salesforce Commerce Cloud implementation for India launch of the brand under Apparel Group.\n\nThis involved international coordination, structured governance, phased rollout planning, and strict brand compliance. It was high visibility and required balancing global brand standards with local execution realities.\n\n### THE One GCC Transformation\n\nPlayed a key role in pre-sales, solution architecture, and program management for a large omni-channel transformation across GCC.\n\nThe program involved ERP integrations, multi-country deployment, and strong SLA-driven expectations. This project was also instrumental in expanding our presence in the GCC region.\n\n### KartmaX Marketplace, Hyperlocal, and Omni-channel Capabilities\n\nOwned product development for enterprise capabilities such as vendor onboarding, automated settlement systems, hyperlocal geo-fencing, and store-level fulfillment orchestration. These were not just client implementations but platform-level evolutions that enabled large brands to operate at scale.\n\n### Inorbit Mall Digitisation\n\nLed solution architecture and program management for digitising multiple malls with marketplace, hyperlocal delivery, vendor payouts, and commission automation. This required integrating multiple retailers, managing settlement logic, and orchestrating logistics across locations.\n\n### Caneza Shopify Plus Headless Rollout\n\nArchitected and led delivery of a Shopify Plus and Hydrogen headless setup for multi-country expansion with shared frontend and localised backend stores. This required balancing performance, localization, and operational maintainability.\n\n### CRO Consulting for Apparel Group Brands\n\nConsulted on structured conversion optimisation initiatives that delivered measurable uplifts in conversion and add-to-cart rates. This reflected my shift from pure delivery into performance-driven consulting.",
+    "tokens": 255
+  },
+  {
+    "id": "career-journey-career-overview-12",
     "source": "career-journey",
     "title": "Career Journey",
     "role": "",
@@ -10,7 +130,7 @@
     "tokens": 17
   },
   {
-    "id": "career-journey-early-days-(2014)-1",
+    "id": "career-journey-early-days-(2014)-13",
     "source": "career-journey",
     "title": "Career Journey",
     "role": "",
@@ -20,7 +140,7 @@
     "tokens": 21
   },
   {
-    "id": "career-journey-entrepreneurship-phase-(2014---2019)-2",
+    "id": "career-journey-entrepreneurship-phase-(2014---2019)-14",
     "source": "career-journey",
     "title": "Career Journey",
     "role": "",
@@ -30,7 +150,7 @@
     "tokens": 68
   },
   {
-    "id": "career-journey-corporate-phase-(2020---present)-3",
+    "id": "career-journey-corporate-phase-(2020---present)-15",
     "source": "career-journey",
     "title": "Career Journey",
     "role": "",
@@ -40,7 +160,7 @@
     "tokens": 140
   },
   {
-    "id": "career-journey-domain-experience-4",
+    "id": "career-journey-domain-experience-16",
     "source": "career-journey",
     "title": "Career Journey",
     "role": "",
@@ -50,7 +170,7 @@
     "tokens": 24
   },
   {
-    "id": "ecommerce-role-5",
+    "id": "ecommerce-role-17",
     "source": "ecommerce",
     "title": "eCommerce",
     "role": "Solutions Architect / Digital Transformation Lead",
@@ -60,7 +180,7 @@
     "tokens": 56
   },
   {
-    "id": "ecommerce-projects-6",
+    "id": "ecommerce-projects-18",
     "source": "ecommerce",
     "title": "eCommerce",
     "role": "Solutions Architect / Digital Transformation Lead",
@@ -70,7 +190,7 @@
     "tokens": 144
   },
   {
-    "id": "ecommerce-tech-stack-7",
+    "id": "ecommerce-tech-stack-19",
     "source": "ecommerce",
     "title": "eCommerce",
     "role": "Solutions Architect / Digital Transformation Lead",
@@ -80,7 +200,7 @@
     "tokens": 33
   },
   {
-    "id": "ecommerce-outcomes-8",
+    "id": "ecommerce-outcomes-20",
     "source": "ecommerce",
     "title": "eCommerce",
     "role": "Solutions Architect / Digital Transformation Lead",
@@ -90,7 +210,7 @@
     "tokens": 24
   },
   {
-    "id": "ecommerce-domain-experience-9",
+    "id": "ecommerce-domain-experience-21",
     "source": "ecommerce",
     "title": "eCommerce",
     "role": "Solutions Architect / Digital Transformation Lead",
@@ -100,7 +220,7 @@
     "tokens": 38
   },
   {
-    "id": "pre-sales-solutions-engineering-role-10",
+    "id": "pre-sales-solutions-engineering-role-22",
     "source": "pre-sales-solutions-engineering",
     "title": "Pre-Sales & Solutions Engineering",
     "role": "Pre-Sales Solutions Architect",
@@ -110,7 +230,7 @@
     "tokens": 48
   },
   {
-    "id": "pre-sales-solutions-engineering-projects-11",
+    "id": "pre-sales-solutions-engineering-projects-23",
     "source": "pre-sales-solutions-engineering",
     "title": "Pre-Sales & Solutions Engineering",
     "role": "Pre-Sales Solutions Architect",
@@ -120,7 +240,7 @@
     "tokens": 167
   },
   {
-    "id": "pre-sales-solutions-engineering-tech-stack-12",
+    "id": "pre-sales-solutions-engineering-tech-stack-24",
     "source": "pre-sales-solutions-engineering",
     "title": "Pre-Sales & Solutions Engineering",
     "role": "Pre-Sales Solutions Architect",
@@ -130,7 +250,7 @@
     "tokens": 38
   },
   {
-    "id": "pre-sales-solutions-engineering-outcomes-13",
+    "id": "pre-sales-solutions-engineering-outcomes-25",
     "source": "pre-sales-solutions-engineering",
     "title": "Pre-Sales & Solutions Engineering",
     "role": "Pre-Sales Solutions Architect",
@@ -140,7 +260,7 @@
     "tokens": 32
   },
   {
-    "id": "pre-sales-solutions-engineering-domain-experience-14",
+    "id": "pre-sales-solutions-engineering-domain-experience-26",
     "source": "pre-sales-solutions-engineering",
     "title": "Pre-Sales & Solutions Engineering",
     "role": "Pre-Sales Solutions Architect",
@@ -150,7 +270,7 @@
     "tokens": 18
   },
   {
-    "id": "product-manager-role-15",
+    "id": "product-manager-role-27",
     "source": "product-manager",
     "title": "Product Manager",
     "role": "Product Manager / Product Strategist",
@@ -160,7 +280,7 @@
     "tokens": 65
   },
   {
-    "id": "product-manager-projects-16",
+    "id": "product-manager-projects-28",
     "source": "product-manager",
     "title": "Product Manager",
     "role": "Product Manager / Product Strategist",
@@ -170,7 +290,7 @@
     "tokens": 87
   },
   {
-    "id": "product-manager-tech-stack-17",
+    "id": "product-manager-tech-stack-29",
     "source": "product-manager",
     "title": "Product Manager",
     "role": "Product Manager / Product Strategist",
@@ -180,7 +300,7 @@
     "tokens": 29
   },
   {
-    "id": "product-manager-outcomes-18",
+    "id": "product-manager-outcomes-30",
     "source": "product-manager",
     "title": "Product Manager",
     "role": "Product Manager / Product Strategist",
@@ -190,7 +310,7 @@
     "tokens": 37
   },
   {
-    "id": "product-manager-domain-experience-19",
+    "id": "product-manager-domain-experience-31",
     "source": "product-manager",
     "title": "Product Manager",
     "role": "Product Manager / Product Strategist",
@@ -200,7 +320,7 @@
     "tokens": 15
   },
   {
-    "id": "program-management-office-pmo-role-20",
+    "id": "program-management-office-pmo-role-32",
     "source": "program-management-office-pmo",
     "title": "Program Management Office (PMO)",
     "role": "PMO Lead / Program Manager",
@@ -210,7 +330,7 @@
     "tokens": 59
   },
   {
-    "id": "program-management-office-pmo-projects-21",
+    "id": "program-management-office-pmo-projects-33",
     "source": "program-management-office-pmo",
     "title": "Program Management Office (PMO)",
     "role": "PMO Lead / Program Manager",
@@ -220,7 +340,7 @@
     "tokens": 96
   },
   {
-    "id": "program-management-office-pmo-tech-stack-22",
+    "id": "program-management-office-pmo-tech-stack-34",
     "source": "program-management-office-pmo",
     "title": "Program Management Office (PMO)",
     "role": "PMO Lead / Program Manager",
@@ -230,7 +350,7 @@
     "tokens": 24
   },
   {
-    "id": "program-management-office-pmo-outcomes-23",
+    "id": "program-management-office-pmo-outcomes-35",
     "source": "program-management-office-pmo",
     "title": "Program Management Office (PMO)",
     "role": "PMO Lead / Program Manager",
@@ -240,7 +360,7 @@
     "tokens": 31
   },
   {
-    "id": "program-management-office-pmo-domain-experience-24",
+    "id": "program-management-office-pmo-domain-experience-36",
     "source": "program-management-office-pmo",
     "title": "Program Management Office (PMO)",
     "role": "PMO Lead / Program Manager",
@@ -250,7 +370,7 @@
     "tokens": 15
   },
   {
-    "id": "project-portfolio-projects-by-brand-25",
+    "id": "project-portfolio-projects-by-brand-37",
     "source": "project-portfolio",
     "title": "Project Portfolio",
     "role": "",
@@ -261,7 +381,7 @@
     "overlap": null
   },
   {
-    "id": "project-portfolio-projects-by-brand-26",
+    "id": "project-portfolio-projects-by-brand-38",
     "source": "project-portfolio",
     "title": "Project Portfolio",
     "role": "",
@@ -272,7 +392,7 @@
     "overlap": ""
   },
   {
-    "id": "project-portfolio-technology-summary-27",
+    "id": "project-portfolio-technology-summary-39",
     "source": "project-portfolio",
     "title": "Project Portfolio",
     "role": "",
@@ -282,7 +402,7 @@
     "tokens": 60
   },
   {
-    "id": "shopify-tpm-role-28",
+    "id": "shopify-tpm-role-40",
     "source": "shopify-tpm",
     "title": "Shopify TPM",
     "role": "Shopify Technical Project Manager",
@@ -292,7 +412,7 @@
     "tokens": 63
   },
   {
-    "id": "shopify-tpm-projects-29",
+    "id": "shopify-tpm-projects-41",
     "source": "shopify-tpm",
     "title": "Shopify TPM",
     "role": "Shopify Technical Project Manager",
@@ -302,7 +422,7 @@
     "tokens": 94
   },
   {
-    "id": "shopify-tpm-tech-stack-30",
+    "id": "shopify-tpm-tech-stack-42",
     "source": "shopify-tpm",
     "title": "Shopify TPM",
     "role": "Shopify Technical Project Manager",
@@ -312,7 +432,7 @@
     "tokens": 31
   },
   {
-    "id": "shopify-tpm-outcomes-31",
+    "id": "shopify-tpm-outcomes-43",
     "source": "shopify-tpm",
     "title": "Shopify TPM",
     "role": "Shopify Technical Project Manager",
@@ -322,7 +442,7 @@
     "tokens": 31
   },
   {
-    "id": "shopify-tpm-domain-experience-32",
+    "id": "shopify-tpm-domain-experience-44",
     "source": "shopify-tpm",
     "title": "Shopify TPM",
     "role": "Shopify Technical Project Manager",
@@ -332,7 +452,7 @@
     "tokens": 15
   },
   {
-    "id": "technical-project-manager-tpm-role-33",
+    "id": "technical-project-manager-tpm-role-45",
     "source": "technical-project-manager-tpm",
     "title": "Technical Project Manager (TPM)",
     "role": "Technical Project Manager / Program Manager",
@@ -342,7 +462,7 @@
     "tokens": 74
   },
   {
-    "id": "technical-project-manager-tpm-projects-34",
+    "id": "technical-project-manager-tpm-projects-46",
     "source": "technical-project-manager-tpm",
     "title": "Technical Project Manager (TPM)",
     "role": "Technical Project Manager / Program Manager",
@@ -352,7 +472,7 @@
     "tokens": 58
   },
   {
-    "id": "technical-project-manager-tpm-tech-stack-35",
+    "id": "technical-project-manager-tpm-tech-stack-47",
     "source": "technical-project-manager-tpm",
     "title": "Technical Project Manager (TPM)",
     "role": "Technical Project Manager / Program Manager",
@@ -362,7 +482,7 @@
     "tokens": 38
   },
   {
-    "id": "technical-project-manager-tpm-outcomes-36",
+    "id": "technical-project-manager-tpm-outcomes-48",
     "source": "technical-project-manager-tpm",
     "title": "Technical Project Manager (TPM)",
     "role": "Technical Project Manager / Program Manager",
@@ -372,7 +492,7 @@
     "tokens": 29
   },
   {
-    "id": "technical-project-manager-tpm-domain-experience-37",
+    "id": "technical-project-manager-tpm-domain-experience-49",
     "source": "technical-project-manager-tpm",
     "title": "Technical Project Manager (TPM)",
     "role": "Technical Project Manager / Program Manager",

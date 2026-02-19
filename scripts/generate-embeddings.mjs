@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const CHUNKS_FILE = path.join(__dirname, '../docs/resources/rag/chunks.json');
 const OUTPUT_FILE = path.join(__dirname, '../docs/resources/rag/embeddings.json');
 
-const GEMINI_API_KEY = process.env.PUBLIC_GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 if (!GEMINI_API_KEY) {
   console.error('Error: GEMINI_API_KEY environment variable is not set');
