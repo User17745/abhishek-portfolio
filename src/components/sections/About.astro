@@ -31,31 +31,31 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
     <div class="sticky top-0 h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-background">
       
       <!-- LEFT COLUMN: ABOUT & SKILLS -->
-      <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/60 z-20 bg-background/50 backdrop-blur-sm">
+      <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/80 z-20 bg-background/50 backdrop-blur-sm">
         <!-- Top Half: About Me -->
         <div class="h-1/2 p-10 sm:p-16 lg:p-24 pt-32 sm:pt-32 lg:pt-40 flex flex-col justify-end bg-background relative overflow-hidden">
           <div class="max-w-[540px] space-y-8 relative z-10">
-            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] uppercase tracking-[0.2em] font-black">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent text-white border border-accent/30 text-[10px] uppercase tracking-[0.2em] font-black shadow-lg shadow-accent/20">
               <Sparkles size={12} />
               Identity
             </div>
             <h2 class="text-5xl lg:text-7xl font-black tracking-tighter leading-[0.85] uppercase">
               Abhishek<br/><span class="text-accent italic">Aggarwal</span>
             </h2>
-            <div class="prose prose-base dark:prose-invert text-foreground/80 leading-relaxed font-medium">
+            <div class="prose prose-base dark:prose-invert text-foreground/90 leading-relaxed font-bold">
               <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
             </div>
           </div>
           <!-- Corner Accent -->
-          <div class="absolute top-0 right-0 p-12 opacity-[0.03] dark:opacity-[0.07]">
+          <div class="absolute top-0 right-0 p-12 opacity-[0.05] dark:opacity-[0.1]">
             <Plus size={120} />
           </div>
         </div>
 
         <!-- Bottom Half: Skills (Individual Pills) -->
-        <div class="h-1/2 p-10 sm:p-16 relative flex flex-col justify-center bg-muted/30 dark:bg-muted/10 border-t border-border/60 overflow-hidden">
+        <div class="h-1/2 p-10 sm:p-16 relative flex flex-col justify-center bg-muted/40 dark:bg-muted/20 border-t border-border/80 overflow-hidden">
           <div class="mb-12 relative z-20">
-             <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/40 mb-3 ml-1">Expertise Matrix</h3>
+             <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-foreground mb-3 ml-1">Expertise Matrix</h3>
              <div class="h-[2px] w-20 bg-gradient-to-r from-accent to-transparent"></div>
           </div>
 
@@ -104,9 +104,9 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
       </div>
 
       <!-- RIGHT COLUMN: MINIMAL CHIC TIMELINE -->
-      <div class="w-full lg:w-1/2 h-full bg-card/10 relative flex flex-col group/timeline">
+      <div class="w-full lg:w-1/2 h-full bg-muted/10 dark:bg-card/5 relative flex flex-col group/timeline">
         <!-- Persistent Header - OFFSET BY 80px (top-20) to clear global nav -->
-        <div class="p-10 flex items-center justify-between sticky top-[72px] lg:top-20 z-50 bg-background/80 backdrop-blur-2xl border-b border-border/40 shadow-sm mx-6 mt-6 rounded-[2rem]">
+        <div class="p-10 flex items-center justify-between sticky top-[72px] lg:top-20 z-50 bg-background/95 backdrop-blur-2xl border border-border/80 shadow-xl mx-6 mt-6 rounded-[2rem]">
            <div class="flex items-center gap-4">
              <div class="relative">
                <div class="w-3 h-3 rounded-full bg-accent animate-ping absolute inset-0"></div>
@@ -116,10 +116,10 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
            </div>
            
            <div class="flex items-center gap-4">
-              <span id="scroll-percentage" class="text-[10px] font-mono font-bold text-muted-foreground/40">00%</span>
+              <span id="scroll-percentage" class="text-[10px] font-mono font-black text-foreground/60">00%</span>
               <div class="flex gap-1.5" id="exp-indicator">
                 {sortedExperiences.map((_, i) => (
-                  <div class={`w-1 h-3 rounded-full bg-accent/10 transition-all duration-500`} data-dot={i}></div>
+                  <div class={`w-1.5 h-4 rounded-full bg-foreground/10 border border-border/40 transition-all duration-500`} data-dot={i}></div>
                 ))}
               </div>
            </div>
@@ -127,8 +127,8 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
 
         <div class="flex-1 overflow-hidden relative">
           <!-- Central Timeline Line -->
-          <div class="absolute left-16 sm:left-24 top-0 bottom-0 w-[2px] bg-border/20">
-            <div id="timeline-progress-line" class="w-full bg-gradient-to-b from-accent to-blue-500 absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-300"></div>
+          <div class="absolute left-16 sm:left-24 top-0 bottom-0 w-[2px] bg-border/40">
+            <div id="timeline-progress-line" class="w-full bg-gradient-to-b from-accent via-accent to-blue-500 absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-300"></div>
           </div>
 
           <div id="experience-vertical-track" class="px-10 sm:px-24 pt-32 pb-60 flex flex-col gap-32 will-change-transform relative z-10">
