@@ -4,24 +4,38 @@ import { getBrandInitials } from "@/data/brands";
 interface BrandLogoProps {
   name: string;
   color?: string;
-  size?: "sm" | "md" | "lg";
+  logo?: string;
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }
 
-export default function BrandLogo({ name, color, size = "md", className }: BrandLogoProps) {
+export default function BrandLogo({ name, color, logo, size = "md", className }: BrandLogoProps) {
   const initials = getBrandInitials(name);
   const brandColor = color || "#6b7280";
-  
+
   const sizeClasses = {
-    sm: "w-8 h-8 text-xs",
-    md: "w-12 h-12 text-sm",
-    lg: "w-16 h-16 text-base",
+    sm: "w-6 h-6 text-[10px]",
+    md: "w-10 h-10 text-xs",
+    lg: "w-14 h-14 text-sm",
+    xl: "w-20 h-20 text-base",
   };
+
+  if (logo) {
+    return (
+      <div className={cn("relative group transition-all duration-300", sizeClasses[size], className)} title={name}>
+        <img
+          src={logo}
+          alt={name}
+          className="w-full h-full object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110"
+        />
+      </div>
+    );
+  }
 
   return (
     <div
       className={cn(
-        "rounded-lg flex items-center justify-center font-bold text-white shadow-sm transition-transform hover:scale-105",
+        "rounded-lg flex items-center justify-center font-bold text-white shadow-sm transition-all duration-300 group-hover:scale-110 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100",
         sizeClasses[size],
         className
       )}
