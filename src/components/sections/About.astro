@@ -6,7 +6,7 @@ import { Briefcase, Building2, MapPin, Sparkles, Plus } from "lucide-react";
 import { decodeHTMLEntities } from "@/lib/utils";
 
 // Sort experiences descending (latest first)
-const sortedExperiences = [...experiences].reverse();
+const sortedExperiences = [...experiences];
 
 // Group skills for categorization within rows
 const skillsByCategoryRow1 = skillCategories.slice(0, 3).map(cat => ({
