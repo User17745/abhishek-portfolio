@@ -28,7 +28,7 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
   </div>
 
   <div id="sticky-scroll-wrapper" class="relative h-[500vh]">
-    <div class="sticky top-0 h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-background">
+    <div id="main-sticky-container" class="sticky top-0 h-screen w-full flex flex-col lg:flex-row lg:overflow-hidden bg-background">
       
       <!-- LEFT COLUMN: ABOUT & SKILLS -->
       <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/80 z-20 bg-background/50 backdrop-blur-sm">
@@ -205,9 +205,9 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
     const onScroll = () => {
       const rect = scrollWrapper.getBoundingClientRect();
       const viewHeight = window.innerHeight;
-      const totalScrollable = scrollWrapper.offsetHeight - viewHeight;
+      const totalScrollable = Math.max(1, scrollWrapper.offsetHeight - viewHeight);
       const currentScroll = Math.max(0, Math.min(totalScrollable, -rect.top));
-      const progress = currentScroll / totalScrollable;
+      const progress = totalScrollable > 0 ? currentScroll / totalScrollable : 0;
 
       // Desktop Only effects
       if (window.innerWidth >= 1024) {
@@ -265,7 +265,11 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
 
   @media (max-width: 1024px) {
     #sticky-scroll-wrapper { height: auto !important; }
-    .lg\:sticky { position: relative !important; }
+    #main-sticky-container { 
+      position: relative !important; 
+      height: auto !important; 
+      overflow: visible !important; 
+    }
     
     .mobile-auto-scroll {
       animation: auto-scroll 30s linear infinite;
