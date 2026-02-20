@@ -236,10 +236,12 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
         const dot = document.querySelector(`[data-dot="${i}"]`) as HTMLElement;
         if (dot) {
           const itemRect = item.getBoundingClientRect();
-          const isActive = itemRect.top < viewHeight / 2 && itemRect.bottom > viewHeight / 2;
-          dot.style.background = isActive ? "var(--accent)" : "rgba(245,158,11,0.1)";
+          const isPassed = itemRect.top < viewHeight / 2;
+          const isActive = isPassed && itemRect.bottom > viewHeight / 2;
+          
+          dot.style.background = isPassed ? "var(--color-accent)" : "rgba(245,158,11,0.1)";
+          dot.style.opacity = isPassed ? "1" : "0.3";
           dot.style.height = window.innerWidth >= 1024 ? (isActive ? "24px" : "12px") : (isActive ? "16px" : "8px");
-          dot.style.opacity = isActive ? "1" : "0.3";
         }
       });
     };
