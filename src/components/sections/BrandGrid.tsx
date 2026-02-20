@@ -19,16 +19,15 @@ export default function BrandGrid({ brands }: BrandGridProps) {
     return (
         <div className="flex flex-col items-center gap-10 w-full animate-in fade-in duration-700">
             <div className={cn(
-                "grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-x-4 sm:gap-x-12 gap-y-10 sm:gap-y-16 items-start justify-items-center w-full transition-all duration-700 ease-in-out overflow-hidden",
-                isExpanded ? "max-h-[4000px]" : "max-h-[280px] sm:max-h-[450px]"
+                "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-x-4 sm:gap-x-12 gap-y-8 sm:gap-y-16 items-start justify-items-center w-full transition-all duration-700 ease-in-out overflow-hidden",
+                isExpanded ? "max-h-[4000px]" : "max-h-[200px] sm:max-h-[450px]"
             )}>
                 {brands.map((brand, index) => {
-                    // CSS classes to hide items beyond 2 rows based on screen size
+                    // CSS classes to hide items beyond 2 rows based on screen size (3 columns on mobile = 6 items)
                     const visibilityClasses = cn(
                         "group flex flex-col items-center transition-all duration-500",
-                        !isExpanded && index >= 4 ? "max-sm:hidden" : "",
-                        !isExpanded && index >= 6 ? "sm:max-md:hidden" : "",
-                        !isExpanded && index >= 8 ? "md:max-lg:hidden" : "",
+                        !isExpanded && index >= 6 ? "max-sm:hidden" : "",
+                        !isExpanded && index >= 8 ? "sm:max-md:hidden" : "",
                         !isExpanded && index >= 10 ? "lg:hidden" : ""
                     );
 
@@ -44,7 +43,7 @@ export default function BrandGrid({ brands }: BrandGridProps) {
                                 name={brand.name}
                                 color={brand.color}
                                 logo={brand.logo}
-                                size="xl"
+                                size="lg"
                             />
                         </div>
                     );
