@@ -2,31 +2,35 @@
 import { summary } from "@/data/summary";
 import { skills, skillCategories } from "@/data/skills";
 import { experiences } from "@/data/experience";
-import { Briefcase, Building2, MapPin, Sparkles } from "lucide-react";
+import { Briefcase, Building2, MapPin, Sparkles, FolderKanban } from "lucide-react";
 import { decodeHTMLEntities } from "@/lib/utils";
 
 // Sort experiences descending (latest first)
 const sortedExperiences = [...experiences].reverse();
 
-// Split skills into two rows for horizontal scrolling
-const halfWay = Math.ceil(skills.length / 2);
-const skillRow1 = skills.slice(0, halfWay);
-const skillRow2 = skills.slice(halfWay);
+// Group skills for categorization within rows
+const skillsByCategoryRow1 = skillCategories.slice(0, 3).map(cat => ({
+  category: cat,
+  items: skills.filter(s => s.category === cat)
+}));
+
+const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
+  category: cat,
+  items: skills.filter(s => s.category === cat)
+}));
 ---
 
 <section id="about-container" class="relative bg-background">
-  <!-- The trigger height for the entire reveal -->
-  <div id="sticky-scroll-wrapper" class="relative h-[400vh]">
+  <div id="sticky-scroll-wrapper" class="relative h-[450vh]">
     <div class="sticky top-0 h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-background">
       
       <!-- Subtle Ambient Glow -->
       <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(245,158,11,0.03),transparent_70%)] pointer-events-none"></div>
 
-      <!-- LEFT COLUMN: ABOUT (TOP) & SKILLS (BOTTOM) -->
+      <!-- LEFT COLUMN -->
       <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/40 z-20">
-        
         <!-- Top Half: About Me -->
-        <div class="h-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-end border-b border-border/20">
+        <div class="h-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-end border-b border-border/20 bg-background">
           <div class="max-w-[540px] space-y-6">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] uppercase tracking-widest font-bold">
               <Sparkles size={12} />
@@ -36,92 +40,120 @@ const skillRow2 = skills.slice(halfWay);
               STRATEGIC<br/><span class="text-accent italic">VISIONARY</span>
             </h2>
             <div class="prose prose-sm dark:prose-invert text-muted-foreground/80 leading-relaxed font-medium">
-              {summary.bio.split('\n\n')[0]}
+              <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
             </div>
           </div>
         </div>
 
-        <!-- Bottom Half: Skills & Expertise -->
+        <!-- Bottom Half: Skills with Categorization -->
         <div class="h-1/2 p-8 sm:p-12 relative flex flex-col justify-start bg-muted/10 overflow-hidden">
-          <div class="mb-10 relative z-20">
-             <h3 class="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground/60 mb-2">Core Competencies</h3>
-             <div class="h-1 w-12 bg-accent rounded-full"></div>
+          <div class="mb-10 relative z-20 flex items-center justify-between">
+             <div class="space-y-1">
+               <h3 class="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground/60">Core Competencies</h3>
+               <div class="h-1 w-12 bg-accent rounded-full"></div>
+             </div>
+             <FolderKanban size={16} className="text-muted-foreground/30" />
           </div>
 
           <div class="space-y-6 relative z-10">
-            <!-- Row 1: Moving Left -->
-            <div id="skill-row-1" class="flex gap-4 whitespace-nowrap will-change-transform">
-              {skillRow1.map((skill) => (
-                <div class="px-6 py-4 bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-sm flex items-center gap-3">
-                  <div class="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div>
-                  <span class="text-xs font-bold uppercase tracking-tight">{skill.name}</span>
+            <!-- Row 1 -->
+            <div id="skill-row-1" class="flex gap-6 whitespace-nowrap will-change-transform">
+              {skillsByCategoryRow1.map((group) => (
+                <div class="flex items-center gap-3 bg-background/40 backdrop-blur-md p-1 pr-4 rounded-2xl border border-border/40">
+                  <div class="px-3 py-2 bg-accent text-white rounded-xl text-[9px] font-black uppercase tracking-widest">
+                    {group.category}
+                  </div>
+                  <div class="flex gap-2">
+                    {group.items.map(skill => (
+                      <span class="text-[11px] font-bold text-foreground/70 uppercase tracking-tight">{skill.name}</span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
             
-            <!-- Row 2: Moving Right (or opposite offset) -->
-            <div id="skill-row-2" class="flex gap-4 whitespace-nowrap will-change-transform">
-              {skillRow2.map((skill) => (
-                <div class="px-6 py-4 bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-sm flex items-center gap-3">
-                  <div class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
-                  <span class="text-xs font-bold uppercase tracking-tight">{skill.name}</span>
+            <!-- Row 2 -->
+            <div id="skill-row-2" class="flex gap-6 whitespace-nowrap will-change-transform">
+              {skillsByCategoryRow2.map((group) => (
+                <div class="flex items-center gap-3 bg-background/40 backdrop-blur-md p-1 pr-4 rounded-2xl border border-border/40">
+                  <div class="px-3 py-2 bg-blue-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest">
+                    {group.category}
+                  </div>
+                  <div class="flex gap-2">
+                    {group.items.map(skill => (
+                      <span class="text-[11px] font-bold text-foreground/70 uppercase tracking-tight">{skill.name}</span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
-
-            <!-- Row 1 Duplicate for infinite-like feel if needed, but here we just scroll the length -->
           </div>
-
-          <!-- Bottom Fade -->
           <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none z-20"></div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: EXPERIENCE (VERTICAL) -->
-      <div class="w-full lg:w-1/2 h-full bg-card/30 relative overflow-hidden">
-        <!-- Floating Header -->
-        <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-40 bg-background/50 backdrop-blur-md border-b border-border/10">
-           <span class="text-[10px] font-black uppercase tracking-[0.5em] text-accent">Career Trajectory</span>
-           <div class="flex gap-1">
-             <div id="exp-dot-1" class="w-1.5 h-1.5 rounded-full bg-accent opacity-50"></div>
-             <div id="exp-dot-2" class="w-1.5 h-1.5 rounded-full bg-accent opacity-50"></div>
-             <div id="exp-dot-3" class="w-1.5 h-1.5 rounded-full bg-accent opacity-50"></div>
+      <!-- RIGHT COLUMN: ACTUAL TIMELINE -->
+      <div class="w-full lg:w-1/2 h-full bg-card/30 relative flex flex-col">
+        <!-- Persistent Header -->
+        <div class="p-8 flex items-center justify-between sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/40 shadow-sm">
+           <div class="flex items-center gap-3">
+             <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+             <h3 class="text-xs font-black uppercase tracking-[0.5em] text-accent">Career Trajectory</h3>
+           </div>
+           <div class="flex gap-1.5" id="exp-indicator">
+             {sortedExperiences.map((_, i) => (
+               <div class={`w-2 h-2 rounded-full bg-accent/20 transition-all duration-300`} data-dot={i}></div>
+             ))}
            </div>
         </div>
 
-        <div id="experience-vertical-track" class="px-8 sm:px-16 pt-40 pb-20 flex flex-col gap-10 will-change-transform">
-          {sortedExperiences.map((exp, idx) => (
-            <div class={`experience-card relative p-8 rounded-[2rem] border border-border/50 bg-background/40 backdrop-blur-sm hover:border-accent/30 transition-all duration-500`}>
-              <div class="absolute top-8 right-8 text-[10px] font-mono text-accent/40 font-bold">
-                0{sortedExperiences.length - idx}
-              </div>
-              
-              <div class="flex items-center gap-4 mb-6">
-                <div class="p-3 rounded-2xl bg-accent text-white shadow-lg shadow-accent/20">
-                  {exp.type === "entrepreneurship" ? <Building2 size={24} /> : <Briefcase size={24} />}
-                </div>
-                <div>
-                  <h4 class="text-lg font-black uppercase leading-none tracking-tight" set:html={decodeHTMLEntities(exp.title)} />
-                  <p class="text-xs font-bold text-accent mt-1 uppercase tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
-                </div>
-              </div>
+        <div class="flex-1 overflow-hidden relative">
+          <!-- The Timeline Line -->
+          <div class="absolute left-12 sm:left-20 top-0 bottom-0 w-px bg-border/40">
+            <div id="timeline-progress-line" class="w-full bg-accent absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-200"></div>
+          </div>
 
-              <div class="text-sm text-muted-foreground/80 leading-relaxed mb-6 space-y-4">
-                <p set:html={decodeHTMLEntities(exp.description)} />
-              </div>
+          <div id="experience-vertical-track" class="px-8 sm:px-20 pt-20 pb-40 flex flex-col gap-24 will-change-transform relative z-10">
+            {sortedExperiences.map((exp, idx) => (
+              <div class="relative group/exp timeline-item" data-index={idx}>
+                <!-- Timeline Dot -->
+                <div class="absolute -left-[5px] top-8 w-2.5 h-2.5 rounded-full bg-background border-2 border-accent z-20 group-hover/exp:scale-150 transition-transform"></div>
+                
+                <div class="space-y-4">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <span class="text-[10px] font-black font-mono text-accent bg-accent/5 px-2 py-1 rounded inline-block w-fit">
+                      {exp.period}
+                    </span>
+                    <span class="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest hidden sm:block">
+                      {exp.location}
+                    </span>
+                  </div>
 
-              <div class="flex flex-wrap items-center gap-6 pt-6 border-t border-border/10">
-                <div class="flex items-center gap-2 text-[10px] font-bold text-muted-foreground/60 uppercase">
-                  <MapPin size={12} className="text-accent" />
-                  {exp.location}
-                </div>
-                <div class="flex items-center gap-2 text-[10px] font-bold text-muted-foreground/60 uppercase">
-                  <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                  {exp.period}
+                  <div class="bg-background/40 backdrop-blur-sm border border-border/40 hover:border-accent/30 p-8 rounded-[2rem] transition-all duration-500 shadow-sm hover:shadow-xl group-hover/exp:-translate-y-1">
+                    <div class="flex items-start gap-6 mb-6">
+                      <div class="p-4 rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-white shadow-lg shadow-accent/20">
+                        {exp.type === "entrepreneurship" ? <Building2 size={24} /> : <Briefcase size={24} />}
+                      </div>
+                      <div>
+                        <h4 class="text-xl font-black uppercase tracking-tighter leading-none mb-1" set:html={decodeHTMLEntities(exp.title)} />
+                        <p class="text-xs font-bold text-muted-foreground uppercase opacity-60" set:html={decodeHTMLEntities(exp.company)} />
+                      </div>
+                    </div>
+
+                    <p class="text-sm text-muted-foreground/80 leading-relaxed mb-6" set:html={decodeHTMLEntities(exp.description)} />
+                    
+                    {exp.roles && (
+                      <div class="flex flex-wrap gap-2 pt-6 border-t border-border/10">
+                        {exp.roles.map(role => (
+                          <span class="text-[9px] font-black px-3 py-1 rounded-full bg-accent/5 text-accent border border-accent/10 uppercase tracking-wider">{role}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -131,49 +163,45 @@ const skillRow2 = skills.slice(halfWay);
 <script>
   function setupDashboardScroll() {
     const scrollWrapper = document.getElementById('sticky-scroll-wrapper');
-    const skillRow1 = document.getElementById('skill-row-1');
-    const skillRow2 = document.getElementById('skill-row-2');
-    const expTrack = document.getElementById('experience-vertical-track');
+    const skillRow1 = document.getElementById('skill-row-1') as HTMLElement;
+    const skillRow2 = document.getElementById('skill-row-2') as HTMLElement;
+    const expTrack = document.getElementById('experience-vertical-track') as HTMLElement;
+    const progressLine = document.getElementById('timeline-progress-line') as HTMLElement;
+    const items = document.querySelectorAll('.timeline-item');
     
     if (!scrollWrapper || !skillRow1 || !skillRow2 || !expTrack) return;
 
     const onScroll = () => {
       const rect = scrollWrapper.getBoundingClientRect();
       const viewHeight = window.innerHeight;
-      
-      // Calculate progress relative to the scroll section
       const totalScrollable = scrollWrapper.offsetHeight - viewHeight;
       const currentScroll = Math.max(0, Math.min(totalScrollable, -rect.top));
       const progress = currentScroll / totalScrollable;
 
-      // 1. Horizontal Skills (Opposite directions)
-      const s1Range = skillRow1.scrollWidth - (window.innerWidth / 2);
-      const s2Range = skillRow2.scrollWidth - (window.innerWidth / 2);
+      // 1. Horizontal Skills (Categorized)
+      const s1Range = skillRow1.scrollWidth - (window.innerWidth / 2.5);
+      const s2Range = skillRow2.scrollWidth - (window.innerWidth / 2.5);
       
-      if (s1Range > 0) {
-        skillRow1.style.transform = `translateX(${-(progress * s1Range)}px)`;
-      }
-      if (s2Range > 0) {
-        // Start from an offset and move "back" or just different speed
-        skillRow2.style.transform = `translateX(${-( (1 - progress) * s2Range )}px)`;
-      }
+      if (s1Range > 0) skillRow1.style.transform = `translateX(${-(progress * s1Range)}px)`;
+      if (s2Range > 0) skillRow2.style.transform = `translateX(${-( (1 - progress) * s2Range )}px)`;
 
-      // 2. Vertical Experience
-      const eRange = expTrack.scrollHeight - (viewHeight * 0.6);
+      // 2. Vertical Timeline (Visual Line)
+      const eRange = expTrack.scrollHeight - (viewHeight * 0.5);
       if (eRange > 0) {
         expTrack.style.transform = `translateY(${-(progress * eRange)}px)`;
+        if (progressLine) progressLine.style.transform = `scaleY(${progress})`;
       }
 
-      // 3. Dynamic Dots
-      const dotCount = 3;
-      for(let i=1; i<=dotCount; i++) {
-        const dot = document.getElementById(`exp-dot-${i}`);
-        if(dot) {
-          const threshold = i / dotCount;
-          dot.style.opacity = progress >= threshold ? "1" : "0.3";
-          dot.style.transform = progress >= threshold ? "scale(1.2)" : "scale(1)";
+      // 3. Dot Indicators
+      items.forEach((item, i) => {
+        const dot = document.querySelector(`[data-dot="${i}"]`) as HTMLElement;
+        if (dot) {
+          const itemRect = item.getBoundingClientRect();
+          const isActive = itemRect.top < viewHeight / 2 && itemRect.bottom > viewHeight / 2;
+          dot.style.opacity = isActive ? "1" : "0.2";
+          dot.style.transform = isActive ? "scale(1.5)" : "scale(1)";
         }
-      }
+      });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -187,30 +215,14 @@ const skillRow2 = skills.slice(halfWay);
 <style>
   .will-change-transform {
     will-change: transform;
-    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .experience-card {
-    transition: transform 0.5s ease, opacity 0.5s ease;
+    transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (max-width: 1024px) {
-    #sticky-scroll-wrapper {
-      height: auto !important;
-    }
-    .sticky {
-      position: relative !important;
-      height: auto !important;
-    }
-    .flex-col {
-      flex-direction: column !important;
-    }
-    #skill-row-1, #skill-row-2, #experience-vertical-track {
-      transform: none !important;
-      transition: none !important;
-    }
-    .h-1\/2 {
-      height: auto !important;
-    }
+    #sticky-scroll-wrapper { height: auto !important; }
+    .sticky { position: relative !important; height: auto !important; }
+    .flex-col { flex-direction: column !important; }
+    #skill-row-1, #skill-row-2, #experience-vertical-track { transform: none !important; }
+    .h-1\/2 { height: auto !important; }
   }
 </style>

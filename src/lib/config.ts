@@ -23,7 +23,8 @@ export const siteConfig = {
 };
 
 export const navItems = [
-  { label: "About", href: "#about" },
+  { label: "About", href: "#about-container" },
+  { label: "Experience", href: "#experience-vertical-track" },
   { label: "Projects", href: "#projects" },
   { label: "Brands", href: "#brands" },
   { label: "Resume", href: "#resume" },
