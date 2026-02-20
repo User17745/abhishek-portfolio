@@ -33,16 +33,16 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
       <!-- LEFT COLUMN: ABOUT & SKILLS -->
       <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/80 z-20 bg-background/50 backdrop-blur-sm">
         <!-- Top Half: About Me -->
-        <div class="h-1/2 p-10 sm:p-16 lg:p-24 pt-32 sm:pt-32 lg:pt-40 flex flex-col justify-end bg-background relative overflow-hidden">
-          <div class="max-w-[540px] space-y-8 relative z-10">
-            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent text-white border border-accent/30 text-[10px] uppercase tracking-[0.2em] font-black shadow-lg shadow-accent/20">
+        <div class="h-1/2 p-10 sm:p-16 lg:p-24 pt-36 sm:pt-40 lg:pt-48 flex flex-col justify-center bg-background relative overflow-hidden min-h-[400px]">
+          <div class="max-w-[540px] space-y-6 relative z-10">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent text-white border border-accent/30 text-[9px] uppercase tracking-[0.2em] font-black shadow-lg shadow-accent/20">
               <Sparkles size={12} />
               Identity
             </div>
-            <h2 class="text-5xl lg:text-7xl font-black tracking-tighter leading-[0.85] uppercase">
+            <h2 class="text-3xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase">
               Abhishek<br/><span class="text-accent italic">Aggarwal</span>
             </h2>
-            <div class="prose prose-base dark:prose-invert text-foreground/90 leading-relaxed font-bold">
+            <div class="prose prose-sm lg:prose-base dark:prose-invert text-foreground/90 leading-relaxed font-bold">
               <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
             </div>
           </div>
