@@ -14,17 +14,17 @@ export default function BrandLogo({ name, color, logo, size = "md", className }:
   const brandColor = color || "#6b7280";
 
   const sizeClasses = {
-    sm: "w-6 h-6 text-[10px]",
-    md: "w-10 h-10 text-xs",
-    lg: "w-14 h-14 text-sm",
-    xl: "w-20 h-20 text-base",
+    sm: "w-10 h-10 text-[10px]",
+    md: "w-16 h-16 text-xs",
+    lg: "w-24 h-24 text-sm",
+    xl: "w-32 h-32 text-base",
   };
 
   if (logo) {
     return (
       <div
         className={cn(
-          "relative group transition-all duration-300 bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-xl p-2",
+          "relative group transition-all duration-300 bg-white/90 dark:bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-border/10",
           sizeClasses[size],
           className
         )}
@@ -33,7 +33,7 @@ export default function BrandLogo({ name, color, logo, size = "md", className }:
         <img
           src={logo}
           alt={name}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain grayscale-[0.5] group-hover:grayscale-0 transition-all"
         />
       </div>
     );
@@ -42,15 +42,18 @@ export default function BrandLogo({ name, color, logo, size = "md", className }:
   return (
     <div
       className={cn(
-        "rounded-xl flex items-center justify-center font-bold text-white shadow-sm transition-all duration-300 px-4 py-2 text-[10px] md:text-xs min-h-[56px] w-full",
+        "relative group transition-all duration-300 bg-white/90 dark:bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-border/10 flex items-center justify-center text-center",
+        sizeClasses[size],
         className
       )}
-      style={{
-        background: `linear-gradient(135deg, ${brandColor}, ${lightenColor(brandColor, 20)})`,
-      }}
       title={name}
     >
-      <span className="text-center">{name}</span>
+      <span
+        className="font-black uppercase tracking-tighter leading-none text-[10px] sm:text-xs"
+        style={{ color: brandColor }}
+      >
+        {name}
+      </span>
     </div>
   );
 }
