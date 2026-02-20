@@ -22,11 +22,18 @@ export default function BrandLogo({ name, color, logo, size = "md", className }:
 
   if (logo) {
     return (
-      <div className={cn("relative group transition-all duration-300", sizeClasses[size], className)} title={name}>
+      <div
+        className={cn(
+          "relative group transition-all duration-300 bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-xl p-2",
+          sizeClasses[size],
+          className
+        )}
+        title={name}
+      >
         <img
           src={logo}
           alt={name}
-          className="w-full h-full object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110"
+          className="w-full h-full object-contain"
         />
       </div>
     );
@@ -35,8 +42,7 @@ export default function BrandLogo({ name, color, logo, size = "md", className }:
   return (
     <div
       className={cn(
-        "rounded-lg flex items-center justify-center font-bold text-white shadow-sm transition-all duration-300 group-hover:scale-110 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100",
-        sizeClasses[size],
+        "rounded-xl flex items-center justify-center font-bold text-white shadow-sm transition-all duration-300 px-4 py-2 text-[10px] md:text-xs min-h-[56px] w-full",
         className
       )}
       style={{
@@ -44,7 +50,7 @@ export default function BrandLogo({ name, color, logo, size = "md", className }:
       }}
       title={name}
     >
-      {initials}
+      <span className="text-center">{name}</span>
     </div>
   );
 }

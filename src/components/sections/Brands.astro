@@ -1,6 +1,6 @@
 ---
 import { brands } from "@/data/brands";
-import BrandLogo from "@/components/shared/BrandLogo";
+import BrandGrid from "@/components/sections/BrandGrid";
 
 // Prioritize brands with logos
 const sortedBrands = [...brands].sort((a, b) => {
@@ -10,12 +10,12 @@ const sortedBrands = [...brands].sort((a, b) => {
 });
 ---
 
-<section id="brands" class="py-12 bg-muted/30 border-y border-border/40 relative overflow-hidden">
+<section id="brands" class="py-16 bg-muted/30 border-y border-border/40 relative overflow-hidden">
   <!-- Subtle background glow -->
   <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-accent/5 blur-[120px] pointer-events-none"></div>
 
   <div class="container mx-auto px-4 relative z-10">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-16">
       <div class="max-w-xl text-center md:text-left">
         <h2 class="text-2xl font-bold mb-2 tracking-tight">Brands I've Worked With</h2>
         <p class="text-muted-foreground text-sm">
@@ -29,27 +29,7 @@ const sortedBrands = [...brands].sort((a, b) => {
       </div>
     </div>
     
-    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-x-4 gap-y-10 items-start justify-items-center">
-      {sortedBrands.map((brand, index) => (
-        <div 
-          class="fade-in group flex flex-col items-center gap-3 transition-opacity duration-300"
-          style={`animation-delay: ${index * 30}ms`}
-        >
-          <div class="relative">
-            <BrandLogo 
-              name={brand.name} 
-              color={brand.color} 
-              logo={brand.logo}
-              size="lg" 
-              client:load 
-            />
-          </div>
-          <span class="text-[9px] md:text-[10px] font-medium text-muted-foreground/60 group-hover:text-foreground group-hover:opacity-100 transition-all text-center leading-tight w-full max-w-[70px] uppercase tracking-tighter">
-            {brand.name}
-          </span>
-        </div>
-      ))}
-    </div>
+    <BrandGrid brands={sortedBrands} client:load />
   </div>
 </section>
 
