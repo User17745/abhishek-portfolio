@@ -16,9 +16,11 @@ export const brands: Brand[] = [
   { name: "Caneza (Rasasi)", category: "enterprise", featured: true, color: "#c2410c", logo: "/images/brand-logos/caneza_transformed.png" },
   { name: "Versuni", category: "enterprise", featured: true, color: "#0284c7", logo: "/images/brand-logos/versuni_transformed.png" },
   { name: "Al Maya Group", category: "enterprise", featured: true, color: "#0f766e", logo: "/images/brand-logos/almaya_transformed.png" },
+  { name: "KartmaX", category: "enterprise", featured: true, color: "#f97316", logo: "/images/brand-logos/kartmax_logo.png" },
 
   // Retail Chains
   { name: "Metro Shoes", category: "retail", featured: true, color: "#be123c", logo: "/images/brand-logos/metro-brands_transformed.png" },
+  { name: "Metro Brands", category: "retail", featured: true, color: "#be123c", logo: "/images/brand-logos/metro-brands_transformed.png" },
   { name: "Mochi Shoes", category: "retail", color: "#4338ca", logo: "/images/brand-logos/mochi_transformed.png" },
   { name: "Being Human", category: "retail", color: "#0891b2", logo: "/images/brand-logos/being-human_logo_transformed.png" },
   { name: "Siyaram's", category: "retail", color: "#1e40af", logo: "/images/brand-logos/siyarams_transformed.png" },

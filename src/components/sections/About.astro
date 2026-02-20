@@ -39,8 +39,8 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
               <Sparkles size={12} />
               Identity
             </div>
-            <h2 class="text-3xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase">
-              Abhishek<br/><span class="text-accent italic">Aggarwal</span>
+            <h2 class="text-3xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase text-foreground">
+              Abhishek<br/>Aggarwal
             </h2>
             <div class="prose prose-sm lg:prose-base dark:prose-invert text-foreground/90 leading-relaxed font-bold">
               <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
