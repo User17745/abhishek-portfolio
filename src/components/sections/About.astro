@@ -2,7 +2,7 @@
 import { summary } from "@/data/summary";
 import { skills, skillCategories } from "@/data/skills";
 import { experiences } from "@/data/experience";
-import { Briefcase, Building2, MapPin, Sparkles, FolderKanban } from "lucide-react";
+import { Briefcase, Building2, MapPin, Sparkles, Plus } from "lucide-react";
 import { decodeHTMLEntities } from "@/lib/utils";
 
 // Sort experiences descending (latest first)
@@ -21,51 +21,57 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
 ---
 
 <section id="about-container" class="relative bg-background">
-  <div id="sticky-scroll-wrapper" class="relative h-[450vh]">
+  <!-- Dynamic Background elements -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/5 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full"></div>
+  </div>
+
+  <div id="sticky-scroll-wrapper" class="relative h-[500vh]">
     <div class="sticky top-0 h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-background">
       
-      <!-- Subtle Ambient Glow -->
-      <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(245,158,11,0.03),transparent_70%)] pointer-events-none"></div>
-
-      <!-- LEFT COLUMN -->
-      <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/40 z-20">
+      <!-- LEFT COLUMN: ABOUT & SKILLS -->
+      <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/60 z-20 bg-background/50 backdrop-blur-sm">
         <!-- Top Half: About Me -->
-        <div class="h-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-end border-b border-border/20 bg-background">
-          <div class="max-w-[540px] space-y-6">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] uppercase tracking-widest font-bold">
+        <div class="h-1/2 p-10 sm:p-16 lg:p-24 pt-32 sm:pt-32 lg:pt-40 flex flex-col justify-end bg-background relative overflow-hidden">
+          <div class="max-w-[540px] space-y-8 relative z-10">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[10px] uppercase tracking-[0.2em] font-black">
               <Sparkles size={12} />
-              About Me
+              Identity
             </div>
-            <h2 class="text-4xl lg:text-5xl font-black tracking-tight leading-[0.9]">
-              STRATEGIC<br/><span class="text-accent italic">VISIONARY</span>
+            <h2 class="text-5xl lg:text-7xl font-black tracking-tighter leading-[0.85] uppercase">
+              Abhishek<br/><span class="text-accent italic">Aggarwal</span>
             </h2>
-            <div class="prose prose-sm dark:prose-invert text-muted-foreground/80 leading-relaxed font-medium">
+            <div class="prose prose-base dark:prose-invert text-foreground/80 leading-relaxed font-medium">
               <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
             </div>
           </div>
+          <!-- Corner Accent -->
+          <div class="absolute top-0 right-0 p-12 opacity-[0.03] dark:opacity-[0.07]">
+            <Plus size={120} />
+          </div>
         </div>
 
-        <!-- Bottom Half: Skills with Categorization -->
-        <div class="h-1/2 p-8 sm:p-12 relative flex flex-col justify-start bg-muted/10 overflow-hidden">
-          <div class="mb-10 relative z-20 flex items-center justify-between">
-             <div class="space-y-1">
-               <h3 class="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground/60">Core Competencies</h3>
-               <div class="h-1 w-12 bg-accent rounded-full"></div>
-             </div>
-             <FolderKanban size={16} className="text-muted-foreground/30" />
+        <!-- Bottom Half: Skills (Individual Pills) -->
+        <div class="h-1/2 p-10 sm:p-16 relative flex flex-col justify-center bg-muted/30 dark:bg-muted/10 border-t border-border/60 overflow-hidden">
+          <div class="mb-12 relative z-20">
+             <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/40 mb-3 ml-1">Expertise Matrix</h3>
+             <div class="h-[2px] w-20 bg-gradient-to-r from-accent to-transparent"></div>
           </div>
 
-          <div class="space-y-6 relative z-10">
+          <div class="space-y-8 relative z-10">
             <!-- Row 1 -->
-            <div id="skill-row-1" class="flex gap-6 whitespace-nowrap will-change-transform">
+            <div id="skill-row-1" class="flex gap-4 whitespace-nowrap will-change-transform">
               {skillsByCategoryRow1.map((group) => (
-                <div class="flex items-center gap-3 bg-background/40 backdrop-blur-md p-1 pr-4 rounded-2xl border border-border/40">
-                  <div class="px-3 py-2 bg-accent text-white rounded-xl text-[9px] font-black uppercase tracking-widest">
+                <div class="flex items-center gap-2 group/skillset">
+                  <div class="px-6 py-3 bg-accent text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl shadow-accent/20 border border-accent/50 z-10">
                     {group.category}
                   </div>
                   <div class="flex gap-2">
                     {group.items.map(skill => (
-                      <span class="text-[11px] font-bold text-foreground/70 uppercase tracking-tight">{skill.name}</span>
+                      <span class="px-5 py-3 bg-background border border-border/40 rounded-full text-[10px] font-bold text-muted-foreground uppercase tracking-wider shadow-sm hover:border-accent/40 hover:text-accent transition-all duration-300">
+                        {skill.name}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -73,82 +79,101 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
             </div>
             
             <!-- Row 2 -->
-            <div id="skill-row-2" class="flex gap-6 whitespace-nowrap will-change-transform">
+            <div id="skill-row-2" class="flex gap-4 whitespace-nowrap will-change-transform">
               {skillsByCategoryRow2.map((group) => (
-                <div class="flex items-center gap-3 bg-background/40 backdrop-blur-md p-1 pr-4 rounded-2xl border border-border/40">
-                  <div class="px-3 py-2 bg-blue-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest">
+                <div class="flex items-center gap-2 group/skillset">
+                  <div class="px-6 py-3 bg-blue-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 border border-blue-400/50 z-10">
                     {group.category}
                   </div>
                   <div class="flex gap-2">
                     {group.items.map(skill => (
-                      <span class="text-[11px] font-bold text-foreground/70 uppercase tracking-tight">{skill.name}</span>
+                      <span class="px-5 py-3 bg-background border border-border/40 rounded-full text-[10px] font-bold text-muted-foreground uppercase tracking-wider shadow-sm hover:border-blue-400/40 hover:text-blue-500 transition-all duration-300">
+                        {skill.name}
+                      </span>
                     ))}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none z-20"></div>
+          
+          <!-- Masked edges for horizontal scroll flow -->
+          <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none z-20"></div>
+          <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none z-20"></div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: ACTUAL TIMELINE -->
-      <div class="w-full lg:w-1/2 h-full bg-card/30 relative flex flex-col">
-        <!-- Persistent Header -->
-        <div class="p-8 flex items-center justify-between sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/40 shadow-sm">
-           <div class="flex items-center gap-3">
-             <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
-             <h3 class="text-xs font-black uppercase tracking-[0.5em] text-accent">Career Trajectory</h3>
+      <!-- RIGHT COLUMN: MINIMAL CHIC TIMELINE -->
+      <div class="w-full lg:w-1/2 h-full bg-card/10 relative flex flex-col group/timeline">
+        <!-- Persistent Header - OFFSET BY 80px (top-20) to clear global nav -->
+        <div class="p-10 flex items-center justify-between sticky top-[72px] lg:top-20 z-50 bg-background/80 backdrop-blur-2xl border-b border-border/40 shadow-sm mx-6 mt-6 rounded-[2rem]">
+           <div class="flex items-center gap-4">
+             <div class="relative">
+               <div class="w-3 h-3 rounded-full bg-accent animate-ping absolute inset-0"></div>
+               <div class="w-3 h-3 rounded-full bg-accent relative z-10"></div>
+             </div>
+             <h3 class="text-xs font-black uppercase tracking-[0.6em] text-foreground">Timeline</h3>
            </div>
-           <div class="flex gap-1.5" id="exp-indicator">
-             {sortedExperiences.map((_, i) => (
-               <div class={`w-2 h-2 rounded-full bg-accent/20 transition-all duration-300`} data-dot={i}></div>
-             ))}
+           
+           <div class="flex items-center gap-4">
+              <span id="scroll-percentage" class="text-[10px] font-mono font-bold text-muted-foreground/40">00%</span>
+              <div class="flex gap-1.5" id="exp-indicator">
+                {sortedExperiences.map((_, i) => (
+                  <div class={`w-1 h-3 rounded-full bg-accent/10 transition-all duration-500`} data-dot={i}></div>
+                ))}
+              </div>
            </div>
         </div>
 
         <div class="flex-1 overflow-hidden relative">
-          <!-- The Timeline Line -->
-          <div class="absolute left-12 sm:left-20 top-0 bottom-0 w-px bg-border/40">
-            <div id="timeline-progress-line" class="w-full bg-accent absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-200"></div>
+          <!-- Central Timeline Line -->
+          <div class="absolute left-16 sm:left-24 top-0 bottom-0 w-[2px] bg-border/20">
+            <div id="timeline-progress-line" class="w-full bg-gradient-to-b from-accent to-blue-500 absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-300"></div>
           </div>
 
-          <div id="experience-vertical-track" class="px-8 sm:px-20 pt-20 pb-40 flex flex-col gap-24 will-change-transform relative z-10">
+          <div id="experience-vertical-track" class="px-10 sm:px-24 pt-32 pb-60 flex flex-col gap-32 will-change-transform relative z-10">
             {sortedExperiences.map((exp, idx) => (
               <div class="relative group/exp timeline-item" data-index={idx}>
-                <!-- Timeline Dot -->
-                <div class="absolute -left-[5px] top-8 w-2.5 h-2.5 rounded-full bg-background border-2 border-accent z-20 group-hover/exp:scale-150 transition-transform"></div>
-                
-                <div class="space-y-4">
-                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <span class="text-[10px] font-black font-mono text-accent bg-accent/5 px-2 py-1 rounded inline-block w-fit">
-                      {exp.period}
-                    </span>
-                    <span class="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest hidden sm:block">
-                      {exp.location}
-                    </span>
+                <!-- Year / Period Marker -->
+                <div class="absolute -left-12 sm:left-[-120px] top-4 text-[10px] font-black font-mono text-muted-foreground/30 mix-blend-difference hidden sm:block uppercase tracking-tighter">
+                  {exp.period.split(" - ")[0]}
+                </div>
+
+                <div class="space-y-6">
+                  <!-- Connective Element -->
+                  <div class="flex items-center gap-6">
+                    <div class="w-4 h-4 rounded-full bg-background border-[3px] border-accent z-20 shadow-[0_0_15px_rgba(245,158,11,0.3)] group-hover/exp:shadow-[0_0_25px_rgba(245,158,11,0.6)] transition-all"></div>
+                    <div class="h-[1px] w-12 bg-accent/20"></div>
+                    <span class="text-[9px] font-black uppercase tracking-[0.3em] text-accent/60">{exp.period}</span>
                   </div>
 
-                  <div class="bg-background/40 backdrop-blur-sm border border-border/40 hover:border-accent/30 p-8 rounded-[2rem] transition-all duration-500 shadow-sm hover:shadow-xl group-hover/exp:-translate-y-1">
-                    <div class="flex items-start gap-6 mb-6">
-                      <div class="p-4 rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-white shadow-lg shadow-accent/20">
-                        {exp.type === "entrepreneurship" ? <Building2 size={24} /> : <Briefcase size={24} />}
-                      </div>
-                      <div>
-                        <h4 class="text-xl font-black uppercase tracking-tighter leading-none mb-1" set:html={decodeHTMLEntities(exp.title)} />
-                        <p class="text-xs font-bold text-muted-foreground uppercase opacity-60" set:html={decodeHTMLEntities(exp.company)} />
-                      </div>
+                  <div class="bg-background border border-border/40 hover:border-accent/40 p-10 rounded-[2.5rem] transition-all duration-700 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.1)] group-hover/exp:-translate-y-2 relative overflow-hidden">
+                    <!-- Background Initial Badge -->
+                    <div class="absolute -bottom-6 -right-6 text-9xl font-black text-muted-foreground/5 pointer-events-none select-none italic">
+                      {exp.company.charAt(0)}
                     </div>
 
-                    <p class="text-sm text-muted-foreground/80 leading-relaxed mb-6" set:html={decodeHTMLEntities(exp.description)} />
-                    
-                    {exp.roles && (
-                      <div class="flex flex-wrap gap-2 pt-6 border-t border-border/10">
-                        {exp.roles.map(role => (
-                          <span class="text-[9px] font-black px-3 py-1 rounded-full bg-accent/5 text-accent border border-accent/10 uppercase tracking-wider">{role}</span>
-                        ))}
+                    <div class="flex flex-col gap-6 relative z-10">
+                      <div class="space-y-1">
+                        <h4 class="text-2xl font-black uppercase tracking-tight leading-none group-hover/exp:text-accent transition-colors" set:html={decodeHTMLEntities(exp.title)} />
+                        <p class="text-xs font-bold text-muted-foreground uppercase opacity-40 tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
                       </div>
-                    )}
+
+                      <p class="text-base text-muted-foreground/80 leading-relaxed font-medium" set:html={decodeHTMLEntities(exp.description)} />
+                      
+                      <div class="flex flex-wrap items-center gap-4 text-[10px] font-bold text-muted-foreground/60 uppercase">
+                        <span class="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/40"><MapPin size={12} className="text-accent" /> {exp.location}</span>
+                        <span class="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/40"><Briefcase size={12} className="text-accent" /> {exp.type}</span>
+                      </div>
+
+                      {exp.roles && (
+                        <div class="flex flex-wrap gap-2 pt-8 border-t border-border/10">
+                          {exp.roles.map(role => (
+                            <span class="text-[10px] font-black px-4 py-2 rounded-xl bg-muted border border-border/60 text-muted-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/20 transition-colors uppercase tracking-tight">{role}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -167,6 +192,7 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
     const skillRow2 = document.getElementById('skill-row-2') as HTMLElement;
     const expTrack = document.getElementById('experience-vertical-track') as HTMLElement;
     const progressLine = document.getElementById('timeline-progress-line') as HTMLElement;
+    const scrollPct = document.getElementById('scroll-percentage');
     const items = document.querySelectorAll('.timeline-item');
     
     if (!scrollWrapper || !skillRow1 || !skillRow2 || !expTrack) return;
@@ -178,28 +204,31 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
       const currentScroll = Math.max(0, Math.min(totalScrollable, -rect.top));
       const progress = currentScroll / totalScrollable;
 
-      // 1. Horizontal Skills (Categorized)
-      const s1Range = skillRow1.scrollWidth - (window.innerWidth / 2.5);
-      const s2Range = skillRow2.scrollWidth - (window.innerWidth / 2.5);
+      // 1. Horizontal Skills (Indvidual Pills with grouping)
+      const s1Range = skillRow1.scrollWidth - (window.innerWidth / 3);
+      const s2Range = skillRow2.scrollWidth - (window.innerWidth / 3);
       
       if (s1Range > 0) skillRow1.style.transform = `translateX(${-(progress * s1Range)}px)`;
       if (s2Range > 0) skillRow2.style.transform = `translateX(${-( (1 - progress) * s2Range )}px)`;
 
       // 2. Vertical Timeline (Visual Line)
-      const eRange = expTrack.scrollHeight - (viewHeight * 0.5);
+      const eRange = expTrack.scrollHeight - (viewHeight * 0.4);
       if (eRange > 0) {
         expTrack.style.transform = `translateY(${-(progress * eRange)}px)`;
         if (progressLine) progressLine.style.transform = `scaleY(${progress})`;
       }
 
-      // 3. Dot Indicators
+      // 3. UI Indicators
+      if (scrollPct) scrollPct.innerText = `${Math.round(progress * 100).toString().padStart(2, '0')}%`;
+
       items.forEach((item, i) => {
         const dot = document.querySelector(`[data-dot="${i}"]`) as HTMLElement;
         if (dot) {
           const itemRect = item.getBoundingClientRect();
           const isActive = itemRect.top < viewHeight / 2 && itemRect.bottom > viewHeight / 2;
-          dot.style.opacity = isActive ? "1" : "0.2";
-          dot.style.transform = isActive ? "scale(1.5)" : "scale(1)";
+          dot.style.background = isActive ? "var(--accent)" : "rgba(245,158,11,0.1)";
+          dot.style.height = isActive ? "24px" : "12px";
+          dot.style.opacity = isActive ? "1" : "0.3";
         }
       });
     };
@@ -215,7 +244,7 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
 <style>
   .will-change-transform {
     will-change: transform;
-    transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (max-width: 1024px) {
