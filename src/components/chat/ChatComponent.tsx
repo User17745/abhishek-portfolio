@@ -446,7 +446,7 @@ export function ChatComponent({
       </div>
 
       {/* Input Area - Absolute at bottom overlay */}
-      <div className="absolute bottom-0 inset-x-0 p-3 pb-6 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-zinc-950 dark:via-zinc-950/80 dark:to-transparent backdrop-blur-[0.1px] z-20">
+      <div className="absolute bottom-0 inset-x-0 p-3 pb-[env(safe-area-inset-bottom,24px)] md:pb-6 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-zinc-950 dark:via-zinc-950/80 dark:to-transparent backdrop-blur-[0.1px] z-20">
         {/* Attached File */}
         {!!composerSuggestions.length && !input.trim() && !attachedFile && (
           <div className="mb-2.5 flex flex-col items-end gap-1">

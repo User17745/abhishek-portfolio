@@ -95,7 +95,7 @@ export function ChatSidebar() {
 
       <div
         data-sidebar-open="true"
-        className="fixed right-0 top-16 w-full md:w-[450px] h-[calc(100vh-4rem)] bg-background border-l border-border z-30 flex flex-col overscroll-y-contain"
+        className="fixed right-0 top-16 w-full md:w-[450px] h-[calc(100dvh-4rem)] bg-background border-l border-border z-30 flex flex-col overscroll-y-contain"
         style={{ overscrollBehavior: 'contain' }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}

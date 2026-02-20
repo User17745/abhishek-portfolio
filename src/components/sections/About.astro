@@ -33,43 +33,44 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
       <!-- LEFT COLUMN: ABOUT & SKILLS -->
       <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/80 z-20 bg-background/50 backdrop-blur-sm">
         <!-- Top Half: About Me -->
-        <div class="h-1/2 p-10 sm:p-16 lg:p-24 pt-36 sm:pt-40 lg:pt-48 flex flex-col justify-center bg-background relative overflow-hidden min-h-[400px]">
-          <div class="max-w-[540px] space-y-6 relative z-10">
-            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent text-white border border-accent/30 text-[9px] uppercase tracking-[0.2em] font-black shadow-lg shadow-accent/20">
-              <Sparkles size={12} />
+        <div class="lg:h-1/2 p-6 sm:p-16 lg:p-24 pt-24 sm:pt-40 lg:pt-48 flex flex-col justify-center bg-background relative overflow-hidden min-h-[300px] lg:min-h-[400px]">
+          <div class="max-w-[540px] space-y-4 lg:space-y-6 relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full bg-accent text-white border border-accent/30 text-[8px] lg:text-[9px] uppercase tracking-[0.2em] font-black shadow-lg shadow-accent/20">
+              <Sparkles size={10} />
               Identity
             </div>
-            <h2 class="text-3xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase text-foreground">
+            <h2 class="text-2xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase text-foreground">
               Abhishek<br/>Aggarwal
             </h2>
-            <div class="prose prose-sm lg:prose-base dark:prose-invert text-foreground/90 leading-relaxed font-bold">
+            <div class="prose prose-sm lg:prose-base dark:prose-invert text-foreground/90 font-bold leading-snug lg:leading-relaxed overflow-y-auto max-h-[200px] lg:max-h-none pr-4 lg:pr-0">
               <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
             </div>
           </div>
           <!-- Corner Accent -->
-          <div class="absolute top-0 right-0 p-12 opacity-[0.05] dark:opacity-[0.1]">
-            <Plus size={120} />
+          <div class="absolute top-0 right-0 p-6 lg:p-12 opacity-[0.03] lg:opacity-[0.05] dark:opacity-[0.1]">
+            <Plus size={80} class="lg:w-[120px] lg:h-[120px]" />
           </div>
         </div>
 
         <!-- Bottom Half: Skills (Individual Pills) -->
-        <div class="h-1/2 p-10 sm:p-16 relative flex flex-col justify-center bg-muted/40 dark:bg-muted/20 border-t border-border/80 overflow-hidden">
-          <div class="mb-12 relative z-20">
-             <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-foreground mb-3 ml-1">Expertise Matrix</h3>
-             <div class="h-[2px] w-20 bg-gradient-to-r from-accent to-transparent"></div>
+        <div class="lg:h-1/2 p-6 sm:p-16 relative flex flex-col justify-center bg-muted/40 dark:bg-muted/20 border-t border-border/80 overflow-hidden">
+          <div class="mb-6 lg:mb-12 relative z-20">
+             <h3 class="text-[9px] lg:text-[10px] font-black uppercase tracking-[0.5em] text-foreground mb-2 ml-1">Expertise Matrix</h3>
+             <div class="h-[2px] w-12 lg:w-20 bg-gradient-to-r from-accent to-transparent"></div>
           </div>
 
-          <div class="space-y-8 relative z-10">
+          <!-- Mobile: Scrollable Cloud | Desktop: Animated Rows -->
+          <div class="space-y-6 lg:space-y-8 relative z-10 overflow-x-auto lg:overflow-visible no-scrollbar pb-4 lg:pb-0">
             <!-- Row 1 -->
-            <div id="skill-row-1" class="flex gap-4 whitespace-nowrap will-change-transform">
+            <div id="skill-row-1" class="flex gap-3 lg:gap-4 whitespace-nowrap will-change-transform min-w-max lg:min-w-0">
               {skillsByCategoryRow1.map((group) => (
                 <div class="flex items-center gap-2 group/skillset">
-                  <div class="px-6 py-3 bg-accent text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl shadow-accent/20 border border-accent/50 z-10">
+                  <div class="px-4 py-2 lg:px-6 lg:py-3 bg-accent text-white rounded-full text-[8px] lg:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-accent/20 border border-accent/50 z-10">
                     {group.category}
                   </div>
                   <div class="flex gap-2">
                     {group.items.map(skill => (
-                      <span class="px-5 py-3 bg-background border border-border/40 rounded-full text-[10px] font-bold text-muted-foreground uppercase tracking-wider shadow-sm hover:border-accent/40 hover:text-accent transition-all duration-300">
+                      <span class="px-3 py-2 lg:px-5 lg:py-3 bg-background border border-border/40 rounded-full text-[8px] lg:text-[10px] font-bold text-muted-foreground uppercase tracking-wider shadow-sm hover:border-accent/40 hover:text-accent transition-all duration-300">
                         {skill.name}
                       </span>
                     ))}
@@ -79,15 +80,15 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
             </div>
             
             <!-- Row 2 -->
-            <div id="skill-row-2" class="flex gap-4 whitespace-nowrap will-change-transform">
+            <div id="skill-row-2" class="flex gap-3 lg:gap-4 whitespace-nowrap will-change-transform min-w-max lg:min-w-0">
               {skillsByCategoryRow2.map((group) => (
                 <div class="flex items-center gap-2 group/skillset">
-                  <div class="px-6 py-3 bg-blue-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 border border-blue-400/50 z-10">
+                  <div class="px-4 py-2 lg:px-6 lg:py-3 bg-blue-600 text-white rounded-full text-[8px] lg:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 border border-blue-400/50 z-10">
                     {group.category}
                   </div>
                   <div class="flex gap-2">
                     {group.items.map(skill => (
-                      <span class="px-5 py-3 bg-background border border-border/40 rounded-full text-[10px] font-bold text-muted-foreground uppercase tracking-wider shadow-sm hover:border-blue-400/40 hover:text-blue-500 transition-all duration-300">
+                      <span class="px-3 py-2 lg:px-5 lg:py-3 bg-background border border-border/40 rounded-full text-[8px] lg:text-[10px] font-bold text-muted-foreground uppercase tracking-wider shadow-sm hover:border-blue-400/40 hover:text-blue-500 transition-all duration-300">
                         {skill.name}
                       </span>
                     ))}
@@ -97,79 +98,79 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
             </div>
           </div>
           
-          <!-- Masked edges for horizontal scroll flow -->
-          <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none z-20"></div>
-          <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none z-20"></div>
+          <!-- Masked edges for horizontal scroll flow (Desktop only) -->
+          <div class="hidden lg:block absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none z-20"></div>
+          <div class="hidden lg:block absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none z-20"></div>
         </div>
       </div>
 
       <!-- RIGHT COLUMN: MINIMAL CHIC TIMELINE -->
-      <div class="w-full lg:w-1/2 h-full bg-muted/10 dark:bg-card/5 relative flex flex-col group/timeline">
-        <!-- Persistent Header - OFFSET BY 80px (top-20) to clear global nav -->
-        <div class="p-10 flex items-center justify-between sticky top-[72px] lg:top-20 z-50 bg-background/95 backdrop-blur-2xl border border-border/80 shadow-xl mx-6 mt-6 rounded-[2rem]">
-           <div class="flex items-center gap-4">
+      <div class="w-full lg:w-1/2 min-h-screen lg:h-full bg-muted/10 dark:bg-card/5 relative flex flex-col group/timeline">
+        <!-- Persistent Header -->
+        <div class="p-6 lg:p-10 flex items-center justify-between sticky top-[64px] lg:top-20 z-50 bg-background/95 backdrop-blur-2xl border border-border/80 shadow-xl mx-4 lg:mx-6 mt-4 lg:mt-6 rounded-2xl lg:rounded-[2rem]">
+           <div class="flex items-center gap-3 lg:gap-4">
              <div class="relative">
-               <div class="w-3 h-3 rounded-full bg-accent animate-ping absolute inset-0"></div>
-               <div class="w-3 h-3 rounded-full bg-accent relative z-10"></div>
+               <div class="w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-accent animate-ping absolute inset-0"></div>
+               <div class="w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-accent relative z-10"></div>
              </div>
-             <h3 class="text-xs font-black uppercase tracking-[0.6em] text-foreground">Timeline</h3>
+             <h3 class="text-[10px] lg:text-xs font-black uppercase tracking-[0.4em] lg:tracking-[0.6em] text-foreground">Timeline</h3>
            </div>
            
-           <div class="flex items-center gap-4">
-              <span id="scroll-percentage" class="text-[10px] font-mono font-black text-foreground/60">00%</span>
-              <div class="flex gap-1.5" id="exp-indicator">
+           <div class="flex items-center gap-2 lg:gap-4">
+              <span id="scroll-percentage" class="text-[9px] lg:text-[10px] font-mono font-black text-foreground/60">00%</span>
+              <div class="flex gap-1 lg:gap-1.5" id="exp-indicator">
                 {sortedExperiences.map((_, i) => (
-                  <div class={`w-1.5 h-4 rounded-full bg-foreground/10 border border-border/40 transition-all duration-500`} data-dot={i}></div>
+                  <div class={`w-1 lg:w-1.5 h-3 lg:h-4 rounded-full bg-foreground/10 border border-border/40 transition-all duration-500`} data-dot={i}></div>
                 ))}
               </div>
            </div>
         </div>
 
-        <div class="flex-1 overflow-hidden relative">
+        <div class="flex-1 lg:overflow-hidden relative">
           <!-- Central Timeline Line -->
-          <div class="absolute left-16 sm:left-24 top-0 bottom-0 w-[2px] bg-border/40">
-            <div id="timeline-progress-line" class="w-full bg-gradient-to-b from-accent via-accent to-blue-500 absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-300"></div>
+          <div class="absolute left-10 sm:left-24 top-0 bottom-0 w-[2px] bg-border/40">
+            <div id="timeline-progress-line" class="w-full bg-gradient-to-b from-accent via-accent to-blue-500 absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-300 hidden lg:block"></div>
           </div>
 
-          <div id="experience-vertical-track" class="px-10 sm:px-24 pt-32 pb-60 flex flex-col gap-32 will-change-transform relative z-10">
+          <div id="experience-vertical-track" class="px-6 sm:px-24 pt-16 lg:pt-32 pb-32 lg:pb-60 flex flex-col gap-12 lg:gap-32 will-change-transform relative z-10">
             {sortedExperiences.map((exp, idx) => (
               <div class="relative group/exp timeline-item" data-index={idx}>
                 <!-- Year / Period Marker -->
-                <div class="absolute -left-12 sm:left-[-120px] top-4 text-[10px] font-black font-mono text-muted-foreground/30 mix-blend-difference hidden sm:block uppercase tracking-tighter">
+                <div class="absolute left-[-80px] sm:left-[-120px] top-4 text-[10px] font-black font-mono text-muted-foreground/30 mix-blend-difference hidden sm:block uppercase tracking-tighter">
                   {exp.period.split(" - ")[0]}
                 </div>
 
-                <div class="space-y-6">
+                <div class="space-y-4 lg:space-y-6">
                   <!-- Connective Element -->
-                  <div class="flex items-center gap-6">
-                    <div class="w-4 h-4 rounded-full bg-background border-[3px] border-accent z-20 shadow-[0_0_15px_rgba(245,158,11,0.3)] group-hover/exp:shadow-[0_0_25px_rgba(245,158,11,0.6)] transition-all"></div>
-                    <div class="h-[1px] w-12 bg-accent/20"></div>
-                    <span class="text-[9px] font-black uppercase tracking-[0.3em] text-accent/60">{exp.period}</span>
+                  <div class="flex items-center gap-3 lg:gap-6">
+                    <div class="w-3 h-3 lg:w-4 lg:h-4 rounded-full bg-background border-[2px] lg:border-[3px] border-accent z-20 shadow-[0_0_15px_rgba(245,158,11,0.3)] group-hover/exp:shadow-[0_0_25px_rgba(245,158,11,0.6)] transition-all"></div>
+                    <div class="h-[1px] w-8 lg:w-12 bg-accent/20"></div>
+                    <span class="text-[8px] lg:text-[9px] font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] text-accent/60">{exp.period}</span>
                   </div>
 
-                  <div class="bg-background border border-border/40 hover:border-accent/40 p-10 rounded-[2.5rem] transition-all duration-700 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.1)] group-hover/exp:-translate-y-2 relative overflow-hidden">
+                  <div class="bg-background border border-border/40 hover:border-accent/40 p-6 lg:p-10 rounded-2xl lg:rounded-[2.5rem] transition-all duration-700 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.1)] group-hover/exp:-translate-y-1 lg:group-hover/exp:-translate-y-2 relative overflow-hidden">
                     <!-- Background Initial Badge -->
-                    <div class="absolute -bottom-6 -right-6 text-9xl font-black text-muted-foreground/5 pointer-events-none select-none italic">
+                    <div class="absolute -bottom-4 lg:-bottom-6 -right-4 lg:-right-6 text-7xl lg:text-9xl font-black text-muted-foreground/5 pointer-events-none select-none italic">
                       {exp.company.charAt(0)}
                     </div>
 
-                    <div class="flex flex-col gap-6 relative z-10">
+                    <div class="flex flex-col gap-4 lg:gap-6 relative z-10">
                       <div class="space-y-1">
-                        <h4 class="text-2xl font-black uppercase tracking-tight leading-none group-hover/exp:text-accent transition-colors" set:html={decodeHTMLEntities(exp.title)} />
-                        <p class="text-xs font-bold text-muted-foreground uppercase opacity-40 tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
+                        <h4 class="text-xl lg:text-2xl font-black uppercase tracking-tight leading-none group-hover/exp:text-accent transition-colors" set:html={decodeHTMLEntities(exp.title)} />
+                        <p class="text-[10px] lg:text-xs font-bold text-muted-foreground uppercase opacity-40 tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
                       </div>
 
-                      <p class="text-base text-muted-foreground/80 leading-relaxed font-medium" set:html={decodeHTMLEntities(exp.description)} />
+                      <p class="text-[13px] lg:text-base text-muted-foreground/80 leading-snug lg:leading-relaxed font-bold lg:font-medium" set:html={decodeHTMLEntities(exp.description)} />
                       
-                      <div class="flex flex-wrap items-center gap-4 text-[10px] font-bold text-muted-foreground/60 uppercase">
-                        <span class="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/40"><MapPin size={12} className="text-accent" /> {exp.location}</span>
-                        <span class="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/40"><Briefcase size={12} className="text-accent" /> {exp.type}</span>
+                      <div class="flex flex-wrap items-center gap-3 lg:gap-4 text-[9px] lg:text-[10px] font-bold text-muted-foreground/60 uppercase">
+                        <span class="flex items-center gap-1.5 lg:gap-2 bg-muted/50 px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full border border-border/40"><MapPin size={10} className="text-accent" /> {exp.location}</span>
+                        <span class="flex items-center gap-1.5 lg:gap-2 bg-muted/50 px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full border border-border/40"><Briefcase size={10} className="text-accent" /> {exp.type}</span>
                       </div>
 
                       {exp.roles && (
-                        <div class="flex flex-wrap gap-2 pt-8 border-t border-border/10">
+                        <div class="flex flex-wrap gap-1.5 lg:gap-2 pt-6 lg:pt-8 border-t border-border/10">
                           {exp.roles.map(role => (
-                            <span class="text-[10px] font-black px-4 py-2 rounded-xl bg-muted border border-border/60 text-muted-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/20 transition-colors uppercase tracking-tight">{role}</span>
+                            <span class="text-[8px] lg:text-[10px] font-black px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl bg-muted border border-border/60 text-muted-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/20 transition-colors uppercase tracking-tight">{role}</span>
                           ))}
                         </div>
                       )}
@@ -198,13 +199,16 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
     if (!scrollWrapper || !skillRow1 || !skillRow2 || !expTrack) return;
 
     const onScroll = () => {
+      // Only run sticky effects on Desktop (LG breakpoint)
+      if (window.innerWidth < 1024) return;
+
       const rect = scrollWrapper.getBoundingClientRect();
       const viewHeight = window.innerHeight;
       const totalScrollable = scrollWrapper.offsetHeight - viewHeight;
       const currentScroll = Math.max(0, Math.min(totalScrollable, -rect.top));
       const progress = currentScroll / totalScrollable;
 
-      // 1. Horizontal Skills (Indvidual Pills with grouping)
+      // 1. Horizontal Skills 
       const s1Range = skillRow1.scrollWidth - (window.innerWidth / 3);
       const s2Range = skillRow2.scrollWidth - (window.innerWidth / 3);
       
@@ -247,11 +251,20 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
     transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  /* Custom Scrollbar for touch regions */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   @media (max-width: 1024px) {
     #sticky-scroll-wrapper { height: auto !important; }
     .sticky { position: relative !important; height: auto !important; }
-    .flex-col { flex-direction: column !important; }
+    #about-container > div:nth-child(2) { height: auto !important; }
+    .sticky > div { height: auto !important; }
     #skill-row-1, #skill-row-2, #experience-vertical-track { transform: none !important; }
-    .h-1\/2 { height: auto !important; }
   }
 </style>
