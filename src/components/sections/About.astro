@@ -1,58 +1,216 @@
 ---
 import { summary } from "@/data/summary";
 import { skills, skillCategories } from "@/data/skills";
+import { experiences } from "@/data/experience";
+import { Briefcase, Building2, MapPin, Sparkles } from "lucide-react";
+import { decodeHTMLEntities } from "@/lib/utils";
+
+// Sort experiences descending (latest first)
+const sortedExperiences = [...experiences].reverse();
+
+// Split skills into two rows for horizontal scrolling
+const halfWay = Math.ceil(skills.length / 2);
+const skillRow1 = skills.slice(0, halfWay);
+const skillRow2 = skills.slice(halfWay);
 ---
 
-<section id="about" class="py-20 bg-muted/20 relative overflow-hidden">
-  <!-- Decorative background element -->
-  <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/5 blur-[100px] rounded-full pointer-events-none"></div>
-  
-  <div class="container mx-auto px-4 relative z-10">
-    <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
+<section id="about-container" class="relative bg-background">
+  <!-- The trigger height for the entire reveal -->
+  <div id="sticky-scroll-wrapper" class="relative h-[400vh]">
+    <div class="sticky top-0 h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-background">
       
-      <!-- Bio Side -->
-      <div class="flex-1 space-y-8 fade-in">
-        <div class="relative">
-          <h2 class="text-3xl font-bold tracking-tight">About Me</h2>
-          <div class="absolute -bottom-2 left-0 w-12 h-1 bg-accent rounded-full"></div>
-        </div>
+      <!-- Subtle Ambient Glow -->
+      <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(245,158,11,0.03),transparent_70%)] pointer-events-none"></div>
+
+      <!-- LEFT COLUMN: ABOUT (TOP) & SKILLS (BOTTOM) -->
+      <div class="w-full lg:w-1/2 h-full flex flex-col border-r border-border/40 z-20">
         
-        <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
-          {summary.bio.split('\n\n').map((paragraph) => (
-            <p class="mb-4 last:mb-0">{paragraph}</p>
-          ))}
+        <!-- Top Half: About Me -->
+        <div class="h-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-end border-b border-border/20">
+          <div class="max-w-[540px] space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] uppercase tracking-widest font-bold">
+              <Sparkles size={12} />
+              About Me
+            </div>
+            <h2 class="text-4xl lg:text-5xl font-black tracking-tight leading-[0.9]">
+              STRATEGIC<br/><span class="text-accent italic">VISIONARY</span>
+            </h2>
+            <div class="prose prose-sm dark:prose-invert text-muted-foreground/80 leading-relaxed font-medium">
+              {summary.bio.split('\n\n')[0]}
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Half: Skills & Expertise -->
+        <div class="h-1/2 p-8 sm:p-12 relative flex flex-col justify-start bg-muted/10 overflow-hidden">
+          <div class="mb-10 relative z-20">
+             <h3 class="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground/60 mb-2">Core Competencies</h3>
+             <div class="h-1 w-12 bg-accent rounded-full"></div>
+          </div>
+
+          <div class="space-y-6 relative z-10">
+            <!-- Row 1: Moving Left -->
+            <div id="skill-row-1" class="flex gap-4 whitespace-nowrap will-change-transform">
+              {skillRow1.map((skill) => (
+                <div class="px-6 py-4 bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-sm flex items-center gap-3">
+                  <div class="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div>
+                  <span class="text-xs font-bold uppercase tracking-tight">{skill.name}</span>
+                </div>
+              ))}
+            </div>
+            
+            <!-- Row 2: Moving Right (or opposite offset) -->
+            <div id="skill-row-2" class="flex gap-4 whitespace-nowrap will-change-transform">
+              {skillRow2.map((skill) => (
+                <div class="px-6 py-4 bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-sm flex items-center gap-3">
+                  <div class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                  <span class="text-xs font-bold uppercase tracking-tight">{skill.name}</span>
+                </div>
+              ))}
+            </div>
+
+            <!-- Row 1 Duplicate for infinite-like feel if needed, but here we just scroll the length -->
+          </div>
+
+          <!-- Bottom Fade -->
+          <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none z-20"></div>
         </div>
       </div>
-      
-      <!-- Skills Side -->
-      <div class="flex-1 w-full lg:max-w-[500px] fade-in stagger-1">
-        <div class="mb-8">
-          <h3 class="text-xl font-semibold tracking-tight">Skills & Expertise</h3>
-          <p class="text-xs text-muted-foreground mt-1 uppercase tracking-widest font-medium opacity-70">
-            Professional core competencies
-          </p>
+
+      <!-- RIGHT COLUMN: EXPERIENCE (VERTICAL) -->
+      <div class="w-full lg:w-1/2 h-full bg-card/30 relative overflow-hidden">
+        <!-- Floating Header -->
+        <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-40 bg-background/50 backdrop-blur-md border-b border-border/10">
+           <span class="text-[10px] font-black uppercase tracking-[0.5em] text-accent">Career Trajectory</span>
+           <div class="flex gap-1">
+             <div id="exp-dot-1" class="w-1.5 h-1.5 rounded-full bg-accent opacity-50"></div>
+             <div id="exp-dot-2" class="w-1.5 h-1.5 rounded-full bg-accent opacity-50"></div>
+             <div id="exp-dot-3" class="w-1.5 h-1.5 rounded-full bg-accent opacity-50"></div>
+           </div>
         </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
-          {skillCategories.map((category) => (
-            <div class="space-y-3">
-              <h4 class="text-[10px] font-bold text-accent uppercase tracking-[0.2em] border-l-2 border-accent/30 pl-3 py-0.5">
-                {category}
-              </h4>
-              <div class="flex flex-wrap gap-1.5">
-                {skills
-                  .filter((skill) => skill.category === category)
-                  .map((skill) => (
-                    <span class="text-[11px] font-medium py-1 px-2.5 bg-background/50 border border-border/50 rounded-md text-muted-foreground/80 hover:text-foreground hover:border-accent/30 transition-all cursor-default block">
-                      {skill.name}
-                    </span>
-                  ))}
+
+        <div id="experience-vertical-track" class="px-8 sm:px-16 pt-40 pb-20 flex flex-col gap-10 will-change-transform">
+          {sortedExperiences.map((exp, idx) => (
+            <div class={`experience-card relative p-8 rounded-[2rem] border border-border/50 bg-background/40 backdrop-blur-sm hover:border-accent/30 transition-all duration-500`}>
+              <div class="absolute top-8 right-8 text-[10px] font-mono text-accent/40 font-bold">
+                0{sortedExperiences.length - idx}
+              </div>
+              
+              <div class="flex items-center gap-4 mb-6">
+                <div class="p-3 rounded-2xl bg-accent text-white shadow-lg shadow-accent/20">
+                  {exp.type === "entrepreneurship" ? <Building2 size={24} /> : <Briefcase size={24} />}
+                </div>
+                <div>
+                  <h4 class="text-lg font-black uppercase leading-none tracking-tight" set:html={decodeHTMLEntities(exp.title)} />
+                  <p class="text-xs font-bold text-accent mt-1 uppercase tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
+                </div>
+              </div>
+
+              <div class="text-sm text-muted-foreground/80 leading-relaxed mb-6 space-y-4">
+                <p set:html={decodeHTMLEntities(exp.description)} />
+              </div>
+
+              <div class="flex flex-wrap items-center gap-6 pt-6 border-t border-border/10">
+                <div class="flex items-center gap-2 text-[10px] font-bold text-muted-foreground/60 uppercase">
+                  <MapPin size={12} className="text-accent" />
+                  {exp.location}
+                </div>
+                <div class="flex items-center gap-2 text-[10px] font-bold text-muted-foreground/60 uppercase">
+                  <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                  {exp.period}
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-      
     </div>
   </div>
 </section>
+
+<script>
+  function setupDashboardScroll() {
+    const scrollWrapper = document.getElementById('sticky-scroll-wrapper');
+    const skillRow1 = document.getElementById('skill-row-1');
+    const skillRow2 = document.getElementById('skill-row-2');
+    const expTrack = document.getElementById('experience-vertical-track');
+    
+    if (!scrollWrapper || !skillRow1 || !skillRow2 || !expTrack) return;
+
+    const onScroll = () => {
+      const rect = scrollWrapper.getBoundingClientRect();
+      const viewHeight = window.innerHeight;
+      
+      // Calculate progress relative to the scroll section
+      const totalScrollable = scrollWrapper.offsetHeight - viewHeight;
+      const currentScroll = Math.max(0, Math.min(totalScrollable, -rect.top));
+      const progress = currentScroll / totalScrollable;
+
+      // 1. Horizontal Skills (Opposite directions)
+      const s1Range = skillRow1.scrollWidth - (window.innerWidth / 2);
+      const s2Range = skillRow2.scrollWidth - (window.innerWidth / 2);
+      
+      if (s1Range > 0) {
+        skillRow1.style.transform = `translateX(${-(progress * s1Range)}px)`;
+      }
+      if (s2Range > 0) {
+        // Start from an offset and move "back" or just different speed
+        skillRow2.style.transform = `translateX(${-( (1 - progress) * s2Range )}px)`;
+      }
+
+      // 2. Vertical Experience
+      const eRange = expTrack.scrollHeight - (viewHeight * 0.6);
+      if (eRange > 0) {
+        expTrack.style.transform = `translateY(${-(progress * eRange)}px)`;
+      }
+
+      // 3. Dynamic Dots
+      const dotCount = 3;
+      for(let i=1; i<=dotCount; i++) {
+        const dot = document.getElementById(`exp-dot-${i}`);
+        if(dot) {
+          const threshold = i / dotCount;
+          dot.style.opacity = progress >= threshold ? "1" : "0.3";
+          dot.style.transform = progress >= threshold ? "scale(1.2)" : "scale(1)";
+        }
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); 
+  }
+
+  document.addEventListener('astro:page-load', setupDashboardScroll);
+  document.addEventListener('DOMContentLoaded', setupDashboardScroll);
+</script>
+
+<style>
+  .will-change-transform {
+    will-change: transform;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .experience-card {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+
+  @media (max-width: 1024px) {
+    #sticky-scroll-wrapper {
+      height: auto !important;
+    }
+    .sticky {
+      position: relative !important;
+      height: auto !important;
+    }
+    .flex-col {
+      flex-direction: column !important;
+    }
+    #skill-row-1, #skill-row-2, #experience-vertical-track {
+      transform: none !important;
+      transition: none !important;
+    }
+    .h-1\/2 {
+      height: auto !important;
+    }
+  }
+</style>
