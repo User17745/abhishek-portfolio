@@ -44,41 +44,45 @@ const getBrandForProject = (client: string, platform?: string) => {
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
       {sortedProjects.map((project, index) => {
         const brand = getBrandForProject(project.client, project.platform);
+        const initials = project.client.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
         
         return (
           <div class="group relative h-full">
-            <div class="h-full flex flex-col bg-background/40 backdrop-blur-md border border-border/60 rounded-2xl overflow-hidden hover:border-accent/40 transition-all duration-300 shadow-sm hover:shadow-xl">
+            <div class="h-full flex flex-col bg-background/40 backdrop-blur-md border border-border/60 rounded-2xl overflow-hidden hover:border-accent/40 transition-all duration-300 shadow-sm hover:shadow-xl relative">
               
+              <!-- Background Watermark Logo -->
+              <div class="absolute -bottom-4 -right-4 w-32 h-32 opacity-[0.03] dark:opacity-[0.07] grayscale pointer-events-none transition-all duration-500 group-hover:scale-110 group-hover:opacity-[0.08] flex items-center justify-center">
+                {brand?.logo ? (
+                  <img src={brand.logo} alt="" class="w-full h-full object-contain" />
+                ) : (
+                  <span class="text-6xl font-black italic">{initials}</span>
+                )}
+              </div>
+
               <!-- Header -->
-              <div class="p-5 border-b border-border/40 space-y-3">
+              <div class="p-5 border-b border-border/40 space-y-2 relative z-10">
                 <div class="flex items-center justify-between">
-                  {brand ? (
-                    <div class="shrink-0 scale-75 origin-left">
-                      <BrandLogo 
-                        name={brand.name} 
-                        logo={brand.logo} 
-                        color={brand.color} 
-                        size="md" 
-                      />
-                    </div>
-                  ) : <div class="h-10" />}
                   <span class="text-[9px] font-black text-accent bg-accent/10 px-2 py-0.5 rounded-full border border-accent/20">
                     {project.year}
                   </span>
+                  <div class="flex items-center gap-1">
+                    <Globe size={10} className="text-muted-foreground/30" />
+                    <span class="text-[8px] font-bold text-muted-foreground/40 uppercase tracking-widest">{project.region}</span>
+                  </div>
                 </div>
                 
                 <div class="space-y-1">
                   <h3 class="text-lg font-black uppercase tracking-tight leading-tight group-hover:text-accent transition-colors" set:html={decodeHTMLEntities(project.title)} />
-                  <p class="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-widest">{project.client}</p>
+                  <p class="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-widest leading-none">{project.client}</p>
                 </div>
               </div>
 
               <!-- Main Content -->
-              <div class="p-5 flex-1 flex flex-col gap-5">
-                <p class="text-[12px] text-foreground/70 leading-snug font-medium" set:html={decodeHTMLEntities(project.description)} />
+              <div class="p-5 flex-1 flex flex-col gap-5 relative z-10">
+                <p class="text-[12px] text-foreground/70 leading-snug font-medium line-clamp-3" set:html={decodeHTMLEntities(project.description)} />
 
                 <!-- Platform Tag -->
-                <div class="flex items-center gap-2 px-3 py-1.5 bg-muted/30 rounded-lg border border-border/40 w-fit">
+                <div class="flex items-center gap-2 px-3 py-1 bg-muted/30 rounded-lg border border-border/40 w-fit">
                   <Terminal size={10} className="text-accent/70" />
                   <span class="text-[8px] font-black uppercase tracking-tight text-muted-foreground" set:html={decodeHTMLEntities(project.platform)} />
                 </div>
@@ -87,9 +91,9 @@ const getBrandForProject = (client: string, platform?: string) => {
                 {project.metrics && (
                   <div class="grid grid-cols-2 gap-2">
                     {project.metrics.map((metric) => (
-                      <div class="p-3 rounded-xl bg-accent/5 border border-accent/10 flex flex-col">
+                      <div class="p-3 rounded-xl bg-accent/5 border border-accent/10 flex flex-col justify-center">
                         <span class="text-sm font-black text-accent leading-none">{metric.value}</span>
-                        <span class="text-[7px] font-bold text-muted-foreground/60 uppercase tracking-tighter mt-1">{metric.label}</span>
+                        <span class="text-[7px] font-bold text-muted-foreground/60 uppercase tracking-tighter mt-1 leading-none">{metric.label}</span>
                       </div>
                     ))}
                   </div>
@@ -97,21 +101,13 @@ const getBrandForProject = (client: string, platform?: string) => {
 
                 <!-- Highlights List -->
                 <ul class="space-y-1.5 mt-auto">
-                  {project.highlights.slice(0, 3).map((highlight) => (
+                  {project.highlights.slice(0, 2).map((highlight) => (
                     <li class="text-[10px] text-muted-foreground/80 flex items-start gap-2 leading-tight">
                       <div class="w-1 h-1 rounded-full bg-accent/40 mt-1.5 shrink-0" />
-                      <span set:html={decodeHTMLEntities(highlight)} />
+                      <span class="line-clamp-2" set:html={decodeHTMLEntities(highlight)} />
                     </li>
                   ))}
                 </ul>
-              </div>
-
-              <!-- Footer -->
-              <div class="px-5 py-3 bg-muted/20 flex items-center justify-between border-t border-border/10">
-                <div class="flex items-center gap-1.5">
-                  <Globe size={10} className="text-muted-foreground/40" />
-                  <span class="text-[8px] font-bold text-muted-foreground/60 uppercase tracking-widest">{project.region}</span>
-                </div>
               </div>
             </div>
           </div>
