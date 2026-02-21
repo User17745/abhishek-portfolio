@@ -234,18 +234,14 @@ export function ChatComponent({
       ".txt",
       ".md",
       ".pdf",
-      ".doc",
-      ".docx",
       "text/plain",
       "text/markdown",
       "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
     const extension = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
 
     if (!validTypes.includes(extension) && !validTypes.includes(file.type)) {
-      setUploadError("Unsupported file type. Use .txt, .md, .pdf, .doc, or .docx.");
+      setUploadError("Unsupported file type. Use .txt, .md, or .pdf.");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -312,7 +308,7 @@ export function ChatComponent({
       {/* Messages - Scrollable area */}
       <div
         ref={scrollContainerRef}
-        className={`flex-1 overflow-y-auto p-4 space-y-4 overscroll-y-contain pb-[320px] ${isDragActive ? "bg-primary/5" : ""}`}
+        className={`flex-1 overflow-y-auto p-4 space-y-4 overscroll-y-contain ${messages.length > 0 ? "pb-[320px]" : ""} ${isDragActive ? "bg-primary/5" : ""}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -508,7 +504,7 @@ export function ChatComponent({
             type="file"
             ref={fileInputRef}
             onChange={handleFileSelect}
-            accept=".txt,.md,.pdf,.doc,.docx,text/plain,text/markdown,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf"
             className="hidden"
             disabled={isLoading}
           />
@@ -554,7 +550,7 @@ export function ChatComponent({
         </div>
 
         <p className="text-[10px] text-muted-foreground mt-1.5 text-center">
-          Press Enter to send • Drag & drop or upload .txt, .md, .pdf, .doc, .docx
+          Press Enter to send • Drag & drop or upload .txt, .md, .pdf
         </p>
 
 
@@ -662,10 +658,6 @@ function guessMimeType(extension: string): string {
       return "text/plain";
     case ".pdf":
       return "application/pdf";
-    case ".doc":
-      return "application/msword";
-    case ".docx":
-      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     default:
       return "application/octet-stream";
   }

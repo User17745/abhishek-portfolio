@@ -87,7 +87,7 @@ export function ChatSidebar() {
             <Upload className="h-12 w-12 text-blue-500 animate-bounce" />
             <p className="text-lg font-medium text-foreground">Drop your resume here</p>
             <p className="text-sm text-muted-foreground">
-              Supports .txt, .md, .pdf, .doc, .docx
+              Supports .txt, .md, .pdf
             </p>
           </div>
         </div>

@@ -21,7 +21,7 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
         </h1>
       </div>
       
-      <div class="fade-in stagger-2 pt-4">
+      <div id="hero-chat-button" class="fade-in stagger-2 pt-4">
         <ChatButton client:load />
       </div>
       
@@ -337,4 +337,17 @@ import { ChatButton } from "@/components/chat/ChatSidebar";
       copiedText?.classList.add('hidden');
     }, 2000);
   });
+
+  // Track ChatButton visibility for Header Glow
+  const heroButton = document.getElementById('hero-chat-button');
+  if (heroButton) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        document.dispatchEvent(new CustomEvent('hero-button-visibility', {
+          detail: { isVisible: entry.isIntersecting }
+        }));
+      });
+    }, { threshold: 0 });
+    observer.observe(heroButton);
+  }
 </script>
