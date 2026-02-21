@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { countryCodes } from "@/lib/countryCodes";
 ---
 
 <section id="contact" class="py-20 px-4 gradient-bg">
@@ -67,26 +68,49 @@ import { Mail, MapPin, Phone } from "lucide-react";
             </div>
             <div class="p-6 pt-0">
               <form 
-                action="https://formspree.io/f/xnnnnnnn" 
-                method="POST"
+                id="contact-form"
                 class="space-y-4"
+                enctype="multipart/form-data"
               >
                 <div class="space-y-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">Name <span class="text-destructive">*</span></Label>
                   <Input id="name" name="name" placeholder="Your name" required className="focus:ring-accent/50 focus:border-accent" />
                 </div>
                 
                 <div class="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Email <span class="text-destructive">*</span></Label>
                   <Input id="email" name="email" type="email" placeholder="your@email.com" required className="focus:ring-accent/50 focus:border-accent" />
+                </div>
+
+                <div class="space-y-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <div class="flex gap-2">
+                    <select id="phoneCode" name="phoneCode" class="flex h-10 w-[120px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background md:text-sm focus:ring-accent/50 focus:border-accent outline-none">
+                      <option value="+1">+1 (United States)</option>
+                      <option value="+44">+44 (United Kingdom)</option>
+                      <option value="+91">+91 (India)</option>
+                      <option value="+971">+971 (UAE)</option>
+                      <option value="+61">+61 (Australia)</option>
+                      <option disabled>──────────</option>
+                      {countryCodes.map(country => (
+                        <option value={country.code}>{country.code} ({country.name})</option>
+                      ))}
+                    </select>
+                    <Input id="phone" name="phone" type="tel" placeholder="Phone number" className="focus:ring-accent/50 focus:border-accent" />
+                  </div>
                 </div>
                 
                 <div class="space-y-2">
-                  <Label htmlFor="message">Message</Label>
+                  <Label htmlFor="message">Message <span class="text-destructive">*</span></Label>
                   <Textarea id="message" name="message" placeholder="How can I help you?" rows={4} required className="focus:ring-accent/50 focus:border-accent resize-none" />
                 </div>
+
+                <div class="space-y-2">
+                  <Label htmlFor="attachments">Attachments</Label>
+                  <Input id="attachments" name="attachments" type="file" multiple className="focus:ring-accent/50 focus:border-accent file:bg-transparent file:text-sm file:font-medium" />
+                </div>
                 
-                <Button type="submit" className="w-full cta-button">Send Message</Button>
+                <Button id="submit-btn" type="submit" className="w-full cta-button">Send Message</Button>
               </form>
             </div>
           </div>
@@ -95,3 +119,61 @@ import { Mail, MapPin, Phone } from "lucide-react";
     </div>
   </div>
 </section>
+
+<script>
+  function showToast(message: string, type: 'success' | 'error' = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-md shadow-lg font-medium transition-all duration-300 transform translate-y-10 opacity-0 ${type === 'success' ? 'bg-success text-white' : 'bg-destructive text-white'}`;
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+      });
+    });
+
+    setTimeout(() => {
+      // Animate out
+      toast.classList.add('translate-y-10', 'opacity-0');
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn');
+  
+  if (form && submitBtn) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const btnText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.setAttribute('disabled', 'true');
+      
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (res.ok) {
+          form.reset();
+          showToast('Message sent successfully!');
+        } else {
+          const error = await res.json();
+          console.error(error);
+          showToast('Failed to send message. ' + (error.error || 'Unknown error'), 'error');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('An error occurred. Please try again later.', 'error');
+      } finally {
+        submitBtn.textContent = btnText;
+        submitBtn.removeAttribute('disabled');
+      }
+    });
+  }
+</script>
