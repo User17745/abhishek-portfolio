@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, MapPin, Phone } from "lucide-react";
 ---
 
@@ -22,12 +21,12 @@ import { Mail, MapPin, Phone } from "lucide-react";
     <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
       <div class="fade-in-left stagger-2">
         <div>
-          <Card className="h-full gradient-border">
-            <CardHeader>
-              <CardTitle>Contact Information</CardTitle>
-              <CardDescription>Reach out via email or connect on LinkedIn</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm h-full gradient-border">
+            <div class="flex flex-col space-y-1.5 p-6">
+              <h3 class="text-2xl font-semibold leading-none tracking-tight">Contact Information</h3>
+              <p class="text-sm text-muted-foreground">Reach out via email or connect on LinkedIn</p>
+            </div>
+            <div class="p-6 pt-0 space-y-4">
               <a 
                 href={`mailto:${siteConfig.contact.email}`}
                 class="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors group"
@@ -54,19 +53,19 @@ import { Mail, MapPin, Phone } from "lucide-react";
                 </div>
                 <span>{siteConfig.contact.location}</span>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
       
       <div class="fade-in-right stagger-3">
         <div>
-          <Card className="h-full gradient-border">
-            <CardHeader>
-              <CardTitle>Send a Message</CardTitle>
-              <CardDescription><span set:html={"I'll get back to you within 24 hours"} /></CardDescription>
-            </CardHeader>
-            <CardContent>
+          <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm h-full gradient-border">
+            <div class="flex flex-col space-y-1.5 p-6">
+              <h3 class="text-2xl font-semibold leading-none tracking-tight">Send a Message</h3>
+              <p class="text-sm text-muted-foreground">I'll get back to you ASAP!</p>
+            </div>
+            <div class="p-6 pt-0">
               <form 
                 action="https://formspree.io/f/xnnnnnnn" 
                 method="POST"
@@ -89,8 +88,8 @@ import { Mail, MapPin, Phone } from "lucide-react";
                 
                 <Button type="submit" className="w-full cta-button">Send Message</Button>
               </form>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
