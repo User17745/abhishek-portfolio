@@ -1,0 +1,19 @@
+{
+    "fields": {
+        "project": { "key": "KAN" },
+        "summary": "API Test Lead",
+        "issuetype": { "name": "Task" },
+        "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        { "type": "text", "text": "This is a test message" }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -43,12 +43,14 @@ export const POST: APIRoute = async ({ request }) => {
             return new Response(JSON.stringify({ error: 'Invalid JIRA_PROJECT_URL' }), { status: 500 });
         }
 
-        // Default Email from siteConfig
-        const jiraUserEmail = env.JIRA_USER_EMAIL || viteEnv.JIRA_USER_EMAIL || siteConfig.contact.email;
+        // Default Email fallback to the Jira owner account
+        const jiraUserEmail = env.JIRA_USER_EMAIL || viteEnv.JIRA_USER_EMAIL || 'abhishekaggarwal1995@gmail.com';
         const authHeader = `Basic ${Buffer.from(`${jiraUserEmail}:${apiToken}`).toString('base64')}`;
 
         // Prepare Issue Data
-        const issueData = {
+        const descriptionBody = `*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${fullPhone || 'N/A'}\n\n*Message:*\n${message}`;
+
+        const baseIssueData = {
             fields: {
                 project: { key: projectKey },
                 summary: `New Lead: ${name}`,
@@ -60,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
                         {
                             type: 'paragraph',
                             content: [
-                                { type: 'text', text: message }
+                                { type: 'text', text: descriptionBody }
                             ]
                         }
                     ]
@@ -68,13 +70,15 @@ export const POST: APIRoute = async ({ request }) => {
             } as any
         };
 
+        const issueData = JSON.parse(JSON.stringify(baseIssueData));
+
         if (nameField) issueData.fields[nameField] = name;
         if (emailField) issueData.fields[emailField] = email;
         if (phoneField) issueData.fields[phoneField] = fullPhone;
         if (messageField) issueData.fields[messageField] = message;
 
         // Create the Issue
-        const createRes = await fetch(`${baseUrl}/rest/api/3/issue`, {
+        let createRes = await fetch(`${baseUrl}/rest/api/3/issue`, {
             method: 'POST',
             headers: {
                 'Authorization': authHeader,
@@ -84,13 +88,36 @@ export const POST: APIRoute = async ({ request }) => {
             body: JSON.stringify(issueData)
         });
 
+        let issueDataRes;
+
         if (!createRes.ok) {
             const errorText = await createRes.text();
-            console.error('Jira Create Issue Error:', errorText);
-            return new Response(JSON.stringify({ error: 'Failed to create Jira issue', details: errorText }), { status: createRes.status });
+
+            // If it failed because of custom fields (400), gracefully retry without them
+            if (createRes.status === 400 && errorText.includes('cannot be set. It is not on the appropriate screen')) {
+                console.warn('Jira custom fields not configured properly, falling back to description-only payload...');
+                createRes = await fetch(`${baseUrl}/rest/api/3/issue`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': authHeader,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(baseIssueData)
+                });
+
+                if (!createRes.ok) {
+                    const fallbackError = await createRes.text();
+                    console.error('Jira Fallback Create Error:', fallbackError);
+                    return new Response(JSON.stringify({ error: 'Failed to create Jira issue', details: fallbackError }), { status: createRes.status });
+                }
+            } else {
+                console.error('Jira Create Issue Error:', errorText);
+                return new Response(JSON.stringify({ error: 'Failed to create Jira issue', details: errorText }), { status: createRes.status });
+            }
         }
 
-        const issueDataRes = await createRes.json();
+        issueDataRes = await createRes.json();
         const issueId = issueDataRes.id;
 
         // Handle Attachments
