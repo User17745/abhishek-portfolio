@@ -18,7 +18,7 @@ Personal portfolio website showcasing 12+ years of experience in eCommerce, Prod
 - Dark/light mode with system preference detection
 - Smooth scroll animations
 - SEO optimized with meta tags
-- Contact form (Formspree)
+- Contact form (Jira API integration to Kanban board)
 - Case studies with MDX content
 - Blog section
 - Global CSS variables for easy theming
@@ -153,6 +153,15 @@ OPENROUTER_API_KEY=your_openrouter_api_key
 GEMINI_API_KEY=your_gemini_api_key
 ZHIPUAI_API_KEY=your_zhipuai_api_key
 NVIDIA_API_KEY=your_nvidia_api_key
+
+# Jira Setup (for Contact Form)
+ATLASSIAN_JIRA_API_TOKEN=your_jira_token
+JIRA_PROJECT_URL=https://your-domain.atlassian.net/jira/software/projects/KAN/boards/1
+JIRA_NAME_FIELD_ID=customfield_10105
+JIRA_EMAIL_FIELD_ID=customfield_10106
+JIRA_PHONE_FIELD_ID=customfield_10107
+JIRA_MESSAGE_FIELD_ID=customfield_10108
+JIRA_USER_EMAIL=your_email@domain.com
 ```
 
 ## Local Development
@@ -251,10 +260,12 @@ Deployed via Vercel with:
 - Edge functions for chat API
 
 Required environment variables in Vercel:
-- `PUBLIC_GEMINI_API_KEY` (for embeddings)
-- `PUBLIC_OPENROUTER_API_KEY` (recommended primary)
-- `PUBLIC_ZHIPUAI_API_KEY`
-- `PUBLIC_NVIDIA_API_KEY`
+- `GEMINI_API_KEY` (for embeddings)
+- `OPENROUTER_API_KEY` (recommended primary)
+- `ZHIPUAI_API_KEY`
+- `NVIDIA_API_KEY`
+- `ATLASSIAN_JIRA_API_TOKEN`
+- `JIRA_PROJECT_URL`
 
 ## Known Issues
 

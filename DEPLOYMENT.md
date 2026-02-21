@@ -13,6 +13,9 @@
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `GEMINI_API_KEY` | Google Gemini API key for embeddings | `AIza...` |
+| `OPENROUTER_API_KEY` | Essential for LLM response | `sk-or-v1...` |
+| `ATLASSIAN_JIRA_API_TOKEN` | Jira token to create issues | `ATATT...` |
+| `JIRA_PROJECT_URL` | Destination board URL for contact form | `https://your-domain...` |
 
 ### Setting Environment Variables
 
