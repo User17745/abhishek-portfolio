@@ -2,86 +2,76 @@
 
 ## Issue Description
 
-The website displays apostrophes as `&amp;#39;` instead of `'` or `&#39;`. For example:
-- Expected: "Victoria's Secret"
-- Actual: "Victoria&amp;#39;s Secret"
+The website occasionally displays apostrophes and special characters as their raw HTML entity codes (e.g., `&#x27;` or `&amp;#39;`) instead of rendering the actual character (`'`).
 
-This appears as `&amp;#39;` (double-encoded) in the HTML source.
+For example:
+- **Expected:** "I'll get back to you ASAP!"
+- **Actual:** "I&#x27;ll get back to you ASAP!" or "I&amp;#39;ll get back to you ASAP!"
 
-## Affected Areas
+This happens because the characters are being double-encoded during the build and render process.
 
-1. **Content Collections (case-studies, blog)** - Frontmatter fields with apostrophes
-2. **Case Studies listing page** - Client names with apostrophes
-3. **About section** - Bio text containing apostrophes
-4. **Skills section** - Any skill text with apostrophes
-5. **Experience section** - Job titles/company names with apostrophes
+## Root Causes
 
-## Root Cause
+This issue stems from two distinct behaviors in our tech stack:
 
-This is a known issue with **Astro Content Collections** in Astro 5.x combined with the `@astrojs/mdx` integration. The markdown processing pipeline is encoding special characters multiple times.
+### 1. Astro + React Component Hand-off (The React Escaping Issue)
+When Astro passes a text string containing an HTML entity (or a plain apostrophe that Astro encodes) into a React component's slot or prop (e.g., `<CardDescription>I'll...</CardDescription>`), the following happens:
+1. Astro parses the string and turns `'` into `&#x27;` or `&#39;`.
+2. React receives `&#x27;` as a raw string child.
+3. React automatically escapes all string children to prevent XSS, meaning it turns the ampersand `&` into `&amp;`, resulting in `&amp;#x27;` in the DOM. 
+4. The browser renders the literal string `&#x27;` on the page instead of the apostrophe.
 
-When markdown is processed:
+**Using Astro's `set:html` directly on a React component does NOT prevent React from re-escaping the content internally depending on how the component handles children.**
+
+### 2. Astro Content Collections & MDX
+Markdown processing pipelines (like `@astrojs/mdx`) also encode special characters.
 1. First pass: `'` → `&#39;` (HTML entity)
-2. Second pass: `&#39;` → `&amp;#39;` (double-encoded)
+2. Second pass: `&#39;` → `&amp;#39;` (double-encoded when passed down)
 
-The issue occurs specifically with:
-- Content collections using markdown/MDX
-- Frontmatter fields containing special characters
-- The markdown rendering pipeline
+## The Solution
 
-## Affected Files
+To definitively solve this, employ these steps:
 
-- `src/content/case-studies/*.md` - Case study markdown files
-- `src/content/blog/*.md` - Blog post files
-- Any content using Astro's content collections with frontmatter
+### Step 1: Use the `decodeHTMLEntities` Utility
+We have a robust utility function in `src/lib/utils.ts` that safely decodes multiple layers of HTML encoding, including smart quotes and entities.
 
-## Potential Solutions
+```typescript
+import { decodeHTMLEntities } from "@/lib/utils";
 
-### 1. Use `markdown-it` Configuration
-```js
-// astro.config.mjs
-markdown: {
-  html: 'raw'  // Attempted - didn't work
-}
+// Example usage
+const cleanText = decodeHTMLEntities(myString);
 ```
 
-### 2. Use Custom Decoding Utility
-Create a utility function to decode HTML entities after rendering:
-```ts
-function decodeHTML(html: string): string {
-  const entities: Record<string, string> = {
-    '&amp;': '&',
-    '&#39;': "'",
-    '&apos;': "'",
-    '&quot;': '"',
-    '&lt;': '<',
-    '&gt;': '>',
-  };
-  return html.replace(/&[#\w]+;/g, entity => entities[entity] || entity);
-}
+### Step 2: Use Native HTML Elements with `set:html`
+To completely bypass React's aggressive escaping of text slots, you must render the text using a **native HTML element** (like `p`, `span`, or `div`) utilizing Astro's `set:html` directive.
+
+**❌ Incorrect (React Component Double-Escapes):**
+```astro
+import { CardDescription } from "@/components/ui/card";
+import { decodeHTMLEntities } from "@/lib/utils";
+
+<!-- React will escape the output of decodeHTMLEntities -->
+<CardDescription set:html={decodeHTMLEntities("I'll be there")} />
 ```
 
-### 3. Avoid Apostrophes in Content
-Replace `'` with `'` (straight apostrophe) or remove entirely. This is a workaround but not ideal.
+**✅ Correct (Native HTML Tag):**
+```astro
+import { decodeHTMLEntities } from "@/lib/utils";
 
-### 4. Use Frontmatter Without Special Characters
-Keep the frontmatter simple and avoid apostrophes in metadata fields.
+<!-- Native p tag allows Astro to inject raw HTML directly into the DOM -->
+<p class="text-sm text-muted-foreground" set:html={decodeHTMLEntities("I'll be there")} />
+```
 
-### 5. Check for Astro Updates
-This may be fixed in a future version of Astro. Monitor:
-- https://github.com/withastro/astro/issues/8374
-- https://github.com/withastro/astro/issues/9431
+### Step 3: Replace Wrapper React Components if Necessary
+If replacing the inner component with a native HTML tag breaks the layout because it was wrapped inside a React structural component (like `<Card>`), recreate that structure using native HTML tags with identical Tailwind classes. This keeps the rendering entirely within Astro's control.
 
-## When It Started
-
-This issue appeared in the `feat/chatbot` branch after adding content collections and MDX integration. The main branch may not have this issue if it doesn't use content collections with markdown frontmatter, or it may be a version-specific issue.
-
-## Testing
-
-To verify the fix:
-1. Check raw HTML output: `grep "Victoria" dist/client/index.html`
-2. Look for `&amp;#39;` (double-encoded) vs `&#39;` (single encoded)
-3. Browser should display correctly even with `&#39;` - only `&amp;#39;` is problematic
+```html
+<div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+  <div class="flex flex-col space-y-1.5 p-6">
+     <p class="text-sm text-muted-foreground" set:html={decodeHTMLEntities("I'll get back to you ASAP!")} />
+  </div>
+</div>
+```
 
 ---
-*Documented: 2026-02-19*
+*Updated: Feb 2026*
