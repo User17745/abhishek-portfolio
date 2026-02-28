@@ -39,10 +39,10 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
               <Sparkles size={10} />
               About Me
             </div>
-            <h2 class="text-2xl lg:text-5xl font-black tracking-tighter leading-[0.9] uppercase text-foreground">
+            <h2 class="text-2xl lg:text-6xl font-black tracking-tighter leading-[0.85] uppercase text-foreground bg-gradient-to-br from-foreground via-foreground to-foreground/70 bg-clip-text lg:drop-shadow-[0_0_40px_rgba(245,158,11,0.15)]">
               Abhishek<br/>Aggarwal
             </h2>
-            <div class="prose prose-sm lg:prose-base dark:prose-invert text-foreground/90 font-bold leading-snug lg:leading-relaxed overflow-y-auto max-h-[200px] lg:max-h-none pr-4 lg:pr-0">
+            <div class="prose prose-sm lg:prose-base dark:prose-invert text-foreground/90 font-normal leading-snug lg:leading-relaxed overflow-y-auto max-h-[200px] lg:max-h-none pr-4 lg:pr-0">
               <p set:html={decodeHTMLEntities(summary.bio.split('\n\n')[0])} />
             </div>
           </div>
@@ -66,10 +66,14 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
               <div id="skill-row-1" class="flex gap-3 lg:gap-4 whitespace-nowrap will-change-transform min-w-max lg:min-w-0 mobile-auto-scroll">
                 {skillsByCategoryRow1.map((group) => (
                   <div class="flex items-center gap-2 group/skillset">
-                    <div class="px-3 py-1.5 lg:px-6 lg:py-3 bg-accent text-white rounded-full text-[8px] lg:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-accent/20 border border-accent/50 z-10">
+                    <div class="px-3 py-1.5 lg:px-6 lg:py-3 bg-accent text-white rounded-full text-[8px] lg:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-accent/20 border border-accent/50 z-10 relative">
                       {group.category}
+                      <!-- Arrow connector to skills -->
+                      <div class="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 items-center justify-center">
+                        <div class="w-2 h-2 border-t-2 border-r-2 border-accent/60 rotate-45"></div>
+                      </div>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 bg-muted/30 lg:bg-muted/50 px-2 lg:px-3 py-1 rounded-r-full border border-accent/10 lg:border-accent/20 border-l-0">
                       {group.items.map(skill => (
                         <span class="px-3 py-1.5 lg:px-5 lg:py-3 bg-background border border-border/40 rounded-full text-[8px] lg:text-[10px] font-bold text-muted-foreground uppercase tracking-wider hover:border-accent/40 hover:text-accent transition-all duration-300">
                           {skill.name}
@@ -86,10 +90,14 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
               <div id="skill-row-2" class="flex gap-3 lg:gap-4 whitespace-nowrap will-change-transform min-w-max lg:min-w-0 mobile-auto-scroll-reverse">
                 {skillsByCategoryRow2.map((group) => (
                   <div class="flex items-center gap-2 group/skillset">
-                    <div class="px-3 py-1.5 lg:px-6 lg:py-3 bg-blue-600 text-white rounded-full text-[8px] lg:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 border border-blue-400/50 z-10">
+                    <div class="px-3 py-1.5 lg:px-6 lg:py-3 bg-blue-600 text-white rounded-full text-[8px] lg:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 border border-blue-400/50 z-10 relative">
                       {group.category}
+                      <!-- Arrow connector to skills -->
+                      <div class="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 items-center justify-center">
+                        <div class="w-2 h-2 border-t-2 border-r-2 border-blue-400/60 rotate-45"></div>
+                      </div>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 bg-blue-500/5 lg:bg-blue-500/10 px-2 lg:px-3 py-1 rounded-r-full border border-blue-400/10 lg:border-blue-400/20 border-l-0">
                       {group.items.map(skill => (
                         <span class="px-3 py-1.5 lg:px-5 lg:py-3 bg-background border border-border/40 rounded-full text-[8px] lg:text-[10px] font-bold text-muted-foreground uppercase tracking-wider hover:border-blue-400/40 hover:text-blue-500 transition-all duration-300">
                           {skill.name}
@@ -131,12 +139,12 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
         </div>
 
         <div class="flex-1 lg:overflow-hidden relative">
-          <!-- Central Timeline Line -->
-          <div class="absolute left-8 lg:left-24 top-0 bottom-0 w-[4px] bg-border/60">
+          <!-- Central Timeline Line - centered on desktop -->
+          <div class="absolute left-8 lg:left-1/2 lg:-translate-x-1/2 top-0 bottom-0 w-[4px] lg:w-[4px] bg-border/60">
             <div id="timeline-progress-line" class="w-full bg-accent absolute top-0 left-0 origin-top scale-y-0 transition-transform duration-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
           </div>
 
-          <div id="experience-vertical-track" class="px-4 lg:px-24 pt-8 lg:pt-32 pb-40 lg:pb-60 flex flex-col gap-8 lg:gap-32 will-change-transform relative z-10">
+          <div id="experience-vertical-track" class="px-4 lg:px-24 pt-8 lg:pt-32 pb-40 lg:pb-60 flex flex-col gap-8 lg:gap-20 will-change-transform relative z-10">
             {sortedExperiences.map((exp, idx) => (
               <div class="relative group/exp timeline-item" data-index={idx}>
                 <!-- Year Marker (Desktop Only) -->
@@ -144,37 +152,37 @@ const skillsByCategoryRow2 = skillCategories.slice(3).map(cat => ({
                   {exp.period.split(" - ")[0]}
                 </div>
 
-                <div class="space-y-3 lg:space-y-6">
-                  <!-- Connective Element -->
-                  <div class="flex items-center gap-2 lg:gap-6">
-                    <div class="w-2.5 h-2.5 lg:w-4 lg:h-4 rounded-full bg-background border-[2px] lg:border-[3px] border-accent z-20 shadow-[0_0_10px_rgba(245,158,11,0.2)] group-hover/exp:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all"></div>
-                    <div class="h-[1px] w-4 lg:w-12 bg-accent/20"></div>
-                    <span class="text-[7px] lg:text-[9px] font-black uppercase tracking-widest text-accent/60">{exp.period}</span>
+                <div class="space-y-2 lg:space-y-3">
+                  <!-- Connective Element - centered on desktop -->
+                  <div class="flex items-center gap-2 lg:gap-0 lg:justify-center lg:relative">
+                    <div class="w-2.5 h-2.5 lg:w-4 lg:h-4 rounded-full bg-background border-[2px] lg:border-[3px] border-accent z-20 shadow-[0_0_10px_rgba(245,158,11,0.2)] group-hover/exp:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all lg:absolute lg:left-1/2 lg:-translate-x-1/2"></div>
+                    <div class="h-[1px] w-4 lg:hidden bg-accent/20"></div>
+                    <span class="text-[7px] lg:text-[9px] font-black uppercase tracking-widest text-accent/60 lg:absolute lg:left-1/2 lg:translate-x-6 lg:top-1/2 lg:-translate-y-1/2">{exp.period}</span>
                   </div>
 
-                  <div class="bg-background border border-border/40 hover:border-accent/40 p-4 lg:p-10 rounded-xl lg:rounded-[2.5rem] transition-all duration-700 shadow-sm hover:shadow-xl group-hover/exp:-translate-y-1 relative overflow-hidden">
+                  <div class="bg-background border border-border/40 hover:border-accent/40 p-4 lg:p-6 rounded-xl lg:rounded-2xl transition-all duration-700 shadow-sm hover:shadow-xl group-hover/exp:-translate-y-1 relative overflow-hidden lg:mx-auto lg:max-w-md">
                     <!-- Background Initial Badge -->
-                    <div class="absolute -bottom-2 lg:-bottom-6 -right-2 lg:-right-6 text-6xl lg:text-9xl font-black text-muted-foreground/5 pointer-events-none select-none italic">
+                    <div class="absolute -bottom-2 lg:-bottom-4 -right-2 lg:-right-4 text-6xl lg:text-8xl font-black text-muted-foreground/5 pointer-events-none select-none italic">
                       {exp.company.charAt(0)}
                     </div>
 
-                    <div class="flex flex-col gap-3 lg:gap-6 relative z-10">
+                    <div class="flex flex-col gap-2 lg:gap-3 relative z-10">
                       <div class="space-y-0.5">
-                        <h4 class="text-base lg:text-2xl font-black uppercase tracking-tight leading-tight group-hover/exp:text-accent transition-colors" set:html={decodeHTMLEntities(exp.title)} />
-                        <p class="text-[9px] lg:text-xs font-bold text-muted-foreground uppercase opacity-40 tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
+                        <h4 class="text-base lg:text-lg font-black uppercase tracking-tight leading-tight group-hover/exp:text-accent transition-colors" set:html={decodeHTMLEntities(exp.title)} />
+                        <p class="text-[9px] lg:text-[10px] font-bold text-muted-foreground uppercase opacity-40 tracking-widest" set:html={decodeHTMLEntities(exp.company)} />
                       </div>
 
-                      <p class="text-[11px] lg:text-base text-muted-foreground/80 leading-snug lg:leading-relaxed font-bold lg:font-medium" set:html={decodeHTMLEntities(exp.description)} />
+                      <p class="text-[11px] lg:text-sm text-muted-foreground/80 leading-snug font-medium" set:html={decodeHTMLEntities(exp.description)} />
                       
-                      <div class="flex flex-wrap items-center gap-2 lg:gap-4 text-[8px] lg:text-[10px] font-bold text-muted-foreground/60 uppercase">
-                        <span class="flex items-center gap-1 lg:gap-2 bg-muted/50 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full border border-border/40 truncate max-w-[120px]"><MapPin size={8} className="text-accent" /> {exp.location}</span>
-                        <span class="flex items-center gap-1 lg:gap-2 bg-muted/50 px-2 py-1 lg:px-3 lg:py-1.5 rounded-full border border-border/40 whitespace-nowrap"><Briefcase size={8} className="text-accent" /> {exp.type}</span>
+                      <div class="flex flex-wrap items-center gap-2 text-[8px] lg:text-[9px] font-bold text-muted-foreground/60 uppercase">
+                        <span class="flex items-center gap-1 bg-muted/50 px-2 py-1 rounded-full border border-border/40 truncate max-w-[120px]"><MapPin size={8} className="text-accent" /> {exp.location}</span>
+                        <span class="flex items-center gap-1 bg-muted/50 px-2 py-1 rounded-full border border-border/40 whitespace-nowrap"><Briefcase size={8} className="text-accent" /> {exp.type}</span>
                       </div>
 
                       {exp.roles && (
-                        <div class="flex flex-wrap gap-1 lg:gap-2 pt-4 lg:pt-8 border-t border-border/10">
+                        <div class="flex flex-wrap gap-1 lg:gap-1.5 pt-2 lg:pt-4 border-t border-border/10">
                           {exp.roles.slice(0, 4).map(role => (
-                            <span class="text-[7px] lg:text-[10px] font-black px-2 py-1 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl bg-muted border border-border/60 text-muted-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/20 transition-colors uppercase tracking-tight">{role}</span>
+                            <span class="text-[7px] lg:text-[9px] font-black px-2 py-1 rounded-lg bg-muted border border-border/60 text-muted-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/20 transition-colors uppercase tracking-tight">{role}</span>
                           ))}
                         </div>
                       )}

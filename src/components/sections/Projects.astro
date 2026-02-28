@@ -13,19 +13,37 @@ const sortedProjects = [...projects].sort((a, b) => {
   return yearB - yearA;
 });
 
-// Helper to find brand
+// Helper to find brand - prioritize client brand over platform
 const getBrandForProject = (client: string, platform?: string) => {
-  if (platform?.toLowerCase().includes("kartmax")) {
-    return brands.find(b => b.name === "KartmaX");
-  }
+  // First, try to match by client name (the actual brand)
+  const clientBrand = brands.find(b => 
+    b.name.toLowerCase().includes(client.toLowerCase()) || 
+    client.toLowerCase().includes(b.name.toLowerCase())
+  );
+  
+  if (clientBrand) return clientBrand;
+  
+  // Special mappings for known clients
   if (client.toLowerCase().includes("caneza")) {
     return brands.find(b => b.name === "Caneza (Rasasi)");
   }
   if (client.toLowerCase().includes("metro")) {
     return brands.find(b => b.name === "Metro Brands");
   }
-  return brands.find(b => b.name.toLowerCase().includes(client.toLowerCase()) || 
-                          client.toLowerCase().includes(b.name.toLowerCase()));
+  if (client.toLowerCase().includes("the one") || client.toLowerCase().includes("theone")) {
+    return brands.find(b => b.name === "THE One");
+  }
+  if (client.toLowerCase().includes("abu")) {
+    return brands.find(b => b.name === "ABU");
+  }
+  
+  // Only use KartmaX logo for KartmaX internal products (not client projects)
+  if (platform?.toLowerCase().includes("kartmax") && 
+      (client.toLowerCase().includes("kartmax") || client.toLowerCase().includes("internal"))) {
+    return brands.find(b => b.name === "KartmaX");
+  }
+  
+  return null;
 };
 ---
 
